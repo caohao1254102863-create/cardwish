@@ -1,0 +1,27 @@
+import { defineNuxtPlugin } from '#app'
+import { Button, NavBar, Tab, Tabs, Popup, Overlay, Loading, Toast, Dialog, ActionSheet, Picker, Uploader, Swipe, SwipeItem, PullRefresh, List, ImagePreview, Field, Form, Cell, CellGroup, Card, Badge, Icon, Pagination, NoticeBar, Divider, Empty, Skeleton, Tag, Progress, Circle } from 'vant'
+
+// Import Vant styles
+import 'vant/lib/index.css'
+
+export default defineNuxtPlugin((nuxtApp) => {
+  // Register Vant components globally
+  const components = [
+    Button, NavBar, Tab, Tabs, Popup, Overlay, Loading, Toast, Dialog,
+    ActionSheet, Picker, Uploader, Swipe, SwipeItem, PullRefresh, List,
+    ImagePreview, Field, Form, Cell, CellGroup, Card, Badge, Icon,
+    Pagination, NoticeBar, Divider, Empty, Skeleton, Tag, Progress, Circle,
+  ]
+
+  components.forEach((component) => {
+    nuxtApp.vueApp.component(component.name || '', component)
+  })
+
+  return {
+    provide: {
+      vantToast: Toast,
+      vantDialog: Dialog,
+      vantImagePreview: ImagePreview,
+    },
+  }
+})

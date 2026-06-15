@@ -1,0 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Global Theme Variables
+   ============================================================ */
+
+:root {
+  --color-primary: #ff6b81;
+  --color-primary-light: #ff8fa3;
+  --color-primary-dark: #e8556b;
+  --color-secondary: #ffd93d;
+  --color-accent: #6c5ce7;
+  --color-bg: #fef6f7;
+  --color-surface: #ffffff;
+  --color-text: #2d3436;
+  --color-text-secondary: #636e72;
+  --color-border: #f0e0e4;
+  --color-success: #00b894;
+  --color-warning: #fdcb6e;
+  --color-error: #e17055;
+  --color-card-shadow: rgba(255, 107, 129, 0.15);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --font-cursive: 'Dancing Script', cursive;
+  --font-serif: 'Playfair Display', serif;
+}
+
+/* ============================================================
+   Base Styles
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: 'Noto Sans', 'Noto Sans SC', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Chinese font optimization */
+html[lang='zh-CN'],
+[data-locale='zh-CN'] {
+  font-family: 'Noto Sans SC', 'Noto Sans', -apple-system, BlinkMacSystemFont,
+    'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light);
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Utility Classes
+   ============================================================ */
+
+@layer components {
+  /* Card container styling */
+  .card-container {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden;
+  }
+
+  /* Gradient text for prices and highlights */
+  .text-gradient {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full
+           bg-gradient-to-r from-[#ff6b81] to-[#ff8fa3]
+           text-white font-semibold text-base
+           shadow-lg shadow-[#ff6b8133]
+           active:scale-95 transition-all duration-200
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Secondary button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full
+           border-2 border-[#ff6b81] text-[#ff6b81]
+           font-semibold text-base
+           active:scale-95 transition-all duration-200
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Card gradient backgrounds */
+  .gradient-love {
+    background: linear-gradient(135deg, #ff6b81 0%, #ff8fa3 50%, #ffb8c9 100%);
+  }
+
+  .gradient-birthday {
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 50%, #dfe6fd 100%);
+  }
+
+  .gradient-floral {
+    background: linear-gradient(135deg, #e17055 0%, #fab1a0 50%, #ffeaa7 100%);
+  }
+
+  .gradient-ocean {
+    background: linear-gradient(135deg, #0984e3 0%, #74b9ff 50%, #a5d1fd 100%);
+  }
+
+  .gradient-sunset {
+    background: linear-gradient(135deg, #fdcb6e 0%, #ffeaa7 50%, #ff7675 100%);
+  }
+
+  .gradient-forest {
+    background: linear-gradient(135deg, #00b894 0%, #55efc4 50%, #81ecec 100%);
+  }
+
+  .gradient-royal {
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 30%, #fd79a8 100%);
+  }
+
+  .gradient-coffee {
+    background: linear-gradient(135deg, #8B4513 0%, #CD853F 50%, #DEB887 100%);
+  }
+
+  /* Cursive font for card messages */
+  .font-message {
+    font-family: var(--font-cursive);
+    font-size: 1.25rem;
+    line-height: 1.8;
+  }
+
+  /* Price display */
+  .price-tag {
+    @apply inline-flex items-center text-[#ff6b81] font-bold;
+  }
+
+  /* Status badges */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-pending {
+    @apply bg-yellow-100 text-yellow-700;
+  }
+
+  .badge-paid {
+    @apply bg-blue-100 text-blue-700;
+  }
+
+  .badge-delivered {
+    @apply bg-green-100 text-green-700;
+  }
+
+  .badge-expired {
+    @apply bg-gray-100 text-gray-500;
+  }
+
+  /* PC layout center */
+  .pc-container {
+    @apply w-full max-w-lg mx-auto;
+  }
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-heart {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+.animate-pulse-heart {
+  animation: pulse-heart 1.5s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ============================================================
+   Vant UI Overrides
+   ============================================================ */
+
+/* Make Vant theme match our brand */
+:root {
+  --van-primary-color: var(--color-primary);
+  --van-button-primary-background: linear-gradient(135deg, #ff6b81, #ff8fa3);
+  --van-button-primary-border-color: transparent;
+  --van-card-background: #fff;
+  --van-tabbar-item-active-color: var(--color-primary);
+  --van-nav-bar-icon-color: var(--color-text);
+  --van-nav-bar-text-color: var(--color-text);
+  --van-tab-active-text-color: var(--color-primary);
+  --van-tabs-bottom-bar-color: var(--color-primary);
+  --van-pagination-item-default-color: var(--color-primary);
+  --van-dialog-confirm-button-text-color: var(--color-primary);
+}
+
+/* Vant button primary override for gradient */
+.van-button--primary {
+  background: linear-gradient(135deg, #ff6b81, #ff8fa3) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(255, 107, 129, 0.3);
+}
+
+/* Smooth navbar */
+.van-nav-bar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Card style for van-card */
+.van-card {
+  border-radius: var(--radius-md) !important;
+  overflow: hidden;
+}
+
+/* ============================================================
+   Responsive: PC layout
+   ============================================================ */
+
+@media (min-width: 769px) {
+  body {
+    background-color: #f5f0f1;
+  }
+
+  #__nuxt {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--color-bg);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+    position: relative;
+  }
+}
+
+/* ============================================================
+   Safe Area (iPhone notch)
+   ============================================================ */
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
