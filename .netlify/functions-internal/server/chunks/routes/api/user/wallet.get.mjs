@@ -1,5 +1,6 @@
 import { d as defineEventHandler, s as setResponseStatus } from '../../../nitro/nitro.mjs';
-import { g as getServiceClient, a as getUserFromEvent, e as ensureProfileAndWallet } from '../../../_/supabase.mjs';
+import { g as getServerUser } from '../../../_/auth.mjs';
+import { g as getServiceClient, e as ensureProfileAndWallet } from '../../../_/supabase.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -12,7 +13,7 @@ import '@supabase/supabase-js';
 const wallet_get = defineEventHandler(async (event) => {
   try {
     const supabase = getServiceClient();
-    const user = await getUserFromEvent(event);
+    const user = await getServerUser(event);
     if (!user) {
       setResponseStatus(event, 401);
       return { error: "Login required" };

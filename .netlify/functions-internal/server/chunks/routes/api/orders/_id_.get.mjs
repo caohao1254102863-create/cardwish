@@ -1,5 +1,6 @@
 import { d as defineEventHandler, s as setResponseStatus, g as getRouterParam } from '../../../nitro/nitro.mjs';
-import { g as getServiceClient, a as getUserFromEvent } from '../../../_/supabase.mjs';
+import { g as getServerUser } from '../../../_/auth.mjs';
+import { g as getServiceClient } from '../../../_/supabase.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -13,7 +14,7 @@ const _id__get = defineEventHandler(async (event) => {
   var _a, _b, _c, _d;
   try {
     const supabase = getServiceClient();
-    const user = await getUserFromEvent(event);
+    const user = await getServerUser(event);
     if (!user) {
       setResponseStatus(event, 401);
       return { error: "Login required" };

@@ -1,10 +1,8 @@
-import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { defineComponent, inject, computed, unref, shallowRef, hasInjectionContext, getCurrentInstance, defineAsyncComponent, toRef, isRef, createElementBlock, provide, cloneVNode, h, ref, reactive, createVNode, watchEffect, mergeProps, Transition, Teleport, watch, nextTick, Fragment, withDirectives, vShow, Comment, withKeys, Suspense, shallowReactive, useSSRContext, createApp, Text, resolveDirective, createTextVNode, withCtx, onErrorCaptured, onServerPrefetch, resolveDynamicComponent, effectScope, getCurrentScope, isReadonly, isShallow, isReactive, toRaw, markRaw } from 'vue';
-import { h as createError$1, n as defu, o as sanitizeStatusCode, p as getContext, $ as $fetch, q as createHooks, t as getRequestProtocol, v as getRequestHeaders, w as executeAsync, b as getHeader, x as setCookie, y as klona, z as getRequestHeader, A as destr, B as isEqual$1, C as getCookie, D as deleteCookie } from '../nitro/nitro.mjs';
+import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { hasInjectionContext, inject, getCurrentInstance, toRef, isRef, computed, shallowRef, defineComponent, createElementBlock, provide, cloneVNode, h, defineAsyncComponent, unref, shallowReactive, ref, Suspense, Fragment, useSSRContext, createApp, createVNode, Text, withCtx, onErrorCaptured, onServerPrefetch, resolveDynamicComponent, reactive, effectScope, nextTick, mergeProps, getCurrentScope, isReadonly, isShallow, isReactive, toRaw, markRaw } from 'vue';
+import { i as createError$1, o as sanitizeStatusCode, q as getContext, $ as $fetch, t as defu, v as createHooks, w as getRequestProtocol, x as getRequestHeaders, y as executeAsync, b as getHeader, z as setCookie, A as klona, B as getRequestHeader, C as destr, D as isEqual$1, e as getCookie, E as deleteCookie } from '../nitro/nitro.mjs';
 import { b as baseURL } from '../routes/renderer.mjs';
-import { useRoute as useRoute$2, RouterView, isNavigationFailure, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
+import { useRoute as useRoute$1, RouterView, isNavigationFailure, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
 import { createServerClient, parseCookieHeader } from '@supabase/ssr';
-import { useWindowSize, useChildren, useParent, useEventListener, useScrollParent, useRect, usePageVisibility, onMountedOrActivated, doubleRaf, CUSTOM_FIELD_INJECTION_KEY, cancelRaf, raf, useCustomFieldValue, getScrollParent } from '@vant/use';
-import { normalizeClass, stringifyStyle, normalizeStyle } from '@vue/shared';
 import { ssrRenderComponent, ssrRenderSuspense, ssrRenderVNode } from 'vue/server-renderer';
 import 'node:http';
 import 'node:https';
@@ -83,7 +81,6 @@ if (!("global" in globalThis)) {
 const appLayoutTransition = false;
 const nuxtLinkDefaults = { "componentName": "NuxtLink" };
 const asyncDataDefaults = { "value": null, "errorValue": null, "deep": true };
-const fetchDefaults = {};
 const appId = "nuxt-app";
 function getNuxtAppCtx(id = appId) {
   return getContext(id, {
@@ -167,11 +164,11 @@ function createNuxtApp(options) {
         await nuxtApp.runWithContext(() => hook(...args));
       }
     };
-    nuxtApp.hooks.callHook = (name2, ...args) => nuxtApp.hooks.callHookWith(contextCaller, name2, ...args);
+    nuxtApp.hooks.callHook = (name, ...args) => nuxtApp.hooks.callHookWith(contextCaller, name, ...args);
   }
   nuxtApp.callHook = nuxtApp.hooks.callHook;
-  nuxtApp.provide = (name2, value) => {
-    const $name = "$" + name2;
+  nuxtApp.provide = (name, value) => {
+    const $name = "$" + name;
     defineGetter(nuxtApp, $name, value);
     defineGetter(nuxtApp.vueApp.config.globalProperties, $name, value);
   };
@@ -203,7 +200,7 @@ async function applyPlugins(nuxtApp, plugins2) {
   let error = void 0;
   let promiseDepth = 0;
   async function executePlugin(plugin2) {
-    const unresolvedPluginsForThisPlugin = plugin2.dependsOn?.filter((name2) => plugins2.some((p) => p._name === name2) && !resolvedPlugins.has(name2)) ?? [];
+    const unresolvedPluginsForThisPlugin = plugin2.dependsOn?.filter((name) => plugins2.some((p) => p._name === name) && !resolvedPlugins.has(name)) ?? [];
     if (unresolvedPluginsForThisPlugin.length > 0) {
       unresolvedPlugins.push([new Set(unresolvedPluginsForThisPlugin), plugin2]);
     } else {
@@ -541,7 +538,7 @@ globalThis._importMeta_.url.replace(/\/app\/.*$/, "/");
 const useRouter = () => {
   return useNuxtApp()?.$router;
 };
-const useRoute$1 = () => {
+const useRoute = () => {
   if (hasInjectionContext()) {
     return inject(PageRouteSymbol, useNuxtApp()._route);
   }
@@ -551,18 +548,18 @@ const useRoute$1 = () => {
 function defineNuxtRouteMiddleware(middleware) {
   return middleware;
 }
-const addRouteMiddleware = (name2, middleware, options = {}) => {
+const addRouteMiddleware = (name, middleware, options = {}) => {
   const nuxtApp = useNuxtApp();
-  const global2 = options.global || typeof name2 !== "string";
+  const global2 = options.global || typeof name !== "string";
   const mw = middleware;
   if (!mw) {
-    console.warn("[nuxt] No route middleware passed to `addRouteMiddleware`.", name2);
+    console.warn("[nuxt] No route middleware passed to `addRouteMiddleware`.", name);
     return;
   }
   if (global2) {
     nuxtApp._middleware.global.push(mw);
   } else {
-    nuxtApp._middleware.named[name2] = mw;
+    nuxtApp._middleware.named[name] = mw;
   }
 };
 const isProcessingMiddleware = () => {
@@ -723,7 +720,7 @@ const unhead_k2P3m_ZDyjlr2mMYnoDPwavjsDN8hBlk9cFai0bbopU = /* @__PURE__ */ defin
     nuxtApp.vueApp.use(head);
   }
 });
-function toArray$3(value) {
+function toArray$2(value) {
   return Array.isArray(value) ? value : [value];
 }
 const matcher = (m, p) => {
@@ -740,209 +737,207 @@ function getRouteRules(arg) {
     return {};
   }
 }
-const __nuxt_page_meta$2 = {
-  layout: "auth"
-};
-const __nuxt_page_meta$1 = {
-  layout: "auth"
-};
 const __nuxt_page_meta = {
   layout: "auth"
 };
 const _routes = [
   {
-    name: "index___en",
-    path: "/",
-    component: () => import('./index-DwCHsa10.mjs')
+    name: "test___zh-CN",
+    path: "/test",
+    component: () => import('./test-BT87K5a8.mjs')
+  },
+  {
+    name: "test___en",
+    path: "/en/test",
+    component: () => import('./test-BT87K5a8.mjs')
   },
   {
     name: "index___zh-CN",
-    path: "/zh-CN",
-    component: () => import('./index-DwCHsa10.mjs')
+    path: "/",
+    component: () => import('./index-CM9HSthY.mjs')
   },
   {
-    name: "checkout___en",
-    path: "/checkout",
-    meta: { "middleware": ["auth"] },
-    component: () => import('./checkout-BvYmkTnK.mjs')
+    name: "index___en",
+    path: "/en",
+    component: () => import('./index-CM9HSthY.mjs')
   },
   {
     name: "checkout___zh-CN",
-    path: "/zh-CN/checkout",
-    meta: { "middleware": ["auth"] },
-    component: () => import('./checkout-BvYmkTnK.mjs')
+    path: "/checkout",
+    component: () => import('./checkout-BoKg_hOU.mjs')
   },
   {
-    name: "card-id___en",
-    path: "/card/:id()",
-    component: () => import('./_id_-B9aD-vQs.mjs')
+    name: "checkout___en",
+    path: "/en/checkout",
+    component: () => import('./checkout-BoKg_hOU.mjs')
   },
   {
     name: "card-id___zh-CN",
-    path: "/zh-CN/card/:id()",
-    component: () => import('./_id_-B9aD-vQs.mjs')
+    path: "/card/:id()",
+    component: () => import('./_id_-BaasPr1x.mjs')
   },
   {
-    name: "auth-login___en",
-    path: "/auth/login",
-    meta: __nuxt_page_meta$2 || {},
-    component: () => import('./login-BvuZ2Lg_.mjs')
+    name: "card-id___en",
+    path: "/en/card/:id()",
+    component: () => import('./_id_-BaasPr1x.mjs')
   },
   {
     name: "auth-login___zh-CN",
-    path: "/zh-CN/auth/login",
-    meta: __nuxt_page_meta$2 || {},
-    component: () => import('./login-BvuZ2Lg_.mjs')
+    path: "/auth/login",
+    component: () => import('./login-CprbZacG.mjs')
   },
   {
-    name: "order-id___en",
-    path: "/order/:id()",
-    component: () => import('./_id_-Dnab-Pon.mjs')
+    name: "auth-login___en",
+    path: "/en/auth/login",
+    component: () => import('./login-CprbZacG.mjs')
   },
   {
     name: "order-id___zh-CN",
-    path: "/zh-CN/order/:id()",
-    component: () => import('./_id_-Dnab-Pon.mjs')
+    path: "/order/:id()",
+    component: () => import('./_id_-BWoUxqF-.mjs')
   },
   {
-    name: "user___en",
-    path: "/user",
-    component: () => import('./index-Cillj584.mjs')
+    name: "order-id___en",
+    path: "/en/order/:id()",
+    component: () => import('./_id_-BWoUxqF-.mjs')
   },
   {
     name: "user___zh-CN",
-    path: "/zh-CN/user",
-    component: () => import('./index-Cillj584.mjs')
+    path: "/user",
+    component: () => import('./index-BXvxcS5D.mjs')
   },
   {
-    name: "legal-terms___en",
-    path: "/legal/terms",
-    component: () => import('./terms-D757bQpf.mjs')
+    name: "user___en",
+    path: "/en/user",
+    component: () => import('./index-BXvxcS5D.mjs')
   },
   {
     name: "legal-terms___zh-CN",
-    path: "/zh-CN/legal/terms",
-    component: () => import('./terms-D757bQpf.mjs')
+    path: "/legal/terms",
+    component: () => import('./terms-Lud27lLa.mjs')
   },
   {
-    name: "user-orders___en",
-    path: "/user/orders",
-    component: () => import('./orders-D-qqz9Dj.mjs')
+    name: "legal-terms___en",
+    path: "/en/legal/terms",
+    component: () => import('./terms-Lud27lLa.mjs')
   },
   {
     name: "user-orders___zh-CN",
-    path: "/zh-CN/user/orders",
-    component: () => import('./orders-D-qqz9Dj.mjs')
+    path: "/user/orders",
+    component: () => import('./orders-DqS_S7fM.mjs')
   },
   {
-    name: "user-wallet___en",
-    path: "/user/wallet",
-    component: () => import('./wallet-DeFZixIQ.mjs')
+    name: "user-orders___en",
+    path: "/en/user/orders",
+    component: () => import('./orders-DqS_S7fM.mjs')
   },
   {
     name: "user-wallet___zh-CN",
-    path: "/zh-CN/user/wallet",
-    component: () => import('./wallet-DeFZixIQ.mjs')
+    path: "/user/wallet",
+    component: () => import('./wallet-ByhBxtqb.mjs')
   },
   {
-    name: "auth-callback___en",
-    path: "/auth/callback",
-    meta: __nuxt_page_meta$1 || {},
-    component: () => import('./callback-3wy2a8H9.mjs')
+    name: "user-wallet___en",
+    path: "/en/user/wallet",
+    component: () => import('./wallet-ByhBxtqb.mjs')
   },
   {
     name: "auth-callback___zh-CN",
-    path: "/zh-CN/auth/callback",
-    meta: __nuxt_page_meta$1 || {},
-    component: () => import('./callback-3wy2a8H9.mjs')
+    path: "/auth/callback",
+    meta: __nuxt_page_meta || {},
+    component: () => import('./callback-MUh7tlzh.mjs')
   },
   {
-    name: "auth-register___en",
-    path: "/auth/register",
+    name: "auth-callback___en",
+    path: "/en/auth/callback",
     meta: __nuxt_page_meta || {},
-    component: () => import('./register-BU95loGD.mjs')
+    component: () => import('./callback-MUh7tlzh.mjs')
   },
   {
     name: "auth-register___zh-CN",
-    path: "/zh-CN/auth/register",
-    meta: __nuxt_page_meta || {},
-    component: () => import('./register-BU95loGD.mjs')
+    path: "/auth/register",
+    component: () => import('./register-DAKrYR1N.mjs')
   },
   {
-    name: "legal-privacy___en",
-    path: "/legal/privacy",
-    component: () => import('./privacy-DYrbGpsl.mjs')
+    name: "auth-register___en",
+    path: "/en/auth/register",
+    component: () => import('./register-DAKrYR1N.mjs')
   },
   {
     name: "legal-privacy___zh-CN",
-    path: "/zh-CN/legal/privacy",
-    component: () => import('./privacy-DYrbGpsl.mjs')
+    path: "/legal/privacy",
+    component: () => import('./privacy-CcxcIJeM.mjs')
   },
   {
-    name: "user-received___en",
-    path: "/user/received",
-    component: () => import('./received-BRpCamKv.mjs'),
-    children: [
-      {
-        name: "user-received-id___en",
-        path: ":id()",
-        component: () => import('./_id_-QKqcWA1u.mjs')
-      }
-    ]
+    name: "legal-privacy___en",
+    path: "/en/legal/privacy",
+    component: () => import('./privacy-CcxcIJeM.mjs')
   },
   {
     name: "user-received___zh-CN",
-    path: "/zh-CN/user/received",
-    component: () => import('./received-BRpCamKv.mjs'),
+    path: "/user/received",
+    component: () => import('./received-BM9Fx55j.mjs'),
     children: [
       {
         name: "user-received-id___zh-CN",
         path: ":id()",
-        component: () => import('./_id_-QKqcWA1u.mjs')
+        component: () => import('./_id_-D1scJcXU.mjs')
       }
     ]
   },
   {
-    name: "user-withdraw___en",
-    path: "/user/withdraw",
-    component: () => import('./withdraw-BhPO6IVX.mjs')
+    name: "user-received___en",
+    path: "/en/user/received",
+    component: () => import('./received-BM9Fx55j.mjs'),
+    children: [
+      {
+        name: "user-received-id___en",
+        path: ":id()",
+        component: () => import('./_id_-D1scJcXU.mjs')
+      }
+    ]
   },
   {
     name: "user-withdraw___zh-CN",
-    path: "/zh-CN/user/withdraw",
-    component: () => import('./withdraw-BhPO6IVX.mjs')
+    path: "/user/withdraw",
+    component: () => import('./withdraw-CKnFgnED.mjs')
   },
   {
-    name: "category-slug___en",
-    path: "/category/:slug()",
-    component: () => import('./_slug_-SjtR-9do.mjs')
+    name: "user-withdraw___en",
+    path: "/en/user/withdraw",
+    component: () => import('./withdraw-CKnFgnED.mjs')
   },
   {
     name: "category-slug___zh-CN",
-    path: "/zh-CN/category/:slug()",
-    component: () => import('./_slug_-SjtR-9do.mjs')
+    path: "/category/:slug()",
+    component: () => import('./_slug_-C8NOa4ex.mjs')
   },
   {
-    name: "pay-shareCode___en",
-    path: "/pay/:shareCode()",
-    component: () => import('./_shareCode_-DKH737oY.mjs'),
-    children: [
-      {
-        name: "pay-shareCode-success___en",
-        path: "success",
-        component: () => import('./success-B7V7YSzP.mjs')
-      }
-    ]
+    name: "category-slug___en",
+    path: "/en/category/:slug()",
+    component: () => import('./_slug_-C8NOa4ex.mjs')
   },
   {
     name: "pay-shareCode___zh-CN",
-    path: "/zh-CN/pay/:shareCode()",
-    component: () => import('./_shareCode_-DKH737oY.mjs'),
+    path: "/pay/:shareCode()",
+    component: () => import('./_shareCode_-B18JC3iL.mjs'),
     children: [
       {
         name: "pay-shareCode-success___zh-CN",
         path: "success",
-        component: () => import('./success-B7V7YSzP.mjs')
+        component: () => import('./success-DW5dwKvZ.mjs')
+      }
+    ]
+  },
+  {
+    name: "pay-shareCode___en",
+    path: "/en/pay/:shareCode()",
+    component: () => import('./_shareCode_-B18JC3iL.mjs'),
+    children: [
+      {
+        name: "pay-shareCode-success___en",
+        path: "success",
+        component: () => import('./success-DW5dwKvZ.mjs')
       }
     ]
   }
@@ -953,9 +948,9 @@ const _wrapInTransition = (props, children) => {
 const ROUTE_KEY_PARENTHESES_RE = /(:\w+)\([^)]+\)/g;
 const ROUTE_KEY_SYMBOLS_RE = /(:\w+)[?+*]/g;
 const ROUTE_KEY_NORMAL_RE = /:\w+/g;
-function generateRouteKey(route2) {
-  const source = route2?.meta.key ?? route2.path.replace(ROUTE_KEY_PARENTHESES_RE, "$1").replace(ROUTE_KEY_SYMBOLS_RE, "$1").replace(ROUTE_KEY_NORMAL_RE, (r) => route2.params[r.slice(1)]?.toString() || "");
-  return typeof source === "function" ? source(route2) : source;
+function generateRouteKey(route) {
+  const source = route?.meta.key ?? route.path.replace(ROUTE_KEY_PARENTHESES_RE, "$1").replace(ROUTE_KEY_SYMBOLS_RE, "$1").replace(ROUTE_KEY_NORMAL_RE, (r) => route.params[r.slice(1)]?.toString() || "");
+  return typeof source === "function" ? source(route) : source;
 }
 function isChangingPage(to, from) {
   if (to === from || from === START_LOCATION) {
@@ -972,19 +967,19 @@ function isChangingPage(to, from) {
   }
   return true;
 }
-function toArray$2(value) {
+function toArray$1(value) {
   return Array.isArray(value) ? value : [value];
 }
-function _mergeTransitionProps(routeProps2) {
+function _mergeTransitionProps(routeProps) {
   const _props = [];
-  for (const prop of routeProps2) {
+  for (const prop of routeProps) {
     if (!prop) {
       continue;
     }
     _props.push({
       ...prop,
-      onAfterLeave: prop.onAfterLeave ? toArray$2(prop.onAfterLeave) : void 0,
-      onBeforeLeave: prop.onBeforeLeave ? toArray$2(prop.onBeforeLeave) : void 0
+      onAfterLeave: prop.onAfterLeave ? toArray$1(prop.onAfterLeave) : void 0,
+      onBeforeLeave: prop.onBeforeLeave ? toArray$1(prop.onBeforeLeave) : void 0
     });
   }
   return defu(..._props);
@@ -1089,7 +1084,7 @@ const globalMiddleware = [
   manifest_45route_45rule
 ];
 const namedMiddleware = {
-  auth: () => import('./auth-BxyJNz1L.mjs')
+  auth: () => import('./auth-WyKyg7_a.mjs')
 };
 Object.assign(/* @__PURE__ */ Object.create(null), {});
 const pageIslandRoutes = Object.assign(/* @__PURE__ */ Object.create(null), {});
@@ -1147,14 +1142,14 @@ const plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
         syncCurrentRoute();
       }
     });
-    const route2 = { sync: syncCurrentRoute };
+    const route = { sync: syncCurrentRoute };
     for (const key in _route.value) {
-      Object.defineProperty(route2, key, {
+      Object.defineProperty(route, key, {
         get: () => _route.value[key],
         enumerable: true
       });
     }
-    nuxtApp._route = shallowReactive(route2);
+    nuxtApp._route = shallowReactive(route);
     nuxtApp._middleware ||= {
       global: [],
       named: {}
@@ -1208,7 +1203,7 @@ const plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
           if (!componentMiddleware) {
             continue;
           }
-          for (const entry2 of toArray$3(componentMiddleware)) {
+          for (const entry2 of toArray$2(componentMiddleware)) {
             middlewareEntries.add(entry2);
           }
         }
@@ -1335,11 +1330,11 @@ function setCookies(event, cookies) {
   if (!headersWritable()) {
     return;
   }
-  for (const { name: name2, value, options } of cookies) {
+  for (const { name, value, options } of cookies) {
     if (!headersWritable()) {
       break;
     }
-    setCookie(event, name2, value, options);
+    setCookie(event, name, value, options);
   }
 }
 const serverSupabaseClient = async (event) => {
@@ -1432,9 +1427,6 @@ function useRequestHeader(header) {
   const event = useRequestEvent();
   return event ? getRequestHeader(event, header) : void 0;
 }
-function useRequestFetch() {
-  return useRequestEvent()?.$fetch || globalThis.$fetch;
-}
 const supabase_server_NZuw_NDm2ZtOgvg4QqXN_Xqdg_KPvGuBBWKrLH15GWY = /* @__PURE__ */ defineNuxtPlugin({
   name: "supabase",
   enforce: "pre",
@@ -1471,9 +1463,9 @@ const supabase_server_NZuw_NDm2ZtOgvg4QqXN_Xqdg_KPvGuBBWKrLH15GWY = /* @__PURE__
     }
   }
 });
-function definePayloadReducer(name2, reduce) {
+function definePayloadReducer(name, reduce) {
   {
-    useNuxtApp().ssrContext["~payloadReducers"][name2] = reduce;
+    useNuxtApp().ssrContext["~payloadReducers"][name] = reduce;
   }
 }
 const reducers = [
@@ -1586,9 +1578,9 @@ const CookieDefaults = {
   },
   encode: (val) => encodeURIComponent(typeof val === "string" ? val : JSON.stringify(val))
 };
-function useCookie(name2, _opts) {
+function useCookie(name, _opts) {
   const opts = { ...CookieDefaults, ..._opts };
-  opts.filter ??= (key) => key === name2;
+  opts.filter ??= (key) => key === name;
   const cookies = readRawCookies(opts) || {};
   let delay;
   if (opts.maxAge !== void 0) {
@@ -1597,22 +1589,22 @@ function useCookie(name2, _opts) {
     delay = opts.expires.getTime() - Date.now();
   }
   const hasExpired = delay !== void 0 && delay <= 0;
-  const cookieValue = klona(hasExpired ? void 0 : cookies[name2] ?? opts.default?.());
+  const cookieValue = klona(hasExpired ? void 0 : cookies[name] ?? opts.default?.());
   const cookie = ref(cookieValue);
   {
     const nuxtApp = useNuxtApp();
     const writeFinalCookieValue = () => {
-      if (opts.readonly || isEqual$1(cookie.value, cookies[name2])) {
+      if (opts.readonly || isEqual$1(cookie.value, cookies[name])) {
         return;
       }
       nuxtApp._cookies ||= {};
-      if (name2 in nuxtApp._cookies) {
-        if (isEqual$1(cookie.value, nuxtApp._cookies[name2])) {
+      if (name in nuxtApp._cookies) {
+        if (isEqual$1(cookie.value, nuxtApp._cookies[name])) {
           return;
         }
       }
-      nuxtApp._cookies[name2] = cookie.value;
-      writeServerCookie(useRequestEvent(nuxtApp), name2, cookie.value, opts);
+      nuxtApp._cookies[name] = cookie.value;
+      writeServerCookie(useRequestEvent(nuxtApp), name, cookie.value, opts);
     };
     const unhook = nuxtApp.hooks.hookOnce("app:rendered", writeFinalCookieValue);
     nuxtApp.hooks.hookOnce("app:error", () => {
@@ -1627,13 +1619,13 @@ function readRawCookies(opts = {}) {
     return parse$1(getRequestHeader(useRequestEvent(), "cookie") || "", opts);
   }
 }
-function writeServerCookie(event, name2, value, opts = {}) {
+function writeServerCookie(event, name, value, opts = {}) {
   if (event) {
     if (value !== null && value !== void 0) {
-      return setCookie(event, name2, value, opts);
+      return setCookie(event, name, value, opts);
     }
-    if (getCookie(event, name2) !== void 0) {
-      return deleteCookie(event, name2, opts);
+    if (getCookie(event, name) !== void 0) {
+      return deleteCookie(event, name, opts);
     }
   }
 }
@@ -1660,7 +1652,7 @@ function warn(msg, err) {
     }
   }
 }
-const makeSymbol = (name2, shareable = false) => !shareable ? Symbol(name2) : Symbol.for(name2);
+const makeSymbol = (name, shareable = false) => !shareable ? Symbol(name) : Symbol.for(name);
 const generateFormatCacheKey = (locale, key, source) => friendlyJSONstringify({ l: locale, k: key, s: source });
 const friendlyJSONstringify = (json) => JSON.stringify(json).replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029").replace(/\u0027/g, "\\u0027");
 const isNumber = (val) => typeof val === "number" && isFinite(val);
@@ -1694,17 +1686,17 @@ function sanitizeTranslatedHtml(html) {
   });
   return html;
 }
-const hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 function hasOwn(obj, key) {
-  return hasOwnProperty$1.call(obj, key);
+  return hasOwnProperty.call(obj, key);
 }
 const isArray = Array.isArray;
-const isFunction$1 = (val) => typeof val === "function";
+const isFunction = (val) => typeof val === "function";
 const isString = (val) => typeof val === "string";
 const isBoolean = (val) => typeof val === "boolean";
-const isObject$1 = (val) => val !== null && typeof val === "object";
-const isPromise$1 = (val) => {
-  return isObject$1(val) && isFunction$1(val.then) && isFunction$1(val.catch);
+const isObject = (val) => val !== null && typeof val === "object";
+const isPromise = (val) => {
+  return isObject(val) && isFunction(val.then) && isFunction(val.catch);
 };
 const objectToString = Object.prototype.toString;
 const toTypeString = (value) => objectToString.call(value);
@@ -1715,7 +1707,7 @@ const toDisplayString = (val) => {
 function join(items, separator = "") {
   return items.reduce((str, item, index) => index === 0 ? str + item : str + separator + item, "");
 }
-const isNotObjectOrIsArray = (val) => !isObject$1(val) || isArray(val);
+const isNotObjectOrIsArray = (val) => !isObject(val) || isArray(val);
 function deepCopy(src, des) {
   if (isNotObjectOrIsArray(src) || isNotObjectOrIsArray(des)) {
     throw new Error("Invalid value");
@@ -1727,7 +1719,7 @@ function deepCopy(src, des) {
       if (key === "__proto__") {
         return;
       }
-      if (isObject$1(src2[key]) && !isObject$1(des2[key])) {
+      if (isObject(src2[key]) && !isObject(des2[key])) {
         des2[key] = Array.isArray(src2[key]) ? [] : create();
       }
       if (isNotObjectOrIsArray(des2[key]) || isNotObjectOrIsArray(src2[key])) {
@@ -1738,50 +1730,511 @@ function deepCopy(src, des) {
     });
   }
 }
+const resource$1 = {
+  "common": {
+    "app_name": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "CardWish" } },
+    "app_tagline": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "精美数字心意卡" } },
+    "pay": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "帮TA付款" } },
+    "share": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "分享" } },
+    "copy": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "复制" } },
+    "copied": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "已复制！" } },
+    "cancel": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "取消" } },
+    "confirm": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "确认" } },
+    "save": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "保存" } },
+    "loading": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "加载中..." } },
+    "error": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "出了点问题" } },
+    "retry": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "重试" } },
+    "back": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "返回" } },
+    "next": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "下一步" } },
+    "done": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "完成" } },
+    "close": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "关闭" } },
+    "logout": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "退出登录" } },
+    "login": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "登录" } },
+    "register": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "注册" } },
+    "view_all": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "查看全部" } },
+    "no_data": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "暂无数据" } },
+    "coming_soon": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "敬请期待" } }
+  },
+  "nav": {
+    "home": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "首页" } },
+    "orders": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "我的订单" } },
+    "wallet": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "钱包" } },
+    "received": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "我的卡片" } },
+    "profile": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "个人中心" } }
+  },
+  "home": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "精美数字心意卡" } },
+    "subtitle": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "选一张卡片，写下心意，让朋友为你买单" } },
+    "hot_picks": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "热门推荐" } },
+    "featured": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "精选卡片" } },
+    "categories": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "分类浏览" } },
+    "how_it_works": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "如何使用" } },
+    "step1_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "选择卡片" } },
+    "step1_desc": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "浏览精美卡片设计" } },
+    "step2_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "写下心意" } },
+    "step2_desc": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "用真挚的文字定制你的卡片" } },
+    "step3_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "分享给好友" } },
+    "step3_desc": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "发送链接，让朋友为你买单" } },
+    "step4_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "收到卡片" } },
+    "step4_desc": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "精美的数字卡片送达你的收藏" } }
+  },
+  "categories": {
+    "birthday": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "生日祝福" } },
+    "love": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "浪漫爱情" } },
+    "thanks": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "感谢有你" } },
+    "congratulations": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "祝贺庆祝" } },
+    "coffee": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "咖啡茶饮" } },
+    "flowers": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "鲜花祝福" } },
+    "cake": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "蛋糕甜点" } },
+    "mystery": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "神秘盲盒" } },
+    "encouragement": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "加油鼓励" } },
+    "friendship": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "友谊长存" } }
+  },
+  "card": {
+    "detail": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "卡片详情" } },
+    "price": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "价格" } },
+    "create_card": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "定制这张卡片" } },
+    "personalize": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "个性定制" } },
+    "your_message": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "你的留言..." } },
+    "message_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "写下你想对付款者说的话..." } },
+    "recipient_name": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "你的名字（显示在卡片上）" } },
+    "recipient_name_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "例如：小明" } },
+    "delivery_address": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": '卡片"寄送"地址' } },
+    "delivery_address_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "例如：幸福路123号快乐小区（仅展示用）" } },
+    "delivery_address_hint": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "仅为仪式感展示，不实际配送" } },
+    "card_preview": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "卡片预览" } },
+    "message_on_card": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "卡片留言" } },
+    "to": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "致" } },
+    "from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "来自" } }
+  },
+  "checkout": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "创建心愿卡片" } },
+    "step_personalize": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "个性定制" } },
+    "step_confirm": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "确认信息" } },
+    "step_share": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "分享链接" } },
+    "message_label": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "你的留言" } },
+    "message_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "写一段话给你的朋友..." } },
+    "recipient_name_label": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "你的名字" } },
+    "simulated_address_label": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "寄送地址（展示用）" } },
+    "confirm_order": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "生成分享链接" } },
+    "total": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "合计" } },
+    "card_fee": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "卡片价格" } },
+    "platform_fee": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "平台服务费" } },
+    "you_receive": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "你将获得" } },
+    "fee_note": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "平台收取30%服务费" } }
+  },
+  "share": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "分享你的心愿卡片！" } },
+    "description": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "分享这个链接，让朋友来帮你买单" } },
+    "copy_link": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "复制链接" } },
+    "copied": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "链接已复制！" } },
+    "share_to_wechat": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "分享到微信" } },
+    "share_to_whatsapp": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "WhatsApp" } },
+    "share_to_line": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "LINE" } },
+    "share_to_messenger": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Messenger" } },
+    "scan_qr": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "扫一扫" } },
+    "og_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 4, "k": "name" }, { "t": 3, "v": " 想要一张" }, { "t": 4, "k": "card_name" }, { "t": 3, "v": "！" }] } },
+    "og_description": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "支付 " }, { "t": 4, "k": "price" }, { "t": 3, "v": " 即可送出这张精美卡片给 " }, { "t": 4, "k": "name" }] } },
+    "waiting_for_payment": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "等待好友付款中..." } },
+    "share_hint": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "将上面的链接分享给你的朋友，第一个付款的人就能帮你实现心愿！" } }
+  },
+  "payment": {
+    "page_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 4, "k": "name" }, { "t": 3, "v": " 许愿了一张" }, { "t": 4, "k": "card_name" }] } },
+    "card_from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "来自 " }, { "t": 4, "k": "name" }, { "t": 3, "v": " 的心愿" }] } },
+    "message_label": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "TA的留言" } },
+    "pay_button": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "支付 " }, { "t": 4, "k": "price" }, { "t": 3, "v": " 帮TA实现心愿" }] } },
+    "your_message": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "回复一句话（选填）" } },
+    "your_message_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "给 " }, { "t": 4, "k": "name" }, { "t": 3, "v": " 回复一句话..." }] } },
+    "success_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "卡片已送出！🎉" } },
+    "success_message": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "你精美的卡片已送达 " }, { "t": 4, "k": "name" }, { "t": 3, "v": "！" }] } },
+    "success_thanks": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "感谢你让别人的一天变得更美好！" } },
+    "already_paid": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "这个心愿已经被实现了" } },
+    "expired": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "这个心愿已经过期了" } },
+    "create_your_own": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "创建你自己的心愿卡片" } },
+    "secure_payment": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "由 Stripe 提供安全支付保障" } },
+    "payment_methods": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "支持银行卡、Apple Pay、Google Pay 等多种支付方式" } }
+  },
+  "wallet": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "我的钱包" } },
+    "balance": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "可用余额" } },
+    "total_earned": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "累计收益" } },
+    "total_withdrawn": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "已提现" } },
+    "withdraw": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "提现" } },
+    "min_withdrawal": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "最低提现金额：" }, { "t": 4, "k": "amount" }] } },
+    "withdraw_amount": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "提现金额" } },
+    "withdraw_method": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "提现方式" } },
+    "method_wechat": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "微信支付" } },
+    "method_alipay": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "支付宝" } },
+    "method_bank": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "银行转账" } },
+    "account_info": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "账户信息" } },
+    "account_info_hint": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "请安全地输入您的收款账户信息" } },
+    "withdraw_success": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "提现申请已提交！" } },
+    "withdraw_pending": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "处理中" } },
+    "withdraw_completed": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "已完成" } },
+    "withdraw_rejected": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "已拒绝" } },
+    "earnings_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "收益明细" } },
+    "no_earnings": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "还没有收益。快去分享你的心愿卡片吧！" } },
+    "earning_from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "卡片：" }, { "t": 4, "k": "card_name" }] } },
+    "platform_fee": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "平台服务费：" }, { "t": 4, "k": "amount" }] } }
+  },
+  "received": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "我收到的卡片" } },
+    "from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "来自 " }, { "t": 4, "k": "payer" }] } },
+    "view_card": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "查看卡片" } },
+    "download": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "下载" } },
+    "no_cards": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "还没有收到卡片。快去分享你的心愿给朋友们吧！" } },
+    "new_badge": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "新" } },
+    "card_from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "来自 " }, { "t": 4, "k": "payer" }, { "t": 3, "v": " 的卡片" }] } },
+    "paid_by": { "t": 0, "b": { "t": 2, "i": [{ "t": 4, "k": "payer" }, { "t": 3, "v": " 为你买单" }] } }
+  },
+  "orders": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "我的订单" } },
+    "status_pending": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "等待付款" } },
+    "status_paid": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "已付款" } },
+    "status_delivered": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "已送达" } },
+    "status_expired": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "已过期" } },
+    "status_cancelled": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "已取消" } },
+    "no_orders": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "还没有订单。去浏览卡片开始吧！" } },
+    "order_number": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "订单号 #" }, { "t": 4, "k": "number" }] } },
+    "expires_in": { "t": 0, "b": { "t": 2, "i": [{ "t": 4, "k": "time" }, { "t": 3, "v": "后过期" }] } },
+    "created_at": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "创建于 " }, { "t": 4, "k": "date" }] } },
+    "cancel_order": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "取消订单" } },
+    "share_again": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "再次分享" } }
+  },
+  "auth": {
+    "login": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "登录" } },
+    "register": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "注册" } },
+    "email": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "邮箱" } },
+    "password": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "密码" } },
+    "phone": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "手机号" } },
+    "phone_number": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "手机号码" } },
+    "phone_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "请输入手机号" } },
+    "nickname": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "昵称" } },
+    "nickname_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "你的显示名称" } },
+    "verification_code": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "验证码" } },
+    "code_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "输入6位验证码" } },
+    "send_code": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "获取验证码" } },
+    "verify_login": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "验证并登录" } },
+    "login_via_sms": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "通过短信验证码登录" } },
+    "register_success": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "注册成功！现在可以登录了。" } },
+    "email_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "请输入邮箱地址" } },
+    "password_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "输入密码" } },
+    "login_button": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "登录" } },
+    "register_button": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "创建账户" } },
+    "no_account": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "还没有账户？" } },
+    "have_account": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "已有账户？" } },
+    "login_to_continue": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "登录后即可创建心愿卡片" } },
+    "or_continue_with": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "或通过以下方式继续" } },
+    "google": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Google 登录" } },
+    "magic_link": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "发送魔法链接" } },
+    "magic_link_sent": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "请查看邮箱中的魔法链接！" } },
+    "logout_confirm": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "确定要退出登录吗？" } },
+    "demo_code_hint": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "演示验证码（复制后填入下方）" } },
+    "demo_code_tip": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "正式环境将通过短信发送到您的手机" } }
+  },
+  "profile": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "个人中心" } },
+    "nickname": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "昵称" } },
+    "joined": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "加入于 " }, { "t": 4, "k": "date" }] } },
+    "edit_profile": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "编辑资料" } },
+    "language": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "语言" } },
+    "my_orders": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "我的订单" } },
+    "my_wallet": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "我的钱包" } },
+    "my_cards": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "收到的卡片" } },
+    "payment_history": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "付款记录" } }
+  },
+  "footer": {
+    "terms": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "服务条款" } },
+    "privacy": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "隐私政策" } },
+    "contact": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "联系我们" } },
+    "copyright": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "© " }, { "t": 4, "k": "year" }, { "t": 3, "v": " CardWish. 保留所有权利。" }] } }
+  },
+  "errors": {
+    "not_found": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "页面未找到" } },
+    "server_error": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "服务器出了点问题" } },
+    "payment_failed": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "支付未完成" } },
+    "login_required": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "请先登录" } },
+    "network_error": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "网络错误，请检查网络连接" } },
+    "card_not_found": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "卡片模板未找到" } },
+    "order_not_found": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "订单未找到" } },
+    "withdrawal_failed": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "提现申请失败" } },
+    "invalid_phone": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "请输入有效的手机号码" } }
+  }
+};
+const resource = {
+  "common": {
+    "app_name": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "CardWish" } },
+    "app_tagline": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Beautiful Digital Greeting Cards" } },
+    "pay": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Pay for Them" } },
+    "share": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Share" } },
+    "copy": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Copy" } },
+    "copied": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Copied!" } },
+    "cancel": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Cancel" } },
+    "confirm": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Confirm" } },
+    "save": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Save" } },
+    "loading": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Loading..." } },
+    "error": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Something went wrong" } },
+    "retry": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Retry" } },
+    "back": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Back" } },
+    "next": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Next" } },
+    "done": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Done" } },
+    "close": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Close" } },
+    "logout": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Sign Out" } },
+    "login": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Sign In" } },
+    "register": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Create Account" } },
+    "view_all": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "View All" } },
+    "no_data": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "No data available" } },
+    "coming_soon": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Coming Soon" } }
+  },
+  "nav": {
+    "home": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Home" } },
+    "orders": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "My Orders" } },
+    "wallet": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Wallet" } },
+    "received": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "My Cards" } },
+    "profile": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Profile" } }
+  },
+  "home": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Beautiful Digital Greeting Cards" } },
+    "subtitle": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Choose a card, write a message, share with friends" } },
+    "hot_picks": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Hot Picks" } },
+    "featured": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Featured" } },
+    "categories": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Categories" } },
+    "how_it_works": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "How It Works" } },
+    "step1_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Choose a Card" } },
+    "step1_desc": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Browse our beautiful card designs" } },
+    "step2_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Write a Message" } },
+    "step2_desc": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Personalize with your heartfelt words" } },
+    "step3_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Share with Friends" } },
+    "step3_desc": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Send the link and let them pay for it" } },
+    "step4_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Receive Your Card" } },
+    "step4_desc": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Get the beautiful digital card delivered to you" } }
+  },
+  "categories": {
+    "birthday": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Birthday" } },
+    "love": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Love & Romance" } },
+    "thanks": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Thank You" } },
+    "congratulations": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Congratulations" } },
+    "coffee": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Coffee & Tea" } },
+    "flowers": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Flowers" } },
+    "cake": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Cakes & Desserts" } },
+    "mystery": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Mystery Box" } },
+    "encouragement": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Encouragement" } },
+    "friendship": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Friendship" } }
+  },
+  "card": {
+    "detail": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Card Details" } },
+    "price": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Price" } },
+    "create_card": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Create This Card" } },
+    "personalize": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Personalize Your Card" } },
+    "your_message": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Your message..." } },
+    "message_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Write a heartfelt message for the person who will pay..." } },
+    "recipient_name": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Your name (shown on card)" } },
+    "recipient_name_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "e.g. Emily" } },
+    "delivery_address": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Where should we 'send' this card?" } },
+    "delivery_address_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "e.g. 123 Happiness Street, Joy City (for display only)" } },
+    "delivery_address_hint": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "This is for the ritual feeling only — no actual delivery" } },
+    "card_preview": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Card Preview" } },
+    "message_on_card": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Message on card" } },
+    "to": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "To" } },
+    "from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "From" } }
+  },
+  "checkout": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Create Your Card Wish" } },
+    "step_personalize": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Personalize" } },
+    "step_confirm": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Confirm" } },
+    "step_share": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Share" } },
+    "message_label": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Your Message" } },
+    "message_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Write a message for your friend..." } },
+    "recipient_name_label": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Your Name" } },
+    "simulated_address_label": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Delivery Address (for display)" } },
+    "confirm_order": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Generate Share Link" } },
+    "total": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Total" } },
+    "card_fee": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Card Price" } },
+    "platform_fee": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Platform Fee" } },
+    "you_receive": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "You'll Receive" } },
+    "fee_note": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Platform takes 30% service fee" } }
+  },
+  "share": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Share Your Card Wish!" } },
+    "description": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Share this link so your friends can pay for your card" } },
+    "copy_link": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Copy Link" } },
+    "copied": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Link copied!" } },
+    "share_to_wechat": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Share to WeChat" } },
+    "share_to_whatsapp": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "WhatsApp" } },
+    "share_to_line": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "LINE" } },
+    "share_to_messenger": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Messenger" } },
+    "scan_qr": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Scan QR Code" } },
+    "og_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 4, "k": "name" }, { "t": 3, "v": " wishes for a " }, { "t": 4, "k": "card_name" }, { "t": 3, "v": "!" }] } },
+    "og_description": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Pay " }, { "t": 4, "k": "price" }, { "t": 3, "v": " to send this beautiful card to " }, { "t": 4, "k": "name" }] } },
+    "waiting_for_payment": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Waiting for someone to pay..." } },
+    "share_hint": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Share the link above with your friends. The first one to pay grants your wish!" } }
+  },
+  "payment": {
+    "page_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 4, "k": "name" }, { "t": 3, "v": " wishes for a " }, { "t": 4, "k": "card_name" }] } },
+    "card_from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "A card wish from " }, { "t": 4, "k": "name" }] } },
+    "message_label": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Their message" } },
+    "pay_button": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Pay " }, { "t": 4, "k": "price" }, { "t": 3, "v": " to Grant This Wish" }] } },
+    "your_message": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Leave a message back (optional)" } },
+    "your_message_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Write a reply to " }, { "t": 4, "k": "name" }, { "t": 3, "v": "..." }] } },
+    "success_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Card Sent! 🎉" } },
+    "success_message": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Your beautiful card has been delivered to " }, { "t": 4, "k": "name" }, { "t": 3, "v": "!" }] } },
+    "success_thanks": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Thank you for making someone's day!" } },
+    "already_paid": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "This card wish has already been granted" } },
+    "expired": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "This card wish has expired" } },
+    "create_your_own": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Create Your Own Card Wish" } },
+    "secure_payment": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Secure payment powered by Stripe" } },
+    "payment_methods": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "We accept cards, Apple Pay, Google Pay, and more" } }
+  },
+  "wallet": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "My Wallet" } },
+    "balance": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Available Balance" } },
+    "total_earned": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Total Earned" } },
+    "total_withdrawn": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Withdrawn" } },
+    "withdraw": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Withdraw" } },
+    "min_withdrawal": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Minimum withdrawal: " }, { "t": 4, "k": "amount" }] } },
+    "withdraw_amount": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Withdrawal Amount" } },
+    "withdraw_method": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Payment Method" } },
+    "method_wechat": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "WeChat Pay" } },
+    "method_alipay": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Alipay" } },
+    "method_bank": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Bank Transfer" } },
+    "account_info": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Account Information" } },
+    "account_info_hint": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Enter your account details securely" } },
+    "withdraw_success": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Withdrawal request submitted!" } },
+    "withdraw_pending": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Processing" } },
+    "withdraw_completed": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Completed" } },
+    "withdraw_rejected": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Rejected" } },
+    "earnings_title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Earnings History" } },
+    "no_earnings": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "No earnings yet. Share your card wishes to start earning!" } },
+    "earning_from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Card: " }, { "t": 4, "k": "card_name" }] } },
+    "platform_fee": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Platform fee: " }, { "t": 4, "k": "amount" }] } }
+  },
+  "received": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "My Received Cards" } },
+    "from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "From " }, { "t": 4, "k": "payer" }] } },
+    "view_card": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "View Card" } },
+    "download": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Download" } },
+    "no_cards": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "No cards received yet. Share your wishes with friends!" } },
+    "new_badge": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "NEW" } },
+    "card_from": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "A card from " }, { "t": 4, "k": "payer" }] } },
+    "paid_by": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Paid by " }, { "t": 4, "k": "payer" }] } }
+  },
+  "orders": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "My Orders" } },
+    "status_pending": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Awaiting Payment" } },
+    "status_paid": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Paid" } },
+    "status_delivered": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Delivered" } },
+    "status_expired": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Expired" } },
+    "status_cancelled": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Cancelled" } },
+    "no_orders": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "No orders yet. Browse cards to get started!" } },
+    "order_number": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Order #" }, { "t": 4, "k": "number" }] } },
+    "expires_in": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Expires in " }, { "t": 4, "k": "time" }] } },
+    "created_at": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Created " }, { "t": 4, "k": "date" }] } },
+    "cancel_order": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Cancel Order" } },
+    "share_again": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Share Again" } }
+  },
+  "auth": {
+    "login": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Sign In" } },
+    "register": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Create Account" } },
+    "email": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Email" } },
+    "password": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Password" } },
+    "phone": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Phone" } },
+    "phone_number": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Phone Number" } },
+    "phone_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Enter your phone number" } },
+    "nickname": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Nickname" } },
+    "nickname_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Your display name" } },
+    "verification_code": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Verification Code" } },
+    "code_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Enter 6-digit code" } },
+    "send_code": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Send Code" } },
+    "verify_login": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Verify & Login" } },
+    "login_via_sms": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Login via SMS verification code" } },
+    "register_success": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Account created! You can now sign in." } },
+    "email_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "you [at] example.com" } },
+    "password_placeholder": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Enter password" } },
+    "login_button": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Sign In" } },
+    "register_button": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Create Account" } },
+    "no_account": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Don't have an account?" } },
+    "have_account": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Already have an account?" } },
+    "login_to_continue": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Sign in to create your card wishes" } },
+    "or_continue_with": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Or continue with" } },
+    "google": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Google" } },
+    "magic_link": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Send Magic Link" } },
+    "magic_link_sent": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Check your email for the magic link!" } },
+    "logout_confirm": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Are you sure you want to sign out?" } },
+    "demo_code_hint": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Demo verification code (copy and enter below)" } },
+    "demo_code_tip": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "In production, this code would be sent via SMS to your phone" } }
+  },
+  "profile": {
+    "title": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "My Profile" } },
+    "nickname": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Nickname" } },
+    "joined": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "Joined " }, { "t": 4, "k": "date" }] } },
+    "edit_profile": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Edit Profile" } },
+    "language": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Language" } },
+    "my_orders": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "My Orders" } },
+    "my_wallet": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "My Wallet" } },
+    "my_cards": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "My Received Cards" } },
+    "payment_history": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Payment History" } }
+  },
+  "footer": {
+    "terms": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Terms of Service" } },
+    "privacy": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Privacy Policy" } },
+    "contact": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Contact Us" } },
+    "copyright": { "t": 0, "b": { "t": 2, "i": [{ "t": 3, "v": "© " }, { "t": 4, "k": "year" }, { "t": 3, "v": " CardWish. All rights reserved." }] } }
+  },
+  "errors": {
+    "not_found": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Page not found" } },
+    "server_error": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Something went wrong on our end" } },
+    "payment_failed": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Payment was not completed" } },
+    "login_required": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Please sign in to continue" } },
+    "network_error": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Network error. Please check your connection." } },
+    "card_not_found": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Card template not found" } },
+    "order_not_found": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Order not found" } },
+    "withdrawal_failed": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Withdrawal request failed" } },
+    "invalid_phone": { "t": 0, "b": { "t": 2, "i": [{ "t": 3 }], "s": "Please enter a valid phone number" } }
+  }
+};
 const localeCodes = [
-  "en",
-  "zh-CN"
+  "zh-CN",
+  "en"
 ];
 const localeLoaders = {
-  en: [
-    {
-      key: "locale_en_46json_cbf9abf8",
-      load: () => import(
-        './en-DXhoXyLz.mjs'
-        /* webpackChunkName: "locale_en_46json_cbf9abf8" */
-      ),
-      cache: true
-    }
-  ],
   "zh-CN": [
     {
       key: "locale_zh_45CN_46json_0fd859d2",
-      load: () => import(
-        './zh-CN-B7cO5_r2.mjs'
-        /* webpackChunkName: "locale_zh_45CN_46json_0fd859d2" */
-      ),
+      load: () => Promise.resolve(resource$1),
+      cache: true
+    }
+  ],
+  en: [
+    {
+      key: "locale_en_46json_cbf9abf8",
+      load: () => Promise.resolve(resource),
       cache: true
     }
   ]
 };
-const vueI18nConfigs = [];
+const vueI18nConfigs = [
+  () => import(
+    './i18n.config-C_mZbzPF.mjs'
+    /* webpackChunkName: "config_i18n_46config_46ts_5f331f5d" */
+  )
+];
 const normalizedLocales = [
-  {
-    code: "en",
-    name: "English",
-    files: [
-      {
-        path: "/Users/langxiaoyue/digital-card-platform/i18n/locales/en.json",
-        cache: void 0
-      }
-    ]
-  },
   {
     code: "zh-CN",
     name: "中文",
     files: [
       {
         path: "/Users/langxiaoyue/digital-card-platform/i18n/locales/zh-CN.json",
+        cache: void 0
+      }
+    ]
+  },
+  {
+    code: "en",
+    name: "English",
+    files: [
+      {
+        path: "/Users/langxiaoyue/digital-card-platform/i18n/locales/en.json",
         cache: void 0
       }
     ]
@@ -1800,11 +2253,11 @@ function getRouteName(routeName) {
 function getLocaleRouteName(routeName, locale, opts) {
   const { defaultLocale, strategy, routesNameSeparator, defaultLocaleRouteNameSuffix, differentDomains } = opts;
   const localizedRoutes = strategy !== "no_prefix" || differentDomains;
-  const name2 = getRouteName(routeName) + (localizedRoutes ? routesNameSeparator + locale : "");
+  const name = getRouteName(routeName) + (localizedRoutes ? routesNameSeparator + locale : "");
   if (locale === defaultLocale && strategy === "prefix_and_default") {
-    return name2 + routesNameSeparator + defaultLocaleRouteNameSuffix;
+    return name + routesNameSeparator + defaultLocaleRouteNameSuffix;
   }
-  return name2;
+  return name;
 }
 function matchBrowserLocale(locales, browserLocales) {
   const matchedLocales = [];
@@ -1851,15 +2304,15 @@ function createLocaleFromRouteGetter() {
   const { routesNameSeparator, defaultLocaleRouteNameSuffix } = (/* @__PURE__ */ useRuntimeConfig()).public.i18n;
   const defaultSuffixPattern = `(?:${routesNameSeparator}${defaultLocaleRouteNameSuffix})?`;
   const regexpName = new RegExp(`${routesNameSeparator}${localesPattern}${defaultSuffixPattern}$`, "i");
-  return (route2) => {
-    if (isString(route2)) {
-      return route2.match(regexpPath)?.[1] ?? "";
+  return (route) => {
+    if (isString(route)) {
+      return route.match(regexpPath)?.[1] ?? "";
     }
-    if (route2.name) {
-      return getRouteName(route2.name).match(regexpName)?.[1] ?? "";
+    if (route.name) {
+      return getRouteName(route.name).match(regexpName)?.[1] ?? "";
     }
-    if (route2.path) {
-      return route2.path.match(regexpPath)?.[1] ?? "";
+    if (route.path) {
+      return route.path.match(regexpPath)?.[1] ?? "";
     }
     return "";
   };
@@ -1886,12 +2339,12 @@ function getHost() {
   const header = useRequestHeaders(["x-forwarded-host", "host"]);
   return header["x-forwarded-host"] || header["host"] || "";
 }
-function getLocaleDomain(locales, strategy, route2) {
+function getLocaleDomain(locales, strategy, route) {
   const host = getHost();
   if (!host) {
     return host;
   }
-  const routePath = isString(route2) ? route2 : route2.path;
+  const routePath = isString(route) ? route : route.path;
   const matchingLocales = locales.filter((locale) => {
     if (locale.domain) {
       return (hasProtocol(locale.domain) ? locale.domain.replace(/(http|https):\/\//, "") : locale.domain) === host;
@@ -1912,7 +2365,7 @@ function getLocaleDomain(locales, strategy, route2) {
     );
     return matchingLocales[0]?.code ?? "";
   }
-  if (route2 && routePath) {
+  if (route && routePath) {
     const matched = routePath.match(getLocalesRegex(matchingLocales.map((l) => l.code)))?.at(1);
     if (matched) {
       const matchingLocale2 = matchingLocales.find((l) => l.code === matched);
@@ -1926,8 +2379,8 @@ function getDomainFromLocale(localeCode) {
   const nuxt = useNuxtApp();
   const host = getHost();
   const { domainLocales } = (/* @__PURE__ */ useRuntimeConfig()).public.i18n;
-  const lang2 = normalizedLocales.find((locale) => locale.code === localeCode);
-  const domain = domainLocales?.[localeCode]?.domain || lang2?.domain || lang2?.domains?.find((v) => v === host);
+  const lang = normalizedLocales.find((locale) => locale.code === localeCode);
+  const domain = domainLocales?.[localeCode]?.domain || lang?.domain || lang?.domains?.find((v) => v === host);
   if (!domain) {
     console.warn(formatMessage("Could not find domain name for locale " + localeCode));
     return;
@@ -1944,8 +2397,8 @@ function setupMultiDomainLocales(runtimeI18n, defaultLocaleDomain) {
   if (!(strategy === "prefix_except_default" || strategy === "prefix_and_default")) return;
   const router = useRouter();
   const defaultRouteSuffix = [routesNameSeparator, defaultLocaleRouteNameSuffix].join("");
-  for (const route2 of router.getRoutes()) {
-    const routeName = getRouteName(route2.name);
+  for (const route of router.getRoutes()) {
+    const routeName = getRouteName(route.name);
     if (routeName.endsWith(defaultRouteSuffix)) {
       router.removeRoute(routeName);
       continue;
@@ -1953,8 +2406,8 @@ function setupMultiDomainLocales(runtimeI18n, defaultLocaleDomain) {
     const routeNameLocale = routeName.split(routesNameSeparator)[1];
     if (routeNameLocale === defaultLocaleDomain) {
       router.addRoute({
-        ...route2,
-        path: route2.path === `/${routeNameLocale}` ? "/" : route2.path.replace(`/${routeNameLocale}`, "")
+        ...route,
+        path: route.path === `/${routeNameLocale}` ? "/" : route.path.replace(`/${routeNameLocale}`, "")
       });
     }
   }
@@ -1965,8 +2418,8 @@ function getDefaultLocaleForDomain(runtimeI18n) {
   if (!multiDomainLocales) {
     const foundLocale = normalizedLocales.find((l) => {
       const localeCode = isString(l) ? l : l.code;
-      const lang2 = normalizedLocales.find((locale) => locale.code === localeCode);
-      const domain = domainLocales?.[localeCode]?.domain ?? lang2?.domain;
+      const lang = normalizedLocales.find((locale) => locale.code === localeCode);
+      const domain = domainLocales?.[localeCode]?.domain ?? lang?.domain;
       return domain === host;
     });
     return foundLocale?.code ?? defaultLocale ?? "";
@@ -1984,7 +2437,7 @@ async function loadVueI18nOptions(vueI18nConfigs2, nuxt) {
   const vueI18nOptions = { messages: {} };
   for (const configFile of vueI18nConfigs2) {
     const { default: resolver } = await configFile();
-    const resolved = isFunction$1(resolver) ? await nuxt.runWithContext(() => resolver()) : resolver;
+    const resolved = isFunction(resolver) ? await nuxt.runWithContext(() => resolver()) : resolver;
     deepCopy(resolved, vueI18nOptions);
   }
   return vueI18nOptions;
@@ -2011,7 +2464,7 @@ async function loadMessage(locale, { key, load }, nuxt) {
   let message = null;
   try {
     const getter = await load().then((x) => isModule(x) ? x.default : x);
-    if (isFunction$1(getter)) {
+    if (isFunction(getter)) {
       message = await nuxt.runWithContext(() => getter(locale));
     } else {
       message = getter;
@@ -2043,66 +2496,66 @@ async function loadLocale(locale, localeLoaders2, setter, nuxt) {
   }
   setter(locale, targetMessage);
 }
-function getRouteBaseName(common, route2) {
-  const _route = unref(route2);
-  const routeName = isObject$1(_route) ? _route?.name : _route;
+function getRouteBaseName(common, route) {
+  const _route = unref(route);
+  const routeName = isObject(_route) ? _route?.name : _route;
   if (_route == null || !routeName) {
     return;
   }
   return getRouteName(routeName).split(common.runtimeConfig.public.i18n.routesNameSeparator)[0];
 }
-function localePath(common, route2, locale) {
-  if (isString(route2) && hasProtocol(route2, { acceptRelative: true })) {
-    return route2;
+function localePath(common, route, locale) {
+  if (isString(route) && hasProtocol(route, { acceptRelative: true })) {
+    return route;
   }
-  const localizedRoute = resolveRoute(common, route2, locale);
+  const localizedRoute = resolveRoute(common, route, locale);
   return localizedRoute == null ? "" : localizedRoute.redirectedFrom?.fullPath || localizedRoute.fullPath;
 }
-function localeRoute(common, route2, locale) {
-  return resolveRoute(common, route2, locale) ?? void 0;
+function localeRoute(common, route, locale) {
+  return resolveRoute(common, route, locale) ?? void 0;
 }
-function normalizeRawLocation(route2) {
-  if (!isString(route2)) {
-    return assign({}, route2);
+function normalizeRawLocation(route) {
+  if (!isString(route)) {
+    return assign({}, route);
   }
-  if (route2[0] === "/") {
-    const { pathname: path, search, hash } = parsePath(route2);
+  if (route[0] === "/") {
+    const { pathname: path, search, hash } = parsePath(route);
     return { path, query: parseQuery(search), hash };
   }
-  return { name: route2 };
+  return { name: route };
 }
 const isRouteLocationPathRaw = (val) => !!val.path && !val.name;
-function resolveRouteObject(common, route2, locale) {
+function resolveRouteObject(common, route, locale) {
   const runtimeI18n = common.runtimeConfig.public.i18n;
-  if (isRouteLocationPathRaw(route2)) {
-    const resolved = resolve(common, route2, locale);
+  if (isRouteLocationPathRaw(route)) {
+    const resolved = resolve(common, route, locale);
     const resolvedName = getRouteBaseName(common, resolved);
     if (resolvedName) {
       resolved.name = getLocaleRouteName(resolvedName, locale, runtimeI18n);
       return resolved;
     }
     if (!runtimeI18n.differentDomains && prefixable(locale, runtimeI18n.defaultLocale, runtimeI18n.strategy)) {
-      route2.path = "/" + locale + route2.path;
+      route.path = "/" + locale + route.path;
     }
-    route2.path = (runtimeI18n.trailingSlash ? withTrailingSlash : withoutTrailingSlash)(route2.path, true);
-    return route2;
+    route.path = (runtimeI18n.trailingSlash ? withTrailingSlash : withoutTrailingSlash)(route.path, true);
+    return route;
   }
-  route2.name ||= getRouteBaseName(common, common.router.currentRoute.value);
-  const localizedName = getLocaleRouteName(route2.name, locale, runtimeI18n);
+  route.name ||= getRouteBaseName(common, common.router.currentRoute.value);
+  const localizedName = getLocaleRouteName(route.name, locale, runtimeI18n);
   if (common.router.hasRoute(localizedName)) {
-    route2.name = localizedName;
+    route.name = localizedName;
   }
-  return route2;
+  return route;
 }
-function resolveRoute(common, route2, locale) {
+function resolveRoute(common, route, locale) {
   try {
     const _locale = locale || unref(getI18nTarget(common.i18n).locale);
-    const normalized = normalizeRawLocation(route2);
+    const normalized = normalizeRawLocation(route);
     const resolved = common.router.resolve(resolveRouteObject(common, normalized, _locale));
     if (resolved.name) {
       return resolved;
     }
-    return common.router.resolve(route2);
+    return common.router.resolve(route);
   } catch (e) {
     if (isNavigationFailure(
       e,
@@ -2113,28 +2566,28 @@ function resolveRoute(common, route2, locale) {
     }
   }
 }
-function getLocalizableMetaFromDynamicParams(common, route2) {
+function getLocalizableMetaFromDynamicParams(common, route) {
   if (common.runtimeConfig.public.i18n.experimental.switchLocalePathLinkSSR) {
     return unref(common.metaState.value);
   }
-  const meta = route2.meta || {};
+  const meta = route.meta || {};
   return unref(meta)?.[DEFAULT_DYNAMIC_PARAMS_KEY] || {};
 }
 function switchLocalePath(common, locale, _route) {
-  const route2 = _route ?? common.router.currentRoute.value;
-  const name2 = getRouteBaseName(common, route2);
-  if (!name2) {
+  const route = _route ?? common.router.currentRoute.value;
+  const name = getRouteBaseName(common, route);
+  if (!name) {
     return "";
   }
-  const resolvedParams = getLocalizableMetaFromDynamicParams(common, route2)[locale];
+  const resolvedParams = getLocalizableMetaFromDynamicParams(common, route)[locale];
   const routeCopy = {
-    name: name2,
-    params: assign({}, route2.params, resolvedParams),
-    fullPath: route2.fullPath,
-    query: route2.query,
-    hash: route2.hash,
-    path: route2.path,
-    meta: route2.meta
+    name,
+    params: assign({}, route.params, resolvedParams),
+    fullPath: route.fullPath,
+    query: route.query,
+    hash: route.hash,
+    path: route.path,
+    meta: route.meta
     // matched: route.matched,
     // redirectedFrom: route.redirectedFrom
   };
@@ -2145,20 +2598,20 @@ function switchLocalePath(common, locale, _route) {
   }
   return path;
 }
-function resolve(common, route2, locale) {
+function resolve(common, route, locale) {
   if (common.runtimeConfig.public.i18n.strategy === "no_prefix") {
-    return route2;
+    return route;
   }
   if (common.runtimeConfig.public.i18n.strategy !== "prefix") {
-    return common.router.resolve(route2);
+    return common.router.resolve(route);
   }
-  const restPath = route2.path.slice(1);
-  const targetPath = route2.path[0] + locale + (restPath && "/" + restPath);
+  const restPath = route.path.slice(1);
+  const targetPath = route.path[0] + locale + (restPath && "/" + restPath);
   const _route = common.router.options.routes.find((r) => r.path === targetPath);
   if (_route == null) {
-    return route2;
+    return route;
   }
-  return common.router.resolve(assign({}, route2, _route, { path: targetPath }));
+  return common.router.resolve(assign({}, route, _route, { path: targetPath }));
 }
 function formatMessage(message) {
   return `[${NUXT_I18N_MODULE_ID}]: ${message}`;
@@ -2216,16 +2669,16 @@ async function loadAndSetLocale(nuxtApp, newLocale, initial = false) {
   await nuxtApp.$i18n.onLanguageSwitched(oldLocale, newLocale);
   return true;
 }
-function detectLocale(nuxtApp, route2, routeLocale, currentLocale, localeCookie) {
+function detectLocale(nuxtApp, route, routeLocale, currentLocale, localeCookie) {
   const { strategy, defaultLocale, differentDomains, multiDomainLocales } = nuxtApp.$config.public.i18n;
   const _detectBrowserLanguage = runtimeDetectBrowserLanguage();
-  const detectedBrowser = detectBrowserLanguage(nuxtApp, route2, localeCookie, currentLocale);
+  const detectedBrowser = detectBrowserLanguage(nuxtApp, route, localeCookie, currentLocale);
   if (detectedBrowser.locale && detectedBrowser.from != null && localeCodes.includes(detectedBrowser.locale)) {
     return detectedBrowser.locale;
   }
   let detected = "";
   if (differentDomains || multiDomainLocales) {
-    detected ||= getLocaleDomain(normalizedLocales, strategy, route2);
+    detected ||= getLocaleDomain(normalizedLocales, strategy, route);
   } else if (strategy !== "no_prefix") {
     detected ||= routeLocale;
   }
@@ -2248,9 +2701,9 @@ function detectRedirect({ to, nuxtApp, from, locale, routeLocale }, inMiddleware
   return redirectPath;
 }
 const useRedirectState = () => useState(NUXT_I18N_MODULE_ID + ":redirect", () => "");
-async function navigate({ nuxt, locale, route: route2, redirectPath }, enableNavigate = false) {
+async function navigate({ nuxt, locale, route, redirectPath }, enableNavigate = false) {
   const { rootRedirect, differentDomains, multiDomainLocales, skipSettingLocaleOnNavigate, locales, strategy } = nuxt.$config.public.i18n;
-  if (route2.path === "/" && rootRedirect) {
+  if (route.path === "/" && rootRedirect) {
     let redirectCode = 302;
     if (isString(rootRedirect)) {
       redirectPath = "/" + rootRedirect;
@@ -2268,17 +2721,17 @@ async function navigate({ nuxt, locale, route: route2, redirectPath }, enableNav
       return locale2.defaultForDomains?.find((domain) => domain === host);
     });
     const defaultLocaleForDomain = !isString(currentDomain) ? currentDomain?.code : void 0;
-    if (route2.path.startsWith(`/${defaultLocaleForDomain}`)) {
-      return navigateTo(route2.path.replace(`/${defaultLocaleForDomain}`, ""));
+    if (route.path.startsWith(`/${defaultLocaleForDomain}`)) {
+      return navigateTo(route.path.replace(`/${defaultLocaleForDomain}`, ""));
     }
-    if (!route2.path.startsWith(`/${locale}`) && locale !== defaultLocaleForDomain) {
-      const oldLocale = nuxt._vueI18n.__localeFromRoute(route2.path);
+    if (!route.path.startsWith(`/${locale}`) && locale !== defaultLocaleForDomain) {
+      const oldLocale = nuxt._vueI18n.__localeFromRoute(route.path);
       if (oldLocale !== "") {
-        return navigateTo(`/${locale + route2.path.replace(`/${oldLocale}`, "")}`);
+        return navigateTo(`/${locale + route.path.replace(`/${oldLocale}`, "")}`);
       }
-      return navigateTo(`/${locale + (route2.path === "/" ? "" : route2.path)}`);
+      return navigateTo(`/${locale + (route.path === "/" ? "" : route.path)}`);
     }
-    if (redirectPath && route2.path !== redirectPath) {
+    if (redirectPath && route.path !== redirectPath) {
       return navigateTo(redirectPath);
     }
     return;
@@ -2303,13 +2756,13 @@ function prefixable(currentLocale, defaultLocale, strategy) {
 }
 function extendBaseUrl(ctx) {
   const { baseUrl, defaultLocale, differentDomains } = ctx.$config.public.i18n;
-  if (isFunction$1(baseUrl)) {
+  if (isFunction(baseUrl)) {
     return () => {
       const baseUrlResult = baseUrl(ctx);
       return baseUrlResult;
     };
   }
-  const localeCode = isFunction$1(defaultLocale) ? defaultLocale() : defaultLocale;
+  const localeCode = isFunction(defaultLocale) ? defaultLocale() : defaultLocale;
   return () => {
     if (differentDomains && localeCode) {
       const domain = getDomainFromLocale(localeCode);
@@ -2320,7 +2773,7 @@ function extendBaseUrl(ctx) {
     return baseUrl ?? "";
   };
 }
-function toArray$1(value) {
+function toArray(value) {
   return isArray(value) ? value : [value];
 }
 function wrapComposable(fn, common = initCommonComposableOptions()) {
@@ -2364,7 +2817,7 @@ function getLocaleCookie(cookieRef, detect, defaultLocale) {
   }
   cookieRef.value = void 0;
 }
-function detectBrowserLanguage(nuxtApp, route2, localeCookie, locale = "") {
+function detectBrowserLanguage(nuxtApp, route, localeCookie, locale = "") {
   const _detect = runtimeDetectBrowserLanguage();
   if (!_detect) {
     return { locale: "", error: "disabled" };
@@ -2375,7 +2828,7 @@ function detectBrowserLanguage(nuxtApp, route2, localeCookie, locale = "") {
     return { locale: strategy === "no_prefix" ? locale : "", error: "first_access_only" };
   }
   if (strategy !== "no_prefix") {
-    const path = isString(route2) ? route2 : route2.path;
+    const path = isString(route) ? route : route.path;
     if (_detect.redirectOn === "root" && path !== "/") {
       return { locale: "", error: "not_redirect_on_root" };
     }
@@ -2421,8 +2874,8 @@ function createHeadContext(options) {
     runtimeI18n
   };
 }
-function localeHead(common, { dir = true, lang: lang2 = true, seo = true, key = "hid" }) {
-  return _localeHead(common, { dir, lang: lang2, seo, key });
+function localeHead(common, { dir = true, lang = true, seo = true, key = "hid" }) {
+  return _localeHead(common, { dir, lang, seo, key });
 }
 function _localeHead(common, options) {
   const metaObject = {
@@ -2487,10 +2940,10 @@ function getHreflangLinks(common, ctx) {
   return links;
 }
 function getCanonicalUrl(common, ctx) {
-  const route2 = common.router.currentRoute.value;
+  const route = common.router.currentRoute.value;
   const currentRoute = localeRoute(
     common,
-    assign({}, route2, { path: void 0, name: getRouteBaseName(common, route2) })
+    assign({}, route, { path: void 0, name: getRouteBaseName(common, route) })
   );
   if (!currentRoute) return "";
   return withQuery(joinURL(ctx.baseUrl, currentRoute.path), getCanonicalQueryParams(common, ctx));
@@ -2501,17 +2954,17 @@ function getCanonicalLink(common, ctx) {
   return [{ [ctx.key]: "i18n-can", rel: "canonical", href }];
 }
 function getCanonicalQueryParams(common, ctx) {
-  const route2 = common.router.currentRoute.value;
+  const route = common.router.currentRoute.value;
   const currentRoute = localeRoute(
     common,
-    assign({}, route2, { path: void 0, name: getRouteBaseName(common, route2) })
+    assign({}, route, { path: void 0, name: getRouteBaseName(common, route) })
   );
-  const canonicalQueries = isObject$1(ctx.seo) && ctx.seo?.canonicalQueries || [];
+  const canonicalQueries = isObject(ctx.seo) && ctx.seo?.canonicalQueries || [];
   const currentRouteQuery = currentRoute?.query || {};
   const params = {};
   for (const param of canonicalQueries.filter((x) => x in currentRouteQuery)) {
     params[param] ??= [];
-    for (const val of toArray$1(currentRouteQuery[param])) {
+    for (const val of toArray(currentRouteQuery[param])) {
       params[param].push(val || "");
     }
   }
@@ -2563,7 +3016,7 @@ const CompileErrorCodes = {
   UNEXPECTED_LEXICAL_ANALYSIS: 14};
 const COMPILE_ERROR_CODES_EXTEND_POINT = 17;
 function createCompileError(code, loc, options = {}) {
-  const { domain, messages: messages2, args } = options;
+  const { domain, messages, args } = options;
   const msg = code;
   const error = new SyntaxError(String(msg));
   error.code = code;
@@ -2940,14 +3393,14 @@ function createTokenizer(source, options = {}) {
   function readNamedIdentifier(scnr) {
     skipSpaces(scnr);
     let ch = "";
-    let name2 = "";
+    let name = "";
     while (ch = takeNamedIdentifierChar(scnr)) {
-      name2 += ch;
+      name += ch;
     }
     if (scnr.currentChar() === EOF) {
       emitError(CompileErrorCodes.UNTERMINATED_CLOSING_BRACE, currentPosition(), 0);
     }
-    return name2;
+    return name;
   }
   function readListIdentifier(scnr) {
     skipSpaces(scnr);
@@ -2978,10 +3431,10 @@ function createTokenizer(source, options = {}) {
         literal += ch;
       }
     }
-    const current2 = scnr.currentChar();
-    if (current2 === CHAR_LF || current2 === EOF) {
+    const current = scnr.currentChar();
+    if (current === CHAR_LF || current === EOF) {
       emitError(CompileErrorCodes.UNTERMINATED_SINGLE_QUOTE_IN_PLACEHOLDER, currentPosition(), 0);
-      if (current2 === CHAR_LF) {
+      if (current === CHAR_LF) {
         scnr.next();
         eat(scnr, `'`);
       }
@@ -3033,11 +3486,11 @@ function createTokenizer(source, options = {}) {
   }
   function readLinkedModifier(scnr) {
     let ch = "";
-    let name2 = "";
+    let name = "";
     while (ch = takeIdentifierChar(scnr)) {
-      name2 += ch;
+      name += ch;
     }
-    return name2;
+    return name;
   }
   function readLinkedRefer(scnr) {
     const fn = (buf) => {
@@ -3561,8 +4014,8 @@ function getTokenCaption(token) {
   if (token.type === 13) {
     return "EOF";
   }
-  const name2 = (token.value || "").replace(/\r?\n/gu, "\\n");
-  return name2.length > 10 ? name2.slice(0, 9) + "…" : name2;
+  const name = (token.value || "").replace(/\r?\n/gu, "\\n");
+  return name.length > 10 ? name.slice(0, 9) + "…" : name;
 }
 function createTransformer(ast, options = {}) {
   const _context = {
@@ -3570,9 +4023,9 @@ function createTransformer(ast, options = {}) {
     helpers: /* @__PURE__ */ new Set()
   };
   const context = () => _context;
-  const helper = (name2) => {
-    _context.helpers.add(name2);
-    return name2;
+  const helper = (name) => {
+    _context.helpers.add(name);
+    return name;
   };
   return { context, helper };
 }
@@ -3681,10 +4134,10 @@ function minify(node) {
   node.t = node.type;
   switch (node.type) {
     case 0: {
-      const resource = node;
-      minify(resource.body);
-      resource.b = resource.body;
-      delete resource.body;
+      const resource2 = node;
+      minify(resource2.body);
+      resource2.b = resource2.body;
+      delete resource2.body;
       break;
     }
     case 1: {
@@ -3953,7 +4406,7 @@ function baseCompile$1(source, options = {}) {
   }
 }
 function isMessageAST(val) {
-  return isObject$1(val) && resolveType(val) === 0 && (hasOwn(val, "b") || hasOwn(val, "body"));
+  return isObject(val) && resolveType(val) === 0 && (hasOwn(val, "b") || hasOwn(val, "body"));
 }
 const PROPS_BODY = ["b", "body"];
 function resolveBody(node) {
@@ -4022,7 +4475,7 @@ const AST_NODE_PROPS_KEYS = [
 function createUnhandleNodeError(type) {
   return new Error(`unhandled node type: ${type}`);
 }
-function format$1(ast) {
+function format(ast) {
   const msg = (ctx) => formatParts(ctx, ast);
   return msg;
 }
@@ -4038,8 +4491,8 @@ function formatParts(ctx, ast) {
   if (type === 1) {
     const plural = body;
     const cases = resolveCases(plural);
-    return ctx.plural(cases.reduce((messages2, c) => [
-      ...messages2,
+    return ctx.plural(cases.reduce((messages, c) => [
+      ...messages,
       formatMessageParts(ctx, c)
     ], []));
   } else {
@@ -4051,8 +4504,8 @@ function formatMessageParts(ctx, node) {
   if (static_ != null) {
     return ctx.type === "text" ? static_ : ctx.normalize([static_]);
   } else {
-    const messages2 = resolveItems(node).reduce((acm, c) => [...acm, formatMessagePart(ctx, c)], []);
-    return ctx.normalize(messages2);
+    const messages = resolveItems(node).reduce((acm, c) => [...acm, formatMessagePart(ctx, c)], []);
+    return ctx.normalize(messages);
   }
 }
 function formatMessagePart(ctx, node) {
@@ -4126,7 +4579,7 @@ function compile(message, context) {
       location: "production" !== "production",
       jit: true
     });
-    const msg = format$1(ast);
+    const msg = format(ast);
     return !detectError ? compileCache[cacheKey] = msg : msg;
   } else {
     const cacheKey = message.cacheKey;
@@ -4135,9 +4588,9 @@ function compile(message, context) {
       if (cached) {
         return cached;
       }
-      return compileCache[cacheKey] = format$1(message);
+      return compileCache[cacheKey] = format(message);
     } else {
-      return format$1(message);
+      return format(message);
     }
   }
 }
@@ -4162,12 +4615,12 @@ function resolveLocale(locale) {
   if (isString(locale)) {
     return locale;
   } else {
-    if (isFunction$1(locale)) {
+    if (isFunction(locale)) {
       if (locale.resolvedOnce && _resolveLocale != null) {
         return _resolveLocale;
       } else if (locale.constructor.name === "Function") {
         const resolve2 = locale();
-        if (isPromise$1(resolve2)) {
+        if (isPromise(resolve2)) {
           throw createCoreError(CoreErrorCodes.NOT_SUPPORT_LOCALE_PROMISE_VALUE);
         }
         return _resolveLocale = resolve2;
@@ -4182,7 +4635,7 @@ function resolveLocale(locale) {
 function fallbackWithSimple(ctx, fallback, start) {
   return [.../* @__PURE__ */ new Set([
     start,
-    ...isArray(fallback) ? fallback : isObject$1(fallback) ? Object.keys(fallback) : isString(fallback) ? [fallback] : [start]
+    ...isArray(fallback) ? fallback : isObject(fallback) ? Object.keys(fallback) : isString(fallback) ? [fallback] : [start]
   ])];
 }
 function fallbackWithLocaleChain(ctx, fallback, start) {
@@ -4658,10 +5111,10 @@ function parse(path) {
 }
 const cache = /* @__PURE__ */ new Map();
 function resolveWithKeyValue(obj, path) {
-  return isObject$1(obj) ? obj[path] : null;
+  return isObject(obj) ? obj[path] : null;
 }
 function resolveValue(obj, path) {
-  if (!isObject$1(obj)) {
+  if (!isObject(obj)) {
     return null;
   }
   let hit = cache.get(path);
@@ -4686,7 +5139,7 @@ function resolveValue(obj, path) {
     if (val === void 0) {
       return null;
     }
-    if (isFunction$1(last)) {
+    if (isFunction(last)) {
       return null;
     }
     last = val;
@@ -4702,13 +5155,13 @@ const capitalize = (str) => `${str.charAt(0).toLocaleUpperCase()}${str.substr(1)
 function getDefaultLinkedModifiers() {
   return {
     upper: (val, type) => {
-      return type === "text" && isString(val) ? val.toUpperCase() : type === "vnode" && isObject$1(val) && "__v_isVNode" in val ? val.children.toUpperCase() : val;
+      return type === "text" && isString(val) ? val.toUpperCase() : type === "vnode" && isObject(val) && "__v_isVNode" in val ? val.children.toUpperCase() : val;
     },
     lower: (val, type) => {
-      return type === "text" && isString(val) ? val.toLowerCase() : type === "vnode" && isObject$1(val) && "__v_isVNode" in val ? val.children.toLowerCase() : val;
+      return type === "text" && isString(val) ? val.toLowerCase() : type === "vnode" && isObject(val) && "__v_isVNode" in val ? val.children.toLowerCase() : val;
     },
     capitalize: (val, type) => {
-      return type === "text" && isString(val) ? capitalize(val) : type === "vnode" && isObject$1(val) && "__v_isVNode" in val ? capitalize(val.children) : val;
+      return type === "text" && isString(val) ? capitalize(val) : type === "vnode" && isObject(val) && "__v_isVNode" in val ? capitalize(val.children) : val;
     }
   };
 }
@@ -4733,40 +5186,40 @@ const setFallbackContext = (context) => {
 const getFallbackContext = () => _fallbackContext;
 let _cid = 0;
 function createCoreContext(options = {}) {
-  const onWarn = isFunction$1(options.onWarn) ? options.onWarn : warn;
+  const onWarn = isFunction(options.onWarn) ? options.onWarn : warn;
   const version = isString(options.version) ? options.version : VERSION$1;
-  const locale = isString(options.locale) || isFunction$1(options.locale) ? options.locale : DEFAULT_LOCALE;
-  const _locale = isFunction$1(locale) ? DEFAULT_LOCALE : locale;
+  const locale = isString(options.locale) || isFunction(options.locale) ? options.locale : DEFAULT_LOCALE;
+  const _locale = isFunction(locale) ? DEFAULT_LOCALE : locale;
   const fallbackLocale = isArray(options.fallbackLocale) || isPlainObject(options.fallbackLocale) || isString(options.fallbackLocale) || options.fallbackLocale === false ? options.fallbackLocale : _locale;
-  const messages2 = isPlainObject(options.messages) ? options.messages : createResources(_locale);
+  const messages = isPlainObject(options.messages) ? options.messages : createResources(_locale);
   const datetimeFormats = isPlainObject(options.datetimeFormats) ? options.datetimeFormats : createResources(_locale);
   const numberFormats = isPlainObject(options.numberFormats) ? options.numberFormats : createResources(_locale);
   const modifiers = assign(create(), options.modifiers, getDefaultLinkedModifiers());
   const pluralRules = options.pluralRules || create();
-  const missing = isFunction$1(options.missing) ? options.missing : null;
+  const missing = isFunction(options.missing) ? options.missing : null;
   const missingWarn = isBoolean(options.missingWarn) || isRegExp(options.missingWarn) ? options.missingWarn : true;
   const fallbackWarn = isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn) ? options.fallbackWarn : true;
   const fallbackFormat = !!options.fallbackFormat;
   const unresolving = !!options.unresolving;
-  const postTranslation = isFunction$1(options.postTranslation) ? options.postTranslation : null;
+  const postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null;
   const processor = isPlainObject(options.processor) ? options.processor : null;
   const warnHtmlMessage = isBoolean(options.warnHtmlMessage) ? options.warnHtmlMessage : true;
   const escapeParameter = !!options.escapeParameter;
-  const messageCompiler = isFunction$1(options.messageCompiler) ? options.messageCompiler : _compiler;
-  const messageResolver = isFunction$1(options.messageResolver) ? options.messageResolver : _resolver || resolveWithKeyValue;
-  const localeFallbacker = isFunction$1(options.localeFallbacker) ? options.localeFallbacker : _fallbacker || fallbackWithSimple;
-  const fallbackContext = isObject$1(options.fallbackContext) ? options.fallbackContext : void 0;
+  const messageCompiler = isFunction(options.messageCompiler) ? options.messageCompiler : _compiler;
+  const messageResolver = isFunction(options.messageResolver) ? options.messageResolver : _resolver || resolveWithKeyValue;
+  const localeFallbacker = isFunction(options.localeFallbacker) ? options.localeFallbacker : _fallbacker || fallbackWithSimple;
+  const fallbackContext = isObject(options.fallbackContext) ? options.fallbackContext : void 0;
   const internalOptions = options;
-  const __datetimeFormatters = isObject$1(internalOptions.__datetimeFormatters) ? internalOptions.__datetimeFormatters : /* @__PURE__ */ new Map();
-  const __numberFormatters = isObject$1(internalOptions.__numberFormatters) ? internalOptions.__numberFormatters : /* @__PURE__ */ new Map();
-  const __meta = isObject$1(internalOptions.__meta) ? internalOptions.__meta : {};
+  const __datetimeFormatters = isObject(internalOptions.__datetimeFormatters) ? internalOptions.__datetimeFormatters : /* @__PURE__ */ new Map();
+  const __numberFormatters = isObject(internalOptions.__numberFormatters) ? internalOptions.__numberFormatters : /* @__PURE__ */ new Map();
+  const __meta = isObject(internalOptions.__meta) ? internalOptions.__meta : {};
   _cid++;
   const context = {
     version,
     cid: _cid,
     locale,
     fallbackLocale,
-    messages: messages2,
+    messages,
     modifiers,
     pluralRules,
     missing,
@@ -5079,10 +5532,10 @@ function normalizeNamed(pluralIndex, props) {
 function createMessageContext(options = {}) {
   const locale = options.locale;
   const pluralIndex = getPluralIndex(options);
-  const pluralRule = isObject$1(options.pluralRules) && isString(locale) && isFunction$1(options.pluralRules[locale]) ? options.pluralRules[locale] : pluralDefault;
-  const orgPluralRule = isObject$1(options.pluralRules) && isString(locale) && isFunction$1(options.pluralRules[locale]) ? pluralDefault : void 0;
-  const plural = (messages2) => {
-    return messages2[pluralRule(pluralIndex, messages2.length, orgPluralRule)];
+  const pluralRule = isObject(options.pluralRules) && isString(locale) && isFunction(options.pluralRules[locale]) ? options.pluralRules[locale] : pluralDefault;
+  const orgPluralRule = isObject(options.pluralRules) && isString(locale) && isFunction(options.pluralRules[locale]) ? pluralDefault : void 0;
+  const plural = (messages) => {
+    return messages[pluralRule(pluralIndex, messages.length, orgPluralRule)];
   };
   const _list = options.list || [];
   const list = (index) => _list[index];
@@ -5090,19 +5543,19 @@ function createMessageContext(options = {}) {
   isNumber(options.pluralIndex) && normalizeNamed(pluralIndex, _named);
   const named = (key) => _named[key];
   function message(key, useLinked) {
-    const msg = isFunction$1(options.messages) ? options.messages(key, !!useLinked) : isObject$1(options.messages) ? options.messages[key] : false;
+    const msg = isFunction(options.messages) ? options.messages(key, !!useLinked) : isObject(options.messages) ? options.messages[key] : false;
     return !msg ? options.parent ? options.parent.message(key) : DEFAULT_MESSAGE : msg;
   }
-  const _modifier = (name2) => options.modifiers ? options.modifiers[name2] : DEFAULT_MODIFIER;
-  const normalize = isPlainObject(options.processor) && isFunction$1(options.processor.normalize) ? options.processor.normalize : DEFAULT_NORMALIZE;
-  const interpolate = isPlainObject(options.processor) && isFunction$1(options.processor.interpolate) ? options.processor.interpolate : DEFAULT_INTERPOLATE;
+  const _modifier = (name) => options.modifiers ? options.modifiers[name] : DEFAULT_MODIFIER;
+  const normalize = isPlainObject(options.processor) && isFunction(options.processor.normalize) ? options.processor.normalize : DEFAULT_NORMALIZE;
+  const interpolate = isPlainObject(options.processor) && isFunction(options.processor.interpolate) ? options.processor.interpolate : DEFAULT_INTERPOLATE;
   const type = isPlainObject(options.processor) && isString(options.processor.type) ? options.processor.type : DEFAULT_MESSAGE_DATA_TYPE;
   const linked = (key, ...args) => {
     const [arg1, arg2] = args;
     let type2 = "text";
     let modifier = "";
     if (args.length === 1) {
-      if (isObject$1(arg1)) {
+      if (isObject(arg1)) {
         modifier = arg1.modifier || modifier;
         type2 = arg1.type || type2;
       } else if (isString(arg1)) {
@@ -5164,22 +5617,22 @@ function createMessageContext(options = {}) {
   return ctx;
 }
 const NOOP_MESSAGE_FUNCTION = () => "";
-const isMessageFunction = (val) => isFunction$1(val);
+const isMessageFunction = (val) => isFunction(val);
 function translate(context, ...args) {
-  const { fallbackFormat, postTranslation, unresolving, messageCompiler, fallbackLocale, messages: messages2 } = context;
+  const { fallbackFormat, postTranslation, unresolving, messageCompiler, fallbackLocale, messages } = context;
   const [key, options] = parseTranslateArgs(...args);
   const missingWarn = isBoolean(options.missingWarn) ? options.missingWarn : context.missingWarn;
   const fallbackWarn = isBoolean(options.fallbackWarn) ? options.fallbackWarn : context.fallbackWarn;
   const escapeParameter = isBoolean(options.escapeParameter) ? options.escapeParameter : context.escapeParameter;
   const resolvedMessage = !!options.resolvedMessage;
   const defaultMsgOrKey = isString(options.default) || isBoolean(options.default) ? !isBoolean(options.default) ? options.default : !messageCompiler ? () => key : key : fallbackFormat ? !messageCompiler ? () => key : key : null;
-  const enableDefaultMsg = fallbackFormat || defaultMsgOrKey != null && (isString(defaultMsgOrKey) || isFunction$1(defaultMsgOrKey));
+  const enableDefaultMsg = fallbackFormat || defaultMsgOrKey != null && (isString(defaultMsgOrKey) || isFunction(defaultMsgOrKey));
   const locale = getLocale(context, options);
   escapeParameter && escapeParams(options);
   let [formatScope, targetLocale, message] = !resolvedMessage ? resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn, missingWarn) : [
     key,
     locale,
-    messages2[locale] || create()
+    messages[locale] || create()
   ];
   let format2 = formatScope;
   let cacheBaseKey = key;
@@ -5212,7 +5665,7 @@ function translate(context, ...args) {
 function escapeParams(options) {
   if (isArray(options.list)) {
     options.list = options.list.map((item) => isString(item) ? escapeHtml(item) : item);
-  } else if (isObject$1(options.named)) {
+  } else if (isObject(options.named)) {
     Object.keys(options.named).forEach((key) => {
       if (isString(options.named[key])) {
         options.named[key] = escapeHtml(options.named[key]);
@@ -5221,7 +5674,7 @@ function escapeParams(options) {
   }
 }
 function resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn, missingWarn) {
-  const { messages: messages2, onWarn, messageResolver: resolveValue2, localeFallbacker } = context;
+  const { messages, onWarn, messageResolver: resolveValue2, localeFallbacker } = context;
   const locales = localeFallbacker(context, fallbackLocale, locale);
   let message = create();
   let targetLocale;
@@ -5229,7 +5682,7 @@ function resolveMessageFormat(context, key, locale, fallbackLocale, fallbackWarn
   const type = "translate";
   for (let i = 0; i < locales.length; i++) {
     targetLocale = locales[i];
-    message = messages2[targetLocale] || create();
+    message = messages[targetLocale] || create();
     if ((format2 = resolveValue2(message, key)) === null) {
       format2 = message[key];
     }
@@ -5390,7 +5843,7 @@ const SetPluralRulesSymbol = makeSymbol("__setPluralRules");
 const InejctWithOptionSymbol = /* @__PURE__ */ makeSymbol("__injectWithOption");
 const DisposeSymbol = /* @__PURE__ */ makeSymbol("__dispose");
 function handleFlatJson(obj) {
-  if (!isObject$1(obj)) {
+  if (!isObject(obj)) {
     return obj;
   }
   if (isMessageAST(obj)) {
@@ -5401,7 +5854,7 @@ function handleFlatJson(obj) {
       continue;
     }
     if (!key.includes(".")) {
-      if (isObject$1(obj[key])) {
+      if (isObject(obj[key])) {
         handleFlatJson(obj[key]);
       }
     } else {
@@ -5416,7 +5869,7 @@ function handleFlatJson(obj) {
         if (!(subKeys[i] in currentObj)) {
           currentObj[subKeys[i]] = create();
         }
-        if (!isObject$1(currentObj[subKeys[i]])) {
+        if (!isObject(currentObj[subKeys[i]])) {
           hasStringValue = true;
           break;
         }
@@ -5434,7 +5887,7 @@ function handleFlatJson(obj) {
       }
       if (!isMessageAST(currentObj)) {
         const target = currentObj[subKeys[lastIndex]];
-        if (isObject$1(target)) {
+        if (isObject(target)) {
           handleFlatJson(target);
         }
       }
@@ -5443,17 +5896,17 @@ function handleFlatJson(obj) {
   return obj;
 }
 function getLocaleMessages(locale, options) {
-  const { messages: messages2, __i18n, messageResolver, flatJson } = options;
-  const ret = isPlainObject(messages2) ? messages2 : isArray(__i18n) ? create() : { [locale]: create() };
+  const { messages, __i18n, messageResolver, flatJson } = options;
+  const ret = isPlainObject(messages) ? messages : isArray(__i18n) ? create() : { [locale]: create() };
   if (isArray(__i18n)) {
     __i18n.forEach((custom) => {
       if ("locale" in custom && "resource" in custom) {
-        const { locale: locale2, resource } = custom;
+        const { locale: locale2, resource: resource2 } = custom;
         if (locale2) {
           ret[locale2] = ret[locale2] || create();
-          deepCopy(resource, ret[locale2]);
+          deepCopy(resource2, ret[locale2]);
         } else {
-          deepCopy(resource, ret);
+          deepCopy(resource2, ret);
         }
       } else {
         isString(custom) && deepCopy(JSON.parse(custom), ret);
@@ -5473,21 +5926,21 @@ function getComponentOptions(instance) {
   return instance.type;
 }
 function adjustI18nResources(gl, options, componentOptions) {
-  let messages2 = isObject$1(options.messages) ? options.messages : create();
+  let messages = isObject(options.messages) ? options.messages : create();
   if ("__i18nGlobal" in componentOptions) {
-    messages2 = getLocaleMessages(gl.locale.value, {
-      messages: messages2,
+    messages = getLocaleMessages(gl.locale.value, {
+      messages,
       __i18n: componentOptions.__i18nGlobal
     });
   }
-  const locales = Object.keys(messages2);
+  const locales = Object.keys(messages);
   if (locales.length) {
     locales.forEach((locale) => {
-      gl.mergeLocaleMessage(locale, messages2[locale]);
+      gl.mergeLocaleMessage(locale, messages[locale]);
     });
   }
   {
-    if (isObject$1(options.datetimeFormats)) {
+    if (isObject(options.datetimeFormats)) {
       const locales2 = Object.keys(options.datetimeFormats);
       if (locales2.length) {
         locales2.forEach((locale) => {
@@ -5495,7 +5948,7 @@ function adjustI18nResources(gl, options, componentOptions) {
         });
       }
     }
-    if (isObject$1(options.numberFormats)) {
+    if (isObject(options.numberFormats)) {
       const locales2 = Object.keys(options.numberFormats);
       if (locales2.length) {
         locales2.forEach((locale) => {
@@ -5543,9 +5996,9 @@ function createComposer(options = {}) {
   let _fallbackWarn = __root ? __root.fallbackWarn : isBoolean(options.fallbackWarn) || isRegExp(options.fallbackWarn) ? options.fallbackWarn : true;
   let _fallbackRoot = __root ? __root.fallbackRoot : isBoolean(options.fallbackRoot) ? options.fallbackRoot : true;
   let _fallbackFormat = !!options.fallbackFormat;
-  let _missing = isFunction$1(options.missing) ? options.missing : null;
-  let _runtimeMissing = isFunction$1(options.missing) ? defineCoreMissingHandler(options.missing) : null;
-  let _postTranslation = isFunction$1(options.postTranslation) ? options.postTranslation : null;
+  let _missing = isFunction(options.missing) ? options.missing : null;
+  let _runtimeMissing = isFunction(options.missing) ? defineCoreMissingHandler(options.missing) : null;
+  let _postTranslation = isFunction(options.postTranslation) ? options.postTranslation : null;
   let _warnHtmlMessage = __root ? __root.warnHtmlMessage : isBoolean(options.warnHtmlMessage) ? options.warnHtmlMessage : true;
   let _escapeParameter = !!options.escapeParameter;
   const _modifiers = __root ? __root.modifiers : isPlainObject(options.modifiers) ? options.modifiers : {};
@@ -5608,11 +6061,11 @@ function createComposer(options = {}) {
       updateFallbackLocale(_context, _locale.value, val);
     }
   });
-  const messages2 = computed(() => _messages.value);
+  const messages = computed(() => _messages.value);
   const datetimeFormats = /* @__PURE__ */ computed(() => _datetimeFormats.value);
   const numberFormats = /* @__PURE__ */ computed(() => _numberFormats.value);
   function getPostTranslationHandler() {
-    return isFunction$1(_postTranslation) ? _postTranslation : null;
+    return isFunction(_postTranslation) ? _postTranslation : null;
   }
   function setPostTranslationHandler(handler) {
     _postTranslation = handler;
@@ -5652,15 +6105,15 @@ function createComposer(options = {}) {
       throw createI18nError(I18nErrorCodes.UNEXPECTED_RETURN_TYPE);
     }
   };
-  function t2(...args) {
+  function t(...args) {
     return wrapWithDeps((context) => Reflect.apply(translate, null, [context, ...args]), () => parseTranslateArgs(...args), "translate", (root) => Reflect.apply(root.t, root, [...args]), (key) => key, (val) => isString(val));
   }
   function rt(...args) {
     const [arg1, arg2, arg3] = args;
-    if (arg3 && !isObject$1(arg3)) {
+    if (arg3 && !isObject(arg3)) {
       throw createI18nError(I18nErrorCodes.INVALID_ARGUMENT);
     }
-    return t2(...[arg1, arg2, assign({ resolvedMessage: true }, arg3 || {})]);
+    return t(...[arg1, arg2, assign({ resolvedMessage: true }, arg3 || {})]);
   }
   function d(...args) {
     return wrapWithDeps((context) => Reflect.apply(datetime, null, [context, ...args]), () => parseDateTimeArgs(...args), "datetime format", (root) => Reflect.apply(root.d, root, [...args]), () => MISSING_RESOLVE_VALUE, (val) => isString(val));
@@ -5714,21 +6167,21 @@ function createComposer(options = {}) {
     }, NOOP_RETURN_FALSE, (val) => isBoolean(val));
   }
   function resolveMessages(key) {
-    let messages22 = null;
+    let messages2 = null;
     const locales = fallbackWithLocaleChain(_context, _fallbackLocale.value, _locale.value);
     for (let i = 0; i < locales.length; i++) {
       const targetLocaleMessages = _messages.value[locales[i]] || {};
       const messageValue = _context.messageResolver(targetLocaleMessages, key);
       if (messageValue != null) {
-        messages22 = messageValue;
+        messages2 = messageValue;
         break;
       }
     }
-    return messages22;
+    return messages2;
   }
   function tm(key) {
-    const messages22 = resolveMessages(key);
-    return messages22 != null ? messages22 : __root ? __root.tm(key) || {} : {};
+    const messages2 = resolveMessages(key);
+    return messages2 != null ? messages2 : __root ? __root.tm(key) || {} : {};
   }
   function getLocaleMessage(locale2) {
     return _messages.value[locale2] || {};
@@ -5805,7 +6258,7 @@ function createComposer(options = {}) {
     get availableLocales() {
       return Object.keys(_messages.value).sort();
     },
-    messages: messages2,
+    messages,
     get modifiers() {
       return _modifiers;
     },
@@ -5856,7 +6309,7 @@ function createComposer(options = {}) {
       _escapeParameter = val;
       _context.escapeParameter = val;
     },
-    t: t2,
+    t,
     getLocaleMessage,
     setLocaleMessage,
     mergeLocaleMessage,
@@ -5908,11 +6361,11 @@ const baseFormatProps = {
 function getInterpolateArg({ slots }, keys) {
   if (keys.length === 1 && keys[0] === "default") {
     const ret = slots.default ? slots.default() : [];
-    return ret.reduce((slot, current2) => {
+    return ret.reduce((slot, current) => {
       return [
         ...slot,
         // prettier-ignore
-        ...current2.type === Fragment ? current2.children : [current2]
+        ...current.type === Fragment ? current.children : [current]
       ];
     }, []);
   } else {
@@ -5961,7 +6414,7 @@ const TranslationImpl = /* @__PURE__ */ defineComponent({
       const arg = getInterpolateArg(context, keys);
       const children = i18n[TranslateVNodeSymbol](props.keypath, arg, options);
       const assignedAttrs = assign(create(), attrs);
-      const tag = isString(props.tag) || isObject$1(props.tag) ? props.tag : getFragmentableTag();
+      const tag = isString(props.tag) || isObject(props.tag) ? props.tag : getFragmentableTag();
       return h(tag, assignedAttrs, children);
     };
   }
@@ -5980,7 +6433,7 @@ function renderFormatter(props, context, slotKeys, partFormatter) {
     }
     if (isString(props.format)) {
       options.key = props.format;
-    } else if (isObject$1(props.format)) {
+    } else if (isObject(props.format)) {
       if (isString(props.format.key)) {
         options.key = props.format.key;
       }
@@ -6003,7 +6456,7 @@ function renderFormatter(props, context, slotKeys, partFormatter) {
       children = [parts];
     }
     const assignedAttrs = assign(create(), attrs);
-    const tag = isString(props.tag) || isObject$1(props.tag) ? props.tag : getFragmentableTag();
+    const tag = isString(props.tag) || isObject(props.tag) ? props.tag : getFragmentableTag();
     return h(tag, assignedAttrs, children);
   };
 }
@@ -6143,9 +6596,9 @@ function apply(app, i18n, ...options) {
   const pluginOptions = isPlainObject(options[0]) ? options[0] : {};
   const globalInstall = isBoolean(pluginOptions.globalInstall) ? pluginOptions.globalInstall : true;
   if (globalInstall) {
-    [Translation.name, "I18nT"].forEach((name2) => app.component(name2, Translation));
-    [NumberFormat.name, "I18nN"].forEach((name2) => app.component(name2, NumberFormat));
-    [DatetimeFormat.name, "I18nD"].forEach((name2) => app.component(name2, DatetimeFormat));
+    [Translation.name, "I18nT"].forEach((name) => app.component(name, Translation));
+    [NumberFormat.name, "I18nN"].forEach((name) => app.component(name, NumberFormat));
+    [DatetimeFormat.name, "I18nD"].forEach((name) => app.component(name, DatetimeFormat));
   }
   {
     app.directive("t", vTDirective(i18n));
@@ -6277,19 +6730,19 @@ function getGlobalComposer(i18n) {
 function getComposer(i18n, target, useComponent = false) {
   let composer = null;
   const root = target.root;
-  let current2 = getParentComponentInstance(target, useComponent);
-  while (current2 != null) {
+  let current = getParentComponentInstance(target, useComponent);
+  while (current != null) {
     const i18nInternal = i18n;
     if (i18n.mode === "composition") {
-      composer = i18nInternal.__getInstance(current2);
+      composer = i18nInternal.__getInstance(current);
     }
     if (composer != null) {
       break;
     }
-    if (root === current2) {
+    if (root === current) {
       break;
     }
-    current2 = current2.parent;
+    current = current.parent;
   }
   return composer;
 }
@@ -6520,11 +6973,11 @@ const i18n_EI7LsD1KYQADczz5hrChviGQCdVM8yUkvFEZLJpmnvM = /* @__PURE__ */ defineN
             i18n.__setLocale(locale);
             return;
           }
-          const route2 = nuxt.$router.currentRoute.value;
+          const route = nuxt.$router.currentRoute.value;
           const redirectPath = await nuxt.runWithContext(
-            () => detectRedirect({ to: route2, nuxtApp: nuxt, locale, routeLocale: i18n.__localeFromRoute(route2) })
+            () => detectRedirect({ to: route, nuxtApp: nuxt, locale, routeLocale: i18n.__localeFromRoute(route) })
           );
-          await nuxt.runWithContext(() => navigate({ nuxt, redirectPath, locale, route: route2 }, true));
+          await nuxt.runWithContext(() => navigate({ nuxt, redirectPath, locale, route }, true));
         };
         composer.loadLocaleMessages = async (locale) => await loadLocale(locale, localeLoaders, composer.mergeLocaleMessage.bind(composer), nuxt);
         composer.differentDomains = runtimeI18n.differentDomains;
@@ -6579,8 +7032,8 @@ const i18n_EI7LsD1KYQADczz5hrChviGQCdVM8yUkvFEZLJpmnvM = /* @__PURE__ */ defineN
           ["finalizePendingLocaleChange", () => () => Reflect.apply(c.finalizePendingLocaleChange, c, [])],
           ["waitForPendingLocaleChange", () => () => Reflect.apply(c.waitForPendingLocaleChange, c, [])]
         ];
-        for (const [key, get2] of props) {
-          Object.defineProperty(instance, key, { get: get2 });
+        for (const [key, get] of props) {
+          Object.defineProperty(instance, key, { get });
         }
       }
     });
@@ -6604,7373 +7057,8 @@ const i18n_EI7LsD1KYQADczz5hrChviGQCdVM8yUkvFEZLJpmnvM = /* @__PURE__ */ defineN
     };
   }
 });
-const LazyAppFooter = defineAsyncComponent(() => import('./AppFooter-dPiBEs93.mjs').then((r) => r["default"] || r.default || r));
-const LazyAppHeader = defineAsyncComponent(() => import('./AppHeader-BTKmFkbe.mjs').then((r) => r["default"] || r.default || r));
-const LazyLocaleSwitcher = defineAsyncComponent(() => import('./LocaleSwitcher-wF0Cmm4X.mjs').then((r) => r["default"] || r.default || r));
-const LazyMobileNavigation = defineAsyncComponent(() => import('./MobileNavigation-DIgsfEWz.mjs').then((r) => r["default"] || r.default || r));
-const lazyGlobalComponents = [
-  ["AppFooter", LazyAppFooter],
-  ["AppHeader", LazyAppHeader],
-  ["LocaleSwitcher", LazyLocaleSwitcher],
-  ["MobileNavigation", LazyMobileNavigation]
-];
 const components_plugin_z4hgvsiddfKkfXTP6M8M4zG5Cb7sGnDhcryKVM45Di4 = /* @__PURE__ */ defineNuxtPlugin({
-  name: "nuxt:global-components",
-  setup(nuxtApp) {
-    for (const [name2, component] of lazyGlobalComponents) {
-      nuxtApp.vueApp.component(name2, component);
-      nuxtApp.vueApp.component("Lazy" + name2, component);
-    }
-  }
-});
-function noop() {
-}
-const extend = Object.assign;
-const isObject = (val) => val !== null && typeof val === "object";
-const isDef = (val) => val !== void 0 && val !== null;
-const isFunction = (val) => typeof val === "function";
-const isPromise = (val) => isObject(val) && isFunction(val.then) && isFunction(val.catch);
-const isNumeric = (val) => typeof val === "number" || /^\d+(\.\d+)?$/.test(val);
-function get(object, path) {
-  const keys = path.split(".");
-  let result = object;
-  keys.forEach((key) => {
-    var _a;
-    result = isObject(result) ? (_a = result[key]) != null ? _a : "" : "";
-  });
-  return result;
-}
-function pick(obj, keys, ignoreUndefined) {
-  return keys.reduce(
-    (ret, key) => {
-      if (!ignoreUndefined || obj[key] !== void 0) {
-        ret[key] = obj[key];
-      }
-      return ret;
-    },
-    {}
-  );
-}
-const isSameValue = (newValue, oldValue) => JSON.stringify(newValue) === JSON.stringify(oldValue);
-const toArray = (item) => Array.isArray(item) ? item : [item];
-const flat = (arr) => arr.reduce((acc, val) => acc.concat(val), []);
-const unknownProp = null;
-const numericProp = [Number, String];
-const truthProp = {
-  type: Boolean,
-  default: true
-};
-const makeRequiredProp = (type) => ({
-  type,
-  required: true
-});
-const makeArrayProp = () => ({
-  type: Array,
-  default: () => []
-});
-const makeNumberProp = (defaultVal) => ({
-  type: Number,
-  default: defaultVal
-});
-const makeNumericProp = (defaultVal) => ({
-  type: numericProp,
-  default: defaultVal
-});
-const makeStringProp = (defaultVal) => ({
-  type: String,
-  default: defaultVal
-});
-function getScrollTop(el) {
-  const top = "scrollTop" in el ? el.scrollTop : el.pageYOffset;
-  return Math.max(top, 0);
-}
-function setScrollTop(el, value) {
-  if ("scrollTop" in el) {
-    el.scrollTop = value;
-  } else {
-    el.scrollTo(el.scrollX, value);
-  }
-}
-function getRootScrollTop() {
-  return (void 0).pageYOffset || (void 0).documentElement.scrollTop || (void 0).body.scrollTop || 0;
-}
-function setRootScrollTop(value) {
-  setScrollTop(void 0, value);
-  setScrollTop((void 0).body, value);
-}
-function getElementTop(el, scroller) {
-  if (el === void 0) {
-    return 0;
-  }
-  const scrollTop = scroller ? getScrollTop(scroller) : getRootScrollTop();
-  return useRect(el).top + scrollTop;
-}
-const stopPropagation = (event) => event.stopPropagation();
-function preventDefault(event, isStopPropagation) {
-  if (typeof event.cancelable !== "boolean" || event.cancelable) {
-    event.preventDefault();
-  }
-  if (isStopPropagation) {
-    stopPropagation(event);
-  }
-}
-function isHidden(elementRef) {
-  const el = unref(elementRef);
-  if (!el) {
-    return false;
-  }
-  const style = (void 0).getComputedStyle(el);
-  const hidden = style.display === "none";
-  const parentHidden = el.offsetParent === null && style.position !== "fixed";
-  return hidden || parentHidden;
-}
-const { width: windowWidth, height: windowHeight } = useWindowSize();
-function addUnit(value) {
-  if (isDef(value)) {
-    return isNumeric(value) ? `${value}px` : String(value);
-  }
-  return void 0;
-}
-function getSizeStyle(originSize) {
-  if (isDef(originSize)) {
-    if (Array.isArray(originSize)) {
-      return {
-        width: addUnit(originSize[0]),
-        height: addUnit(originSize[1])
-      };
-    }
-    const size = addUnit(originSize);
-    return {
-      width: size,
-      height: size
-    };
-  }
-}
-function getZIndexStyle(zIndex) {
-  const style = {};
-  if (zIndex !== void 0) {
-    style.zIndex = +zIndex;
-  }
-  return style;
-}
-function unitToPx(value) {
-  if (typeof value === "number") {
-    return value;
-  }
-  return parseFloat(value);
-}
-const camelizeRE = /-(\w)/g;
-const camelize = (str) => str.replace(camelizeRE, (_, c) => c.toUpperCase());
-const kebabCase = (str) => str.replace(/([A-Z])/g, "-$1").toLowerCase().replace(/^-/, "");
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-function trimExtraChar(value, char, regExp) {
-  const index = value.indexOf(char);
-  if (index === -1) {
-    return value;
-  }
-  if (char === "-" && index !== 0) {
-    return value.slice(0, index);
-  }
-  return value.slice(0, index + 1) + value.slice(index).replace(regExp, "");
-}
-function formatNumber(value, allowDot = true, allowMinus = true) {
-  if (allowDot) {
-    value = trimExtraChar(value, ".", /\./g);
-  } else {
-    value = value.split(".")[0];
-  }
-  if (allowMinus) {
-    value = trimExtraChar(value, "-", /-/g);
-  } else {
-    value = value.replace(/-/, "");
-  }
-  const regExp = allowDot ? /[^-0-9.]/g : /[^-0-9]/g;
-  return value.replace(regExp, "");
-}
-const { hasOwnProperty } = Object.prototype;
-function assignKey(to, from, key) {
-  const val = from[key];
-  if (!isDef(val)) {
-    return;
-  }
-  if (!hasOwnProperty.call(to, key) || !isObject(val)) {
-    to[key] = val;
-  } else {
-    to[key] = deepAssign(Object(to[key]), val);
-  }
-}
-function deepAssign(to, from) {
-  Object.keys(from).forEach((key) => {
-    assignKey(to, from, key);
-  });
-  return to;
-}
-var stdin_default$M = {
-  name: "姓名",
-  tel: "电话",
-  save: "保存",
-  clear: "清空",
-  undo: "撤销",
-  cancel: "取消",
-  confirm: "确认",
-  delete: "删除",
-  loading: "加载中...",
-  noCoupon: "暂无优惠券",
-  nameEmpty: "请填写姓名",
-  addContact: "添加联系人",
-  telInvalid: "请填写正确的电话",
-  vanCalendar: {
-    end: "结束",
-    start: "开始",
-    title: "日期选择",
-    weekdays: ["日", "一", "二", "三", "四", "五", "六"],
-    monthTitle: (year, month) => `${year}年${month}月`,
-    rangePrompt: (maxRange) => `最多选择 ${maxRange} 天`
-  },
-  vanCascader: {
-    select: "请选择"
-  },
-  vanPagination: {
-    prev: "上一页",
-    next: "下一页"
-  },
-  vanPullRefresh: {
-    pulling: "下拉即可刷新...",
-    loosing: "释放即可刷新..."
-  },
-  vanSubmitBar: {
-    label: "合计:"
-  },
-  vanCoupon: {
-    unlimited: "无门槛",
-    discount: (discount) => `${discount}折`,
-    condition: (condition) => `满${condition}元可用`
-  },
-  vanCouponCell: {
-    title: "优惠券",
-    count: (count) => `${count}张可用`
-  },
-  vanCouponList: {
-    exchange: "兑换",
-    close: "不使用",
-    enable: "可用",
-    disabled: "不可用",
-    placeholder: "输入优惠码"
-  },
-  vanAddressEdit: {
-    area: "地区",
-    areaEmpty: "请选择地区",
-    addressEmpty: "请填写详细地址",
-    addressDetail: "详细地址",
-    defaultAddress: "设为默认收货地址"
-  },
-  vanAddressList: {
-    add: "新增地址"
-  }
-};
-const lang = ref("zh-CN");
-const messages = reactive({
-  "zh-CN": stdin_default$M
-});
-const Locale = {
-  messages() {
-    return messages[lang.value];
-  },
-  use(newLang, newMessages) {
-    lang.value = newLang;
-    this.add({ [newLang]: newMessages });
-  },
-  add(newMessages = {}) {
-    deepAssign(messages, newMessages);
-  }
-};
-var stdin_default$L = Locale;
-function createTranslate(name2) {
-  const prefix = camelize(name2) + ".";
-  return (path, ...args) => {
-    const messages2 = stdin_default$L.messages();
-    const message = get(messages2, prefix + path) || get(messages2, path);
-    return isFunction(message) ? message(...args) : message;
-  };
-}
-function genBem(name2, mods) {
-  if (!mods) {
-    return "";
-  }
-  if (typeof mods === "string") {
-    return ` ${name2}--${mods}`;
-  }
-  if (Array.isArray(mods)) {
-    return mods.reduce(
-      (ret, item) => ret + genBem(name2, item),
-      ""
-    );
-  }
-  return Object.keys(mods).reduce(
-    (ret, key) => ret + (mods[key] ? genBem(name2, key) : ""),
-    ""
-  );
-}
-function createBEM(name2) {
-  return (el, mods) => {
-    if (el && typeof el !== "string") {
-      mods = el;
-      el = "";
-    }
-    el = el ? `${name2}__${el}` : name2;
-    return `${el}${genBem(el, mods)}`;
-  };
-}
-function createNamespace(name2) {
-  const prefixedName = `van-${name2}`;
-  return [
-    prefixedName,
-    createBEM(prefixedName),
-    createTranslate(prefixedName)
-  ];
-}
-const BORDER = "van-hairline";
-const BORDER_TOP = `${BORDER}--top`;
-const BORDER_LEFT = `${BORDER}--left`;
-const BORDER_BOTTOM = `${BORDER}--bottom`;
-const BORDER_SURROUND = `${BORDER}--surround`;
-const BORDER_TOP_BOTTOM = `${BORDER}--top-bottom`;
-const BORDER_UNSET_TOP_BOTTOM = `${BORDER}-unset--top-bottom`;
-const HAPTICS_FEEDBACK = "van-haptics-feedback";
-const FORM_KEY = /* @__PURE__ */ Symbol("van-form");
-const LONG_PRESS_START_TIME = 500;
-const TAP_OFFSET = 5;
-function callInterceptor(interceptor, {
-  args = [],
-  done,
-  canceled,
-  error
-}) {
-  if (interceptor) {
-    const returnVal = interceptor.apply(null, args);
-    if (isPromise(returnVal)) {
-      returnVal.then((value) => {
-        if (value) {
-          done();
-        } else if (canceled) {
-          canceled();
-        }
-      }).catch(error || noop);
-    } else if (returnVal) {
-      done();
-    } else if (canceled) {
-      canceled();
-    }
-  } else {
-    done();
-  }
-}
-function withInstall(options) {
-  options.install = (app) => {
-    const { name: name2 } = options;
-    if (name2) {
-      app.component(name2, options);
-      app.component(camelize(`-${name2}`), options);
-    }
-  };
-  return options;
-}
-const POPUP_TOGGLE_KEY = /* @__PURE__ */ Symbol();
-function onPopupReopen(callback) {
-  const popupToggleStatus = inject(POPUP_TOGGLE_KEY, null);
-  if (popupToggleStatus) {
-    watch(popupToggleStatus, (show) => {
-      if (show) {
-        callback();
-      }
-    });
-  }
-}
-const useHeight = (element, withSafeArea) => {
-  const height = ref();
-  const setHeight = () => {
-    height.value = useRect(element).height;
-  };
-  onPopupReopen(() => nextTick(setHeight));
-  watch([windowWidth, windowHeight], setHeight);
-  return height;
-};
-function usePlaceholder(contentRef, bem2) {
-  const height = useHeight(contentRef);
-  return (renderContent) => createVNode("div", {
-    "class": bem2("placeholder"),
-    "style": {
-      height: height.value ? `${height.value}px` : void 0
-    }
-  }, [renderContent()]);
-}
-const [name$I, bem$I] = createNamespace("action-bar");
-const ACTION_BAR_KEY = Symbol(name$I);
-const actionBarProps = {
-  placeholder: Boolean,
-  safeAreaInsetBottom: truthProp
-};
-var stdin_default$K = defineComponent({
-  name: name$I,
-  props: actionBarProps,
-  setup(props, {
-    slots
-  }) {
-    const root = ref();
-    const renderPlaceholder = usePlaceholder(root, bem$I);
-    const {
-      linkChildren
-    } = useChildren(ACTION_BAR_KEY);
-    linkChildren();
-    const renderActionBar = () => {
-      var _a;
-      return createVNode("div", {
-        "ref": root,
-        "class": [bem$I(), {
-          "van-safe-area-bottom": props.safeAreaInsetBottom
-        }]
-      }, [(_a = slots.default) == null ? void 0 : _a.call(slots)]);
-    };
-    return () => {
-      if (props.placeholder) {
-        return renderPlaceholder(renderActionBar);
-      }
-      return renderActionBar();
-    };
-  }
-});
-const ActionBar = withInstall(stdin_default$K);
-function useExpose(apis) {
-  const instance = getCurrentInstance();
-  if (instance) {
-    extend(instance.proxy, apis);
-  }
-}
-const routeProps = {
-  to: [String, Object],
-  url: String,
-  replace: Boolean
-};
-function route({
-  to,
-  url,
-  replace,
-  $router: router
-}) {
-  if (to && router) {
-    router[replace ? "replace" : "push"](to);
-  } else if (url) {
-    replace ? (void 0).replace(url) : (void 0).href = url;
-  }
-}
-function useRoute() {
-  const vm = getCurrentInstance().proxy;
-  return () => route(vm);
-}
-const [name$H, bem$H] = createNamespace("badge");
-const badgeProps = {
-  dot: Boolean,
-  max: numericProp,
-  tag: makeStringProp("div"),
-  color: String,
-  offset: Array,
-  content: numericProp,
-  showZero: truthProp,
-  position: makeStringProp("top-right")
-};
-var stdin_default$J = defineComponent({
-  name: name$H,
-  props: badgeProps,
-  setup(props, {
-    slots
-  }) {
-    const hasContent = () => {
-      if (slots.content) {
-        return true;
-      }
-      const {
-        content,
-        showZero
-      } = props;
-      return isDef(content) && content !== "" && (showZero || content !== 0 && content !== "0");
-    };
-    const renderContent = () => {
-      const {
-        dot,
-        max,
-        content
-      } = props;
-      if (!dot && hasContent()) {
-        if (slots.content) {
-          return slots.content();
-        }
-        if (isDef(max) && isNumeric(content) && +content > +max) {
-          return `${max}+`;
-        }
-        return content;
-      }
-    };
-    const getOffsetWithMinusString = (val) => val.startsWith("-") ? val.replace("-", "") : `-${val}`;
-    const style = computed(() => {
-      const style2 = {
-        background: props.color
-      };
-      if (props.offset) {
-        const [x, y] = props.offset;
-        const {
-          position
-        } = props;
-        const [offsetY, offsetX] = position.split("-");
-        if (slots.default) {
-          if (typeof y === "number") {
-            style2[offsetY] = addUnit(offsetY === "top" ? y : -y);
-          } else {
-            style2[offsetY] = offsetY === "top" ? addUnit(y) : getOffsetWithMinusString(y);
-          }
-          if (typeof x === "number") {
-            style2[offsetX] = addUnit(offsetX === "left" ? x : -x);
-          } else {
-            style2[offsetX] = offsetX === "left" ? addUnit(x) : getOffsetWithMinusString(x);
-          }
-        } else {
-          style2.marginTop = addUnit(y);
-          style2.marginLeft = addUnit(x);
-        }
-      }
-      return style2;
-    });
-    const renderBadge = () => {
-      if (hasContent() || props.dot) {
-        return createVNode("div", {
-          "class": bem$H([props.position, {
-            dot: props.dot,
-            fixed: !!slots.default
-          }]),
-          "style": style.value
-        }, [renderContent()]);
-      }
-    };
-    return () => {
-      if (slots.default) {
-        const {
-          tag
-        } = props;
-        return createVNode(tag, {
-          "class": bem$H("wrapper")
-        }, {
-          default: () => [slots.default(), renderBadge()]
-        });
-      }
-      return renderBadge();
-    };
-  }
-});
-const Badge = withInstall(stdin_default$J);
-let globalZIndex = 2e3;
-const useGlobalZIndex = () => ++globalZIndex;
-const setGlobalZIndex = (val) => {
-  globalZIndex = val;
-};
-const [name$G, bem$G] = createNamespace("config-provider");
-const CONFIG_PROVIDER_KEY = Symbol(name$G);
-const configProviderProps = {
-  tag: makeStringProp("div"),
-  theme: makeStringProp("light"),
-  zIndex: Number,
-  themeVars: Object,
-  themeVarsDark: Object,
-  themeVarsLight: Object,
-  themeVarsScope: makeStringProp("local"),
-  iconPrefix: String
-};
-function insertDash(str) {
-  return str.replace(/([a-zA-Z])(\d)/g, "$1-$2");
-}
-function mapThemeVarsToCSSVars(themeVars) {
-  const cssVars = {};
-  Object.keys(themeVars).forEach((key) => {
-    const formattedKey = insertDash(kebabCase(key));
-    cssVars[`--van-${formattedKey}`] = themeVars[key];
-  });
-  return cssVars;
-}
-defineComponent({
-  name: name$G,
-  props: configProviderProps,
-  setup(props, {
-    slots
-  }) {
-    const style = computed(() => mapThemeVarsToCSSVars(extend({}, props.themeVars, props.theme === "dark" ? props.themeVarsDark : props.themeVarsLight)));
-    provide(CONFIG_PROVIDER_KEY, props);
-    watchEffect(() => {
-      if (props.zIndex !== void 0) {
-        setGlobalZIndex(props.zIndex);
-      }
-    });
-    return () => createVNode(props.tag, {
-      "class": bem$G(),
-      "style": props.themeVarsScope === "local" ? style.value : void 0
-    }, {
-      default: () => {
-        var _a;
-        return [(_a = slots.default) == null ? void 0 : _a.call(slots)];
-      }
-    });
-  }
-});
-const [name$F, bem$F] = createNamespace("icon");
-const isImage = (name2) => name2 == null ? void 0 : name2.includes("/");
-const iconProps = {
-  dot: Boolean,
-  tag: makeStringProp("i"),
-  name: String,
-  size: numericProp,
-  badge: numericProp,
-  color: String,
-  badgeProps: Object,
-  classPrefix: String
-};
-var stdin_default$I = defineComponent({
-  name: name$F,
-  props: iconProps,
-  setup(props, {
-    slots
-  }) {
-    const config = inject(CONFIG_PROVIDER_KEY, null);
-    const classPrefix = computed(() => props.classPrefix || (config == null ? void 0 : config.iconPrefix) || bem$F());
-    return () => {
-      const {
-        tag,
-        dot,
-        name: name2,
-        size,
-        badge,
-        color
-      } = props;
-      const isImageIcon = isImage(name2);
-      return createVNode(Badge, mergeProps({
-        "dot": dot,
-        "tag": tag,
-        "class": [classPrefix.value, isImageIcon ? "" : `${classPrefix.value}-${name2}`],
-        "style": {
-          color,
-          fontSize: addUnit(size)
-        },
-        "content": badge
-      }, props.badgeProps), {
-        default: () => {
-          var _a;
-          return [(_a = slots.default) == null ? void 0 : _a.call(slots), isImageIcon && createVNode("img", {
-            "class": bem$F("image"),
-            "src": name2
-          }, null)];
-        }
-      });
-    };
-  }
-});
-const Icon = withInstall(stdin_default$I);
-const [name$E, bem$E] = createNamespace("loading");
-const SpinIcon = Array(12).fill(null).map((_, index) => createVNode("i", {
-  "class": bem$E("line", String(index + 1))
-}, null));
-const CircularIcon = createVNode("svg", {
-  "class": bem$E("circular"),
-  "viewBox": "25 25 50 50"
-}, [createVNode("circle", {
-  "cx": "50",
-  "cy": "50",
-  "r": "20",
-  "fill": "none"
-}, null)]);
-const loadingProps = {
-  size: numericProp,
-  type: makeStringProp("circular"),
-  color: String,
-  vertical: Boolean,
-  textSize: numericProp,
-  textColor: String
-};
-var stdin_default$H = defineComponent({
-  name: name$E,
-  props: loadingProps,
-  setup(props, {
-    slots
-  }) {
-    const spinnerStyle = computed(() => extend({
-      color: props.color
-    }, getSizeStyle(props.size)));
-    const renderIcon = () => {
-      const DefaultIcon = props.type === "spinner" ? SpinIcon : CircularIcon;
-      return createVNode("span", {
-        "class": bem$E("spinner", props.type),
-        "style": spinnerStyle.value
-      }, [slots.icon ? slots.icon() : DefaultIcon]);
-    };
-    const renderText = () => {
-      var _a;
-      if (slots.default) {
-        return createVNode("span", {
-          "class": bem$E("text"),
-          "style": {
-            fontSize: addUnit(props.textSize),
-            color: (_a = props.textColor) != null ? _a : props.color
-          }
-        }, [slots.default()]);
-      }
-    };
-    return () => {
-      const {
-        type,
-        vertical
-      } = props;
-      return createVNode("div", {
-        "class": bem$E([type, {
-          vertical
-        }]),
-        "aria-live": "polite",
-        "aria-busy": true
-      }, [renderIcon(), renderText()]);
-    };
-  }
-});
-const Loading = withInstall(stdin_default$H);
-const [name$D, bem$D] = createNamespace("button");
-const buttonProps = extend({}, routeProps, {
-  tag: makeStringProp("button"),
-  text: String,
-  icon: String,
-  type: makeStringProp("default"),
-  size: makeStringProp("normal"),
-  color: String,
-  block: Boolean,
-  plain: Boolean,
-  round: Boolean,
-  square: Boolean,
-  loading: Boolean,
-  hairline: Boolean,
-  disabled: Boolean,
-  iconPrefix: String,
-  nativeType: makeStringProp("button"),
-  loadingSize: numericProp,
-  loadingText: String,
-  loadingType: String,
-  iconPosition: makeStringProp("left")
-});
-var stdin_default$G = defineComponent({
-  name: name$D,
-  props: buttonProps,
-  emits: ["click"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const route2 = useRoute();
-    const renderLoadingIcon = () => {
-      if (slots.loading) {
-        return slots.loading();
-      }
-      return createVNode(Loading, {
-        "size": props.loadingSize,
-        "type": props.loadingType,
-        "class": bem$D("loading")
-      }, null);
-    };
-    const renderIcon = () => {
-      if (props.loading) {
-        return renderLoadingIcon();
-      }
-      if (slots.icon) {
-        return createVNode("div", {
-          "class": bem$D("icon")
-        }, [slots.icon()]);
-      }
-      if (props.icon) {
-        return createVNode(Icon, {
-          "name": props.icon,
-          "class": bem$D("icon"),
-          "classPrefix": props.iconPrefix
-        }, null);
-      }
-    };
-    const renderText = () => {
-      let text;
-      if (props.loading) {
-        text = props.loadingText;
-      } else {
-        text = slots.default ? slots.default() : props.text;
-      }
-      if (text) {
-        return createVNode("span", {
-          "class": bem$D("text")
-        }, [text]);
-      }
-    };
-    const getStyle = () => {
-      const {
-        color,
-        plain
-      } = props;
-      if (color) {
-        const style = {
-          color: plain ? color : "white"
-        };
-        if (!plain) {
-          style.background = color;
-        }
-        if (color.includes("gradient")) {
-          style.border = 0;
-        } else {
-          style.borderColor = color;
-        }
-        return style;
-      }
-    };
-    const onClick = (event) => {
-      if (props.loading) {
-        preventDefault(event);
-      } else if (!props.disabled) {
-        emit("click", event);
-        route2();
-      }
-    };
-    return () => {
-      const {
-        tag,
-        type,
-        size,
-        block,
-        round,
-        plain,
-        square,
-        loading,
-        disabled,
-        hairline,
-        nativeType,
-        iconPosition
-      } = props;
-      const classes = [bem$D([type, size, {
-        plain,
-        block,
-        round,
-        square,
-        loading,
-        disabled,
-        hairline
-      }]), {
-        [BORDER_SURROUND]: hairline
-      }];
-      return createVNode(tag, {
-        "type": nativeType,
-        "class": classes,
-        "style": getStyle(),
-        "disabled": disabled,
-        "onClick": onClick
-      }, {
-        default: () => [createVNode("div", {
-          "class": bem$D("content")
-        }, [iconPosition === "left" && renderIcon(), renderText(), iconPosition === "right" && renderIcon()])]
-      });
-    };
-  }
-});
-const Button = withInstall(stdin_default$G);
-const [name$C, bem$C] = createNamespace("action-bar-button");
-const actionBarButtonProps = extend({}, routeProps, {
-  type: String,
-  text: String,
-  icon: String,
-  color: String,
-  loading: Boolean,
-  disabled: Boolean
-});
-var stdin_default$F = defineComponent({
-  name: name$C,
-  props: actionBarButtonProps,
-  setup(props, {
-    slots
-  }) {
-    const route2 = useRoute();
-    const {
-      parent,
-      index
-    } = useParent(ACTION_BAR_KEY);
-    const isFirst = computed(() => {
-      if (parent) {
-        const prev = parent.children[index.value - 1];
-        return !(prev && "isButton" in prev);
-      }
-    });
-    const isLast = computed(() => {
-      if (parent) {
-        const next = parent.children[index.value + 1];
-        return !(next && "isButton" in next);
-      }
-    });
-    useExpose({
-      isButton: true
-    });
-    return () => {
-      const {
-        type,
-        icon,
-        text,
-        color,
-        loading,
-        disabled
-      } = props;
-      return createVNode(Button, {
-        "class": bem$C([type, {
-          last: isLast.value,
-          first: isFirst.value
-        }]),
-        "size": "large",
-        "type": type,
-        "icon": icon,
-        "color": color,
-        "loading": loading,
-        "disabled": disabled,
-        "onClick": route2
-      }, {
-        default: () => [slots.default ? slots.default() : text]
-      });
-    };
-  }
-});
-const ActionBarButton = withInstall(stdin_default$F);
-const popupSharedProps = {
-  // whether to show popup
-  show: Boolean,
-  // z-index
-  zIndex: numericProp,
-  // whether to show overlay
-  overlay: truthProp,
-  // transition duration
-  duration: numericProp,
-  // teleport
-  teleport: [String, Object],
-  // prevent body scroll
-  lockScroll: truthProp,
-  // whether to lazy render
-  lazyRender: truthProp,
-  // callback function before close
-  beforeClose: Function,
-  // overlay props
-  overlayProps: Object,
-  // overlay custom style
-  overlayStyle: Object,
-  // overlay custom class name
-  overlayClass: unknownProp,
-  // Initial rendering animation
-  transitionAppear: Boolean,
-  // whether to close popup when overlay is clicked
-  closeOnClickOverlay: truthProp
-};
-const popupSharedPropKeys = Object.keys(
-  popupSharedProps
-);
-function getDirection(x, y) {
-  if (x > y) {
-    return "horizontal";
-  }
-  if (y > x) {
-    return "vertical";
-  }
-  return "";
-}
-function useTouch() {
-  const startX = ref(0);
-  const startY = ref(0);
-  const deltaX = ref(0);
-  const deltaY = ref(0);
-  const offsetX = ref(0);
-  const offsetY = ref(0);
-  const direction = ref("");
-  const isTap = ref(true);
-  const isVertical = () => direction.value === "vertical";
-  const isHorizontal = () => direction.value === "horizontal";
-  const reset = () => {
-    deltaX.value = 0;
-    deltaY.value = 0;
-    offsetX.value = 0;
-    offsetY.value = 0;
-    direction.value = "";
-    isTap.value = true;
-  };
-  const start = ((event) => {
-    reset();
-    startX.value = event.touches[0].clientX;
-    startY.value = event.touches[0].clientY;
-  });
-  const move = ((event) => {
-    const touch = event.touches[0];
-    deltaX.value = (touch.clientX < 0 ? 0 : touch.clientX) - startX.value;
-    deltaY.value = touch.clientY - startY.value;
-    offsetX.value = Math.abs(deltaX.value);
-    offsetY.value = Math.abs(deltaY.value);
-    const LOCK_DIRECTION_DISTANCE = 10;
-    if (!direction.value || offsetX.value < LOCK_DIRECTION_DISTANCE && offsetY.value < LOCK_DIRECTION_DISTANCE) {
-      direction.value = getDirection(offsetX.value, offsetY.value);
-    }
-    if (isTap.value && (offsetX.value > TAP_OFFSET || offsetY.value > TAP_OFFSET)) {
-      isTap.value = false;
-    }
-  });
-  return {
-    move,
-    start,
-    reset,
-    startX,
-    startY,
-    deltaX,
-    deltaY,
-    offsetX,
-    offsetY,
-    direction,
-    isVertical,
-    isHorizontal,
-    isTap
-  };
-}
-let totalLockCount = 0;
-const BODY_LOCK_CLASS = "van-overflow-hidden";
-function useLockScroll(rootRef, shouldLock) {
-  const touch = useTouch();
-  const DIRECTION_UP = "01";
-  const DIRECTION_DOWN = "10";
-  const onTouchMove = (event) => {
-    touch.move(event);
-    const direction = touch.deltaY.value > 0 ? DIRECTION_DOWN : DIRECTION_UP;
-    const el = getScrollParent(
-      event.target,
-      rootRef.value
-    );
-    const { scrollHeight, offsetHeight, scrollTop } = el;
-    let status = "11";
-    if (scrollTop === 0) {
-      status = offsetHeight >= scrollHeight ? "00" : "01";
-    } else if (scrollTop + offsetHeight >= scrollHeight) {
-      status = "10";
-    }
-    if (status !== "11" && touch.isVertical() && !(parseInt(status, 2) & parseInt(direction, 2))) {
-      preventDefault(event, true);
-    }
-  };
-  const lock = () => {
-    (void 0).addEventListener("touchstart", touch.start);
-    (void 0).addEventListener("touchmove", onTouchMove, { passive: false });
-    if (!totalLockCount) {
-      (void 0).body.classList.add(BODY_LOCK_CLASS);
-    }
-    totalLockCount++;
-  };
-  const unlock = () => {
-    if (totalLockCount) {
-      (void 0).removeEventListener("touchstart", touch.start);
-      (void 0).removeEventListener("touchmove", onTouchMove);
-      totalLockCount--;
-      if (!totalLockCount) {
-        (void 0).body.classList.remove(BODY_LOCK_CLASS);
-      }
-    }
-  };
-  const init = () => shouldLock() && lock();
-  onMountedOrActivated(init);
-  watch(shouldLock, (value) => {
-    value ? lock() : unlock();
-  });
-}
-function useLazyRender(show) {
-  const inited = ref(false);
-  watch(
-    show,
-    (value) => {
-      if (value) {
-        inited.value = value;
-      }
-    },
-    { immediate: true }
-  );
-  return (render) => () => inited.value ? render() : null;
-}
-const useScopeId = () => {
-  var _a;
-  const { scopeId } = ((_a = getCurrentInstance()) == null ? void 0 : _a.vnode) || {};
-  return scopeId ? { [scopeId]: "" } : null;
-};
-const [name$B, bem$B] = createNamespace("overlay");
-const overlayProps = {
-  show: Boolean,
-  zIndex: numericProp,
-  duration: numericProp,
-  className: unknownProp,
-  lockScroll: truthProp,
-  lazyRender: truthProp,
-  customStyle: Object,
-  teleport: [String, Object]
-};
-var stdin_default$E = defineComponent({
-  name: name$B,
-  inheritAttrs: false,
-  props: overlayProps,
-  setup(props, {
-    attrs,
-    slots
-  }) {
-    const root = ref();
-    const lazyRender = useLazyRender(() => props.show || !props.lazyRender);
-    const onTouchMove = (event) => {
-      if (props.lockScroll) {
-        preventDefault(event, true);
-      }
-    };
-    const renderOverlay = lazyRender(() => {
-      var _a;
-      const style = extend(getZIndexStyle(props.zIndex), props.customStyle);
-      if (isDef(props.duration)) {
-        style.animationDuration = `${props.duration}s`;
-      }
-      return withDirectives(createVNode("div", mergeProps({
-        "ref": root,
-        "style": style,
-        "class": [bem$B(), props.className]
-      }, attrs), [(_a = slots.default) == null ? void 0 : _a.call(slots)]), [[vShow, props.show]]);
-    });
-    useEventListener("touchmove", onTouchMove, {
-      target: root
-    });
-    return () => {
-      const Content = createVNode(Transition, {
-        "name": "van-fade",
-        "appear": true
-      }, {
-        default: renderOverlay
-      });
-      if (props.teleport) {
-        return createVNode(Teleport, {
-          "to": props.teleport
-        }, {
-          default: () => [Content]
-        });
-      }
-      return Content;
-    };
-  }
-});
-const Overlay = withInstall(stdin_default$E);
-const popupProps$1 = extend({}, popupSharedProps, {
-  round: Boolean,
-  position: makeStringProp("center"),
-  closeIcon: makeStringProp("cross"),
-  closeable: Boolean,
-  transition: String,
-  iconPrefix: String,
-  closeOnPopstate: Boolean,
-  closeIconPosition: makeStringProp("top-right"),
-  destroyOnClose: Boolean,
-  safeAreaInsetTop: Boolean,
-  safeAreaInsetBottom: Boolean
-});
-const [name$A, bem$A] = createNamespace("popup");
-var stdin_default$D = defineComponent({
-  name: name$A,
-  inheritAttrs: false,
-  props: popupProps$1,
-  emits: ["open", "close", "opened", "closed", "keydown", "update:show", "clickOverlay", "clickCloseIcon"],
-  setup(props, {
-    emit,
-    attrs,
-    slots
-  }) {
-    let opened;
-    const zIndex = ref();
-    const popupRef = ref();
-    const lazyRender = useLazyRender(() => props.show || !props.lazyRender);
-    const style = computed(() => {
-      const style2 = {
-        zIndex: zIndex.value
-      };
-      if (isDef(props.duration)) {
-        const key = props.position === "center" ? "animationDuration" : "transitionDuration";
-        style2[key] = `${props.duration}s`;
-      }
-      return style2;
-    });
-    const open = () => {
-      if (!opened) {
-        opened = true;
-        zIndex.value = props.zIndex !== void 0 ? +props.zIndex : useGlobalZIndex();
-        emit("open");
-      }
-    };
-    const close = () => {
-      if (opened) {
-        callInterceptor(props.beforeClose, {
-          done() {
-            opened = false;
-            emit("close");
-            emit("update:show", false);
-          }
-        });
-      }
-    };
-    const onClickOverlay = (event) => {
-      emit("clickOverlay", event);
-      if (props.closeOnClickOverlay) {
-        close();
-      }
-    };
-    const renderOverlay = () => {
-      if (props.overlay) {
-        const overlayProps2 = extend({
-          show: props.show,
-          class: props.overlayClass,
-          zIndex: zIndex.value,
-          duration: props.duration,
-          customStyle: props.overlayStyle,
-          role: props.closeOnClickOverlay ? "button" : void 0,
-          tabindex: props.closeOnClickOverlay ? 0 : void 0
-        }, props.overlayProps);
-        return createVNode(Overlay, mergeProps(overlayProps2, useScopeId(), {
-          "onClick": onClickOverlay
-        }), {
-          default: slots["overlay-content"]
-        });
-      }
-    };
-    const onClickCloseIcon = (event) => {
-      emit("clickCloseIcon", event);
-      close();
-    };
-    const renderCloseIcon = () => {
-      if (props.closeable) {
-        return createVNode(Icon, {
-          "role": "button",
-          "tabindex": 0,
-          "name": props.closeIcon,
-          "class": [bem$A("close-icon", props.closeIconPosition), HAPTICS_FEEDBACK],
-          "classPrefix": props.iconPrefix,
-          "onClick": onClickCloseIcon
-        }, null);
-      }
-    };
-    let timer;
-    const onOpened = () => {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        emit("opened");
-      });
-    };
-    const onClosed = () => emit("closed");
-    const onKeydown = (event) => emit("keydown", event);
-    const renderPopup = lazyRender(() => {
-      var _a;
-      const {
-        destroyOnClose,
-        round,
-        position,
-        safeAreaInsetTop,
-        safeAreaInsetBottom,
-        show
-      } = props;
-      if (!show && destroyOnClose) {
-        return;
-      }
-      return withDirectives(createVNode("div", mergeProps({
-        "ref": popupRef,
-        "style": style.value,
-        "role": "dialog",
-        "tabindex": 0,
-        "class": [bem$A({
-          round,
-          [position]: position
-        }), {
-          "van-safe-area-top": safeAreaInsetTop,
-          "van-safe-area-bottom": safeAreaInsetBottom
-        }],
-        "onKeydown": onKeydown
-      }, attrs, useScopeId()), [(_a = slots.default) == null ? void 0 : _a.call(slots), renderCloseIcon()]), [[vShow, show]]);
-    });
-    const renderTransition = () => {
-      const {
-        position,
-        transition,
-        transitionAppear
-      } = props;
-      const name2 = position === "center" ? "van-fade" : `van-popup-slide-${position}`;
-      return createVNode(Transition, {
-        "name": transition || name2,
-        "appear": transitionAppear,
-        "onAfterEnter": onOpened,
-        "onAfterLeave": onClosed
-      }, {
-        default: renderPopup
-      });
-    };
-    watch(() => props.show, (show) => {
-      if (show && !opened) {
-        open();
-        if (attrs.tabindex === 0) {
-          nextTick(() => {
-            var _a;
-            (_a = popupRef.value) == null ? void 0 : _a.focus();
-          });
-        }
-      }
-      if (!show && opened) {
-        opened = false;
-        emit("close");
-      }
-    });
-    useExpose({
-      popupRef
-    });
-    useLockScroll(popupRef, () => props.show && props.lockScroll);
-    useEventListener("popstate", () => {
-      if (props.closeOnPopstate) {
-        close();
-      }
-    });
-    provide(POPUP_TOGGLE_KEY, () => props.show);
-    return () => {
-      if (props.teleport) {
-        return createVNode(Teleport, {
-          "to": props.teleport
-        }, {
-          default: () => [renderOverlay(), renderTransition()]
-        });
-      }
-      return createVNode(Fragment, null, [renderOverlay(), renderTransition()]);
-    };
-  }
-});
-const Popup = withInstall(stdin_default$D);
-const [name$z, bem$z] = createNamespace("action-sheet");
-const actionSheetProps = extend({}, popupSharedProps, {
-  title: String,
-  round: truthProp,
-  actions: makeArrayProp(),
-  closeIcon: makeStringProp("cross"),
-  closeable: truthProp,
-  cancelText: String,
-  description: String,
-  closeOnPopstate: truthProp,
-  closeOnClickAction: Boolean,
-  safeAreaInsetBottom: truthProp
-});
-const popupInheritKeys$1 = [...popupSharedPropKeys, "round", "closeOnPopstate", "safeAreaInsetBottom"];
-var stdin_default$C = defineComponent({
-  name: name$z,
-  props: actionSheetProps,
-  emits: ["select", "cancel", "update:show"],
-  setup(props, {
-    slots,
-    emit
-  }) {
-    const updateShow = (show) => emit("update:show", show);
-    const onCancel = () => {
-      updateShow(false);
-      emit("cancel");
-    };
-    const renderHeader = () => {
-      if (props.title) {
-        return createVNode("div", {
-          "class": bem$z("header")
-        }, [props.title, props.closeable && createVNode(Icon, {
-          "name": props.closeIcon,
-          "class": [bem$z("close"), HAPTICS_FEEDBACK],
-          "onClick": onCancel
-        }, null)]);
-      }
-    };
-    const renderCancel = () => {
-      if (slots.cancel || props.cancelText) {
-        return [createVNode("div", {
-          "class": bem$z("gap")
-        }, null), createVNode("button", {
-          "type": "button",
-          "class": bem$z("cancel"),
-          "onClick": onCancel
-        }, [slots.cancel ? slots.cancel() : props.cancelText])];
-      }
-    };
-    const renderIcon = (action) => {
-      if (action.icon) {
-        return createVNode(Icon, {
-          "class": bem$z("item-icon"),
-          "name": action.icon
-        }, null);
-      }
-    };
-    const renderActionContent = (action, index) => {
-      if (action.loading) {
-        return createVNode(Loading, {
-          "class": bem$z("loading-icon")
-        }, null);
-      }
-      if (slots.action) {
-        return slots.action({
-          action,
-          index
-        });
-      }
-      return [createVNode("span", {
-        "class": bem$z("name")
-      }, [action.name]), action.subname && createVNode("div", {
-        "class": bem$z("subname")
-      }, [action.subname])];
-    };
-    const renderAction = (action, index) => {
-      const {
-        color,
-        loading,
-        callback,
-        disabled,
-        className
-      } = action;
-      const onClick = () => {
-        if (disabled || loading) {
-          return;
-        }
-        if (callback) {
-          callback(action);
-        }
-        if (props.closeOnClickAction) {
-          updateShow(false);
-        }
-        nextTick(() => emit("select", action, index));
-      };
-      return createVNode("button", {
-        "type": "button",
-        "style": {
-          color
-        },
-        "class": [bem$z("item", {
-          loading,
-          disabled
-        }), className],
-        "onClick": onClick
-      }, [renderIcon(action), renderActionContent(action, index)]);
-    };
-    const renderDescription = () => {
-      if (props.description || slots.description) {
-        const content = slots.description ? slots.description() : props.description;
-        return createVNode("div", {
-          "class": bem$z("description")
-        }, [content]);
-      }
-    };
-    return () => createVNode(Popup, mergeProps({
-      "class": bem$z(),
-      "position": "bottom",
-      "onUpdate:show": updateShow
-    }, pick(props, popupInheritKeys$1)), {
-      default: () => {
-        var _a;
-        return [renderHeader(), renderDescription(), createVNode("div", {
-          "class": bem$z("content")
-        }, [props.actions.map(renderAction), (_a = slots.default) == null ? void 0 : _a.call(slots)]), renderCancel()];
-      }
-    });
-  }
-});
-const ActionSheet = withInstall(stdin_default$C);
-const [name$y, bem$y, t$5] = createNamespace("picker");
-const getFirstEnabledOption = (options) => options.find((option) => !option.disabled) || options[0];
-function getColumnsType(columns, fields) {
-  const firstColumn = columns[0];
-  if (firstColumn) {
-    if (Array.isArray(firstColumn)) {
-      return "multiple";
-    }
-    if (fields.children in firstColumn) {
-      return "cascade";
-    }
-  }
-  return "default";
-}
-function findIndexOfEnabledOption(options, index) {
-  index = clamp(index, 0, options.length);
-  for (let i = index; i < options.length; i++) {
-    if (!options[i].disabled) return i;
-  }
-  for (let i = index - 1; i >= 0; i--) {
-    if (!options[i].disabled) return i;
-  }
-  return 0;
-}
-const isOptionExist = (options, value, fields) => value !== void 0 && options.some((option) => option[fields.value] === value);
-function findOptionByValue(options, value, fields) {
-  const index = options.findIndex((option) => option[fields.value] === value);
-  const enabledIndex = findIndexOfEnabledOption(options, index);
-  return options[enabledIndex];
-}
-function formatCascadeColumns(columns, fields, selectedValues) {
-  const formatted = [];
-  let cursor = {
-    [fields.children]: columns
-  };
-  let columnIndex = 0;
-  while (cursor && cursor[fields.children]) {
-    const options = cursor[fields.children];
-    const value = selectedValues.value[columnIndex];
-    cursor = isDef(value) ? findOptionByValue(options, value, fields) : void 0;
-    if (!cursor && options.length) {
-      const firstValue = getFirstEnabledOption(options)[fields.value];
-      cursor = findOptionByValue(options, firstValue, fields);
-    }
-    columnIndex++;
-    formatted.push(options);
-  }
-  return formatted;
-}
-function getElementTranslateY(element) {
-  const { transform: transform2 } = (void 0).getComputedStyle(element);
-  const translateY = transform2.slice(7, transform2.length - 1).split(", ")[5];
-  return Number(translateY);
-}
-function assignDefaultFields(fields) {
-  return extend(
-    {
-      text: "text",
-      value: "value",
-      children: "children"
-    },
-    fields
-  );
-}
-const DEFAULT_DURATION = 200;
-const MOMENTUM_TIME = 300;
-const MOMENTUM_DISTANCE = 15;
-const [name$x, bem$x] = createNamespace("picker-column");
-const PICKER_KEY = Symbol(name$x);
-var stdin_default$B = defineComponent({
-  name: name$x,
-  props: {
-    value: numericProp,
-    fields: makeRequiredProp(Object),
-    options: makeArrayProp(),
-    readonly: Boolean,
-    allowHtml: Boolean,
-    optionHeight: makeRequiredProp(Number),
-    swipeDuration: makeRequiredProp(numericProp),
-    visibleOptionNum: makeRequiredProp(numericProp)
-  },
-  emits: ["change", "clickOption", "scrollInto"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    let moving;
-    let startOffset;
-    let touchStartTime;
-    let momentumOffset;
-    let transitionEndTrigger;
-    const root = ref();
-    const wrapper = ref();
-    const currentOffset = ref(0);
-    const currentDuration = ref(0);
-    const touch = useTouch();
-    const count = () => props.options.length;
-    const baseOffset = () => props.optionHeight * (+props.visibleOptionNum - 1) / 2;
-    const updateValueByIndex = (index) => {
-      let enabledIndex = findIndexOfEnabledOption(props.options, index);
-      const offset = -enabledIndex * props.optionHeight;
-      const trigger = () => {
-        if (enabledIndex > count() - 1) {
-          enabledIndex = findIndexOfEnabledOption(props.options, index);
-        }
-        const value = props.options[enabledIndex][props.fields.value];
-        if (value !== props.value) {
-          emit("change", value);
-        }
-      };
-      if (moving && offset !== currentOffset.value) {
-        transitionEndTrigger = trigger;
-      } else {
-        trigger();
-      }
-      currentOffset.value = offset;
-    };
-    const isReadonly2 = () => props.readonly || !props.options.length;
-    const onClickOption = (index) => {
-      if (moving || isReadonly2()) {
-        return;
-      }
-      transitionEndTrigger = null;
-      currentDuration.value = DEFAULT_DURATION;
-      updateValueByIndex(index);
-      emit("clickOption", props.options[index]);
-    };
-    const getIndexByOffset = (offset) => clamp(Math.round(-offset / props.optionHeight), 0, count() - 1);
-    const currentIndex = computed(() => getIndexByOffset(currentOffset.value));
-    const momentum = (distance, duration) => {
-      const speed = Math.abs(distance / duration);
-      distance = currentOffset.value + speed / 3e-3 * (distance < 0 ? -1 : 1);
-      const index = getIndexByOffset(distance);
-      currentDuration.value = +props.swipeDuration;
-      updateValueByIndex(index);
-    };
-    const stopMomentum = () => {
-      moving = false;
-      currentDuration.value = 0;
-      if (transitionEndTrigger) {
-        transitionEndTrigger();
-        transitionEndTrigger = null;
-      }
-    };
-    const onTouchStart = (event) => {
-      if (isReadonly2()) {
-        return;
-      }
-      touch.start(event);
-      if (moving) {
-        const translateY = getElementTranslateY(wrapper.value);
-        currentOffset.value = Math.min(0, translateY - baseOffset());
-      }
-      currentDuration.value = 0;
-      startOffset = currentOffset.value;
-      touchStartTime = Date.now();
-      momentumOffset = startOffset;
-      transitionEndTrigger = null;
-    };
-    const onTouchMove = (event) => {
-      if (isReadonly2()) {
-        return;
-      }
-      touch.move(event);
-      if (touch.isVertical()) {
-        moving = true;
-        preventDefault(event, true);
-      }
-      const newOffset = clamp(startOffset + touch.deltaY.value, -(count() * props.optionHeight), props.optionHeight);
-      const newIndex = getIndexByOffset(newOffset);
-      if (newIndex !== currentIndex.value) {
-        emit("scrollInto", props.options[newIndex]);
-      }
-      currentOffset.value = newOffset;
-      const now = Date.now();
-      if (now - touchStartTime > MOMENTUM_TIME) {
-        touchStartTime = now;
-        momentumOffset = newOffset;
-      }
-    };
-    const onTouchEnd = () => {
-      if (isReadonly2()) {
-        return;
-      }
-      const distance = currentOffset.value - momentumOffset;
-      const duration = Date.now() - touchStartTime;
-      const startMomentum = duration < MOMENTUM_TIME && Math.abs(distance) > MOMENTUM_DISTANCE;
-      if (startMomentum) {
-        momentum(distance, duration);
-        return;
-      }
-      const index = getIndexByOffset(currentOffset.value);
-      currentDuration.value = DEFAULT_DURATION;
-      updateValueByIndex(index);
-      setTimeout(() => {
-        moving = false;
-      }, 0);
-    };
-    const renderOptions = () => {
-      const optionStyle = {
-        height: `${props.optionHeight}px`
-      };
-      return props.options.map((option, index) => {
-        const text = option[props.fields.text];
-        const {
-          disabled
-        } = option;
-        const value = option[props.fields.value];
-        const data = {
-          role: "button",
-          style: optionStyle,
-          tabindex: disabled ? -1 : 0,
-          class: [bem$x("item", {
-            disabled,
-            selected: value === props.value
-          }), option.className],
-          onClick: () => onClickOption(index)
-        };
-        const childData = {
-          class: "van-ellipsis",
-          [props.allowHtml ? "innerHTML" : "textContent"]: text
-        };
-        return createVNode("li", data, [slots.option ? slots.option(option, index) : createVNode("div", childData, null)]);
-      });
-    };
-    useParent(PICKER_KEY);
-    useExpose({
-      stopMomentum
-    });
-    watchEffect(() => {
-      const index = moving ? Math.floor(-currentOffset.value / props.optionHeight) : props.options.findIndex((option) => option[props.fields.value] === props.value);
-      const enabledIndex = findIndexOfEnabledOption(props.options, index);
-      const offset = -enabledIndex * props.optionHeight;
-      if (moving && enabledIndex < index) stopMomentum();
-      currentOffset.value = offset;
-    });
-    useEventListener("touchmove", onTouchMove, {
-      target: root
-    });
-    return () => createVNode("div", {
-      "ref": root,
-      "class": bem$x(),
-      "onTouchstartPassive": onTouchStart,
-      "onTouchend": onTouchEnd,
-      "onTouchcancel": onTouchEnd
-    }, [createVNode("ul", {
-      "ref": wrapper,
-      "style": {
-        transform: `translate3d(0, ${currentOffset.value + baseOffset()}px, 0)`,
-        transitionDuration: `${currentDuration.value}ms`,
-        transitionProperty: currentDuration.value ? "all" : "none"
-      },
-      "class": bem$x("wrapper"),
-      "onTransitionend": stopMomentum
-    }, [renderOptions()])]);
-  }
-});
-const [name$w] = createNamespace("picker-toolbar");
-const pickerToolbarProps = {
-  title: String,
-  cancelButtonText: String,
-  confirmButtonText: String
-};
-const pickerToolbarSlots = ["cancel", "confirm", "title", "toolbar"];
-const pickerToolbarPropKeys = Object.keys(pickerToolbarProps);
-var stdin_default$A = defineComponent({
-  name: name$w,
-  props: pickerToolbarProps,
-  emits: ["confirm", "cancel"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const renderTitle = () => {
-      if (slots.title) {
-        return slots.title();
-      }
-      if (props.title) {
-        return createVNode("div", {
-          "class": [bem$y("title"), "van-ellipsis"]
-        }, [props.title]);
-      }
-    };
-    const onCancel = () => emit("cancel");
-    const onConfirm = () => emit("confirm");
-    const renderCancel = () => {
-      var _a;
-      const text = (_a = props.cancelButtonText) != null ? _a : t$5("cancel");
-      if (!slots.cancel && !text) {
-        return;
-      }
-      return createVNode("button", {
-        "type": "button",
-        "class": [bem$y("cancel"), HAPTICS_FEEDBACK],
-        "onClick": onCancel
-      }, [slots.cancel ? slots.cancel() : text]);
-    };
-    const renderConfirm = () => {
-      var _a;
-      const text = (_a = props.confirmButtonText) != null ? _a : t$5("confirm");
-      if (!slots.confirm && !text) {
-        return;
-      }
-      return createVNode("button", {
-        "type": "button",
-        "class": [bem$y("confirm"), HAPTICS_FEEDBACK],
-        "onClick": onConfirm
-      }, [slots.confirm ? slots.confirm() : text]);
-    };
-    return () => createVNode("div", {
-      "class": bem$y("toolbar")
-    }, [slots.toolbar ? slots.toolbar() : [renderCancel(), renderTitle(), renderConfirm()]]);
-  }
-});
-const useSyncPropRef = (getProp, setProp) => {
-  const propRef = ref(getProp());
-  watch(getProp, (value) => {
-    if (value !== propRef.value) {
-      propRef.value = value;
-    }
-  });
-  watch(propRef, (value) => {
-    if (value !== getProp()) {
-      setProp(value);
-    }
-  });
-  return propRef;
-};
-function scrollLeftTo(scroller, to, duration) {
-  let rafId;
-  let count = 0;
-  const from = scroller.scrollLeft;
-  const frames = duration === 0 ? 1 : Math.round(duration * 1e3 / 16);
-  let scrollLeft = from;
-  function cancel() {
-    cancelRaf(rafId);
-  }
-  function animate() {
-    scrollLeft += (to - from) / frames;
-    scroller.scrollLeft = scrollLeft;
-    if (++count < frames) {
-      rafId = raf(animate);
-    }
-  }
-  animate();
-  return cancel;
-}
-function scrollTopTo(scroller, to, duration, callback) {
-  let rafId;
-  let current2 = getScrollTop(scroller);
-  const isDown = current2 < to;
-  const frames = duration === 0 ? 1 : Math.round(duration * 1e3 / 16);
-  const step = (to - current2) / frames;
-  function cancel() {
-    cancelRaf(rafId);
-  }
-  function animate() {
-    current2 += step;
-    if (isDown && current2 > to || !isDown && current2 < to) {
-      current2 = to;
-    }
-    setScrollTop(scroller, current2);
-    if (isDown && current2 < to || !isDown && current2 > to) {
-      rafId = raf(animate);
-    } else if (callback) {
-      rafId = raf(callback);
-    }
-  }
-  animate();
-  return cancel;
-}
-let current = 0;
-function useId() {
-  const vm = getCurrentInstance();
-  const { name: name2 = "unknown" } = (vm == null ? void 0 : vm.type) || {};
-  return `${name2}-${++current}`;
-}
-function useRefs() {
-  const refs = ref([]);
-  const cache2 = [];
-  const setRefs = (index) => {
-    if (!cache2[index]) {
-      cache2[index] = (el) => {
-        refs.value[index] = el;
-      };
-    }
-    return cache2[index];
-  };
-  return [refs, setRefs];
-}
-const [name$v, bem$w] = createNamespace("sticky");
-const stickyProps = {
-  zIndex: numericProp,
-  position: makeStringProp("top"),
-  container: Object,
-  offsetTop: makeNumericProp(0),
-  offsetBottom: makeNumericProp(0)
-};
-var stdin_default$z = defineComponent({
-  name: name$v,
-  props: stickyProps,
-  emits: ["scroll", "change"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const root = ref();
-    const scrollParent = useScrollParent(root);
-    const state = reactive({
-      fixed: false,
-      width: 0,
-      // root width
-      height: 0,
-      // root height
-      transform: 0
-    });
-    const isReset = ref(false);
-    const offset = computed(() => unitToPx(props.position === "top" ? props.offsetTop : props.offsetBottom));
-    const rootStyle = computed(() => {
-      if (isReset.value) {
-        return;
-      }
-      const {
-        fixed,
-        height,
-        width
-      } = state;
-      if (fixed) {
-        return {
-          width: `${width}px`,
-          height: `${height}px`
-        };
-      }
-    });
-    const stickyStyle = computed(() => {
-      if (!state.fixed || isReset.value) {
-        return;
-      }
-      const style = extend(getZIndexStyle(props.zIndex), {
-        width: `${state.width}px`,
-        height: `${state.height}px`,
-        [props.position]: `${offset.value}px`
-      });
-      if (state.transform) {
-        style.transform = `translate3d(0, ${state.transform}px, 0)`;
-      }
-      return style;
-    });
-    const emitScroll = (scrollTop) => emit("scroll", {
-      scrollTop,
-      isFixed: state.fixed
-    });
-    const onScroll = () => {
-      if (!root.value || isHidden(root)) {
-        return;
-      }
-      const {
-        container,
-        position
-      } = props;
-      const rootRect = useRect(root);
-      const scrollTop = getScrollTop(void 0);
-      state.width = rootRect.width;
-      state.height = rootRect.height;
-      if (position === "top") {
-        if (container) {
-          const containerRect = useRect(container);
-          const difference = containerRect.bottom - offset.value - state.height;
-          state.fixed = offset.value > rootRect.top && containerRect.bottom > 0;
-          state.transform = difference < 0 ? difference : 0;
-        } else {
-          state.fixed = offset.value > rootRect.top;
-        }
-      } else {
-        const {
-          clientHeight
-        } = (void 0).documentElement;
-        if (container) {
-          const containerRect = useRect(container);
-          const difference = clientHeight - containerRect.top - offset.value - state.height;
-          state.fixed = clientHeight - offset.value < rootRect.bottom && clientHeight > containerRect.top;
-          state.transform = difference < 0 ? -difference : 0;
-        } else {
-          state.fixed = clientHeight - offset.value < rootRect.bottom;
-        }
-      }
-      emitScroll(scrollTop);
-    };
-    watch(() => state.fixed, (value) => emit("change", value));
-    useEventListener("scroll", onScroll, {
-      target: scrollParent,
-      passive: true
-    });
-    watch([windowWidth, windowHeight], () => {
-      if (!root.value || isHidden(root) || !state.fixed) {
-        return;
-      }
-      isReset.value = true;
-      nextTick(() => {
-        const rootRect = useRect(root);
-        state.width = rootRect.width;
-        state.height = rootRect.height;
-        isReset.value = false;
-      });
-    });
-    return () => {
-      var _a;
-      return createVNode("div", {
-        "ref": root,
-        "style": rootStyle.value
-      }, [createVNode("div", {
-        "class": bem$w({
-          fixed: state.fixed && !isReset.value
-        }),
-        "style": stickyStyle.value
-      }, [(_a = slots.default) == null ? void 0 : _a.call(slots)])]);
-    };
-  }
-});
-const Sticky = withInstall(stdin_default$z);
-const [name$u, bem$v] = createNamespace("swipe");
-const swipeProps = {
-  loop: truthProp,
-  width: numericProp,
-  height: numericProp,
-  vertical: Boolean,
-  autoplay: makeNumericProp(0),
-  duration: makeNumericProp(500),
-  touchable: truthProp,
-  lazyRender: Boolean,
-  initialSwipe: makeNumericProp(0),
-  indicatorColor: String,
-  showIndicators: truthProp,
-  stopPropagation: truthProp
-};
-const SWIPE_KEY = Symbol(name$u);
-var stdin_default$y = defineComponent({
-  name: name$u,
-  props: swipeProps,
-  emits: ["change", "dragStart", "dragEnd"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const root = ref();
-    const track = ref();
-    const state = reactive({
-      rect: null,
-      width: 0,
-      height: 0,
-      offset: 0,
-      active: 0,
-      swiping: false
-    });
-    let dragging = false;
-    const touch = useTouch();
-    const {
-      children,
-      linkChildren
-    } = useChildren(SWIPE_KEY);
-    const count = computed(() => children.length);
-    const size = computed(() => state[props.vertical ? "height" : "width"]);
-    const delta = computed(() => props.vertical ? touch.deltaY.value : touch.deltaX.value);
-    const minOffset = computed(() => {
-      if (state.rect) {
-        const base = props.vertical ? state.rect.height : state.rect.width;
-        return base - size.value * count.value;
-      }
-      return 0;
-    });
-    const maxCount = computed(() => size.value ? Math.ceil(Math.abs(minOffset.value) / size.value) : count.value);
-    const trackSize = computed(() => count.value * size.value);
-    const activeIndicator = computed(() => (state.active + count.value) % count.value);
-    const isCorrectDirection = computed(() => {
-      const expect = props.vertical ? "vertical" : "horizontal";
-      return touch.direction.value === expect;
-    });
-    const trackStyle = computed(() => {
-      const style = {
-        transitionDuration: `${state.swiping ? 0 : props.duration}ms`,
-        transform: `translate${props.vertical ? "Y" : "X"}(${+state.offset.toFixed(2)}px)`
-      };
-      if (size.value) {
-        const mainAxis = props.vertical ? "height" : "width";
-        const crossAxis = props.vertical ? "width" : "height";
-        style[mainAxis] = `${trackSize.value}px`;
-        style[crossAxis] = props[crossAxis] ? `${props[crossAxis]}px` : "";
-      }
-      return style;
-    });
-    const getTargetActive = (pace) => {
-      const {
-        active
-      } = state;
-      if (pace) {
-        if (props.loop) {
-          return clamp(active + pace, -1, count.value);
-        }
-        return clamp(active + pace, 0, maxCount.value);
-      }
-      return active;
-    };
-    const getTargetOffset = (targetActive, offset = 0) => {
-      let currentPosition = targetActive * size.value;
-      if (!props.loop) {
-        currentPosition = Math.min(currentPosition, -minOffset.value);
-      }
-      let targetOffset = offset - currentPosition;
-      if (!props.loop) {
-        targetOffset = clamp(targetOffset, minOffset.value, 0);
-      }
-      return targetOffset;
-    };
-    const move = ({
-      pace = 0,
-      offset = 0,
-      emitChange
-    }) => {
-      if (count.value <= 1) {
-        return;
-      }
-      const {
-        active
-      } = state;
-      const targetActive = getTargetActive(pace);
-      const targetOffset = getTargetOffset(targetActive, offset);
-      if (props.loop) {
-        if (children[0] && targetOffset !== minOffset.value) {
-          const outRightBound = targetOffset < minOffset.value;
-          children[0].setOffset(outRightBound ? trackSize.value : 0);
-        }
-        if (children[count.value - 1] && targetOffset !== 0) {
-          const outLeftBound = targetOffset > 0;
-          children[count.value - 1].setOffset(outLeftBound ? -trackSize.value : 0);
-        }
-      }
-      state.active = targetActive;
-      state.offset = targetOffset;
-      if (emitChange && targetActive !== active) {
-        emit("change", activeIndicator.value);
-      }
-    };
-    const correctPosition = () => {
-      state.swiping = true;
-      if (state.active <= -1) {
-        move({
-          pace: count.value
-        });
-      } else if (state.active >= count.value) {
-        move({
-          pace: -count.value
-        });
-      }
-    };
-    const prev = () => {
-      correctPosition();
-      touch.reset();
-      doubleRaf(() => {
-        state.swiping = false;
-        move({
-          pace: -1,
-          emitChange: true
-        });
-      });
-    };
-    const next = () => {
-      correctPosition();
-      touch.reset();
-      doubleRaf(() => {
-        state.swiping = false;
-        move({
-          pace: 1,
-          emitChange: true
-        });
-      });
-    };
-    let autoplayTimer;
-    const stopAutoplay = () => clearTimeout(autoplayTimer);
-    const autoplay = () => {
-      stopAutoplay();
-      if (+props.autoplay > 0 && count.value > 1) {
-        autoplayTimer = setTimeout(() => {
-          next();
-          autoplay();
-        }, +props.autoplay);
-      }
-    };
-    const initialize = (active = +props.initialSwipe) => {
-      if (!root.value) {
-        return;
-      }
-      const cb = () => {
-        var _a, _b;
-        if (!isHidden(root)) {
-          const rect = {
-            width: root.value.offsetWidth,
-            height: root.value.offsetHeight
-          };
-          state.rect = rect;
-          state.width = +((_a = props.width) != null ? _a : rect.width);
-          state.height = +((_b = props.height) != null ? _b : rect.height);
-        }
-        if (count.value) {
-          active = Math.min(count.value - 1, active);
-          if (active === -1) {
-            active = count.value - 1;
-          }
-        }
-        state.active = active;
-        state.swiping = true;
-        state.offset = getTargetOffset(active);
-        children.forEach((swipe) => {
-          swipe.setOffset(0);
-        });
-        autoplay();
-      };
-      if (isHidden(root)) {
-        nextTick().then(cb);
-      } else {
-        cb();
-      }
-    };
-    const resize = () => initialize(state.active);
-    let touchStartTime;
-    const onTouchStart = (event) => {
-      if (!props.touchable || // avoid resetting position on multi-finger touch
-      event.touches.length > 1) return;
-      touch.start(event);
-      dragging = false;
-      touchStartTime = Date.now();
-      stopAutoplay();
-      correctPosition();
-    };
-    const onTouchMove = (event) => {
-      if (props.touchable && state.swiping) {
-        touch.move(event);
-        if (isCorrectDirection.value) {
-          const isEdgeTouch = !props.loop && (state.active === 0 && delta.value > 0 || state.active === count.value - 1 && delta.value < 0);
-          if (!isEdgeTouch) {
-            preventDefault(event, props.stopPropagation);
-            move({
-              offset: delta.value
-            });
-            if (!dragging) {
-              emit("dragStart", {
-                index: activeIndicator.value
-              });
-              dragging = true;
-            }
-          }
-        }
-      }
-    };
-    const onTouchEnd = () => {
-      if (!props.touchable || !state.swiping) {
-        return;
-      }
-      const duration = Date.now() - touchStartTime;
-      const speed = delta.value / duration;
-      const shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(delta.value) > size.value / 2;
-      if (shouldSwipe && isCorrectDirection.value) {
-        const offset = props.vertical ? touch.offsetY.value : touch.offsetX.value;
-        let pace = 0;
-        if (props.loop) {
-          pace = offset > 0 ? delta.value > 0 ? -1 : 1 : 0;
-        } else {
-          pace = -Math[delta.value > 0 ? "ceil" : "floor"](delta.value / size.value);
-        }
-        move({
-          pace,
-          emitChange: true
-        });
-      } else if (delta.value) {
-        move({
-          pace: 0
-        });
-      }
-      dragging = false;
-      state.swiping = false;
-      emit("dragEnd", {
-        index: activeIndicator.value
-      });
-      autoplay();
-    };
-    const swipeTo = (index, options = {}) => {
-      correctPosition();
-      touch.reset();
-      doubleRaf(() => {
-        let targetIndex;
-        if (props.loop && index === count.value) {
-          targetIndex = state.active === 0 ? 0 : index;
-        } else {
-          targetIndex = index % count.value;
-        }
-        if (options.immediate) {
-          doubleRaf(() => {
-            state.swiping = false;
-          });
-        } else {
-          state.swiping = false;
-        }
-        move({
-          pace: targetIndex - state.active,
-          emitChange: true
-        });
-      });
-    };
-    const renderDot = (_, index) => {
-      const active = index === activeIndicator.value;
-      const style = active ? {
-        backgroundColor: props.indicatorColor
-      } : void 0;
-      return createVNode("i", {
-        "style": style,
-        "class": bem$v("indicator", {
-          active
-        })
-      }, null);
-    };
-    const renderIndicator = () => {
-      if (slots.indicator) {
-        return slots.indicator({
-          active: activeIndicator.value,
-          total: count.value
-        });
-      }
-      if (props.showIndicators && count.value > 1) {
-        return createVNode("div", {
-          "class": bem$v("indicators", {
-            vertical: props.vertical
-          })
-        }, [Array(count.value).fill("").map(renderDot)]);
-      }
-    };
-    useExpose({
-      prev,
-      next,
-      state,
-      resize,
-      swipeTo
-    });
-    linkChildren({
-      size,
-      props,
-      count,
-      activeIndicator
-    });
-    watch(() => props.initialSwipe, (value) => initialize(+value));
-    watch(count, () => initialize(state.active));
-    watch(() => props.autoplay, autoplay);
-    watch([windowWidth, windowHeight, () => props.width, () => props.height], resize);
-    watch(usePageVisibility(), (visible) => {
-      if (visible === "visible") {
-        autoplay();
-      } else {
-        stopAutoplay();
-      }
-    });
-    onPopupReopen(() => initialize(state.active));
-    useEventListener("touchmove", onTouchMove, {
-      target: track
-    });
-    return () => {
-      var _a;
-      return createVNode("div", {
-        "ref": root,
-        "class": bem$v()
-      }, [createVNode("div", {
-        "ref": track,
-        "style": trackStyle.value,
-        "class": bem$v("track", {
-          vertical: props.vertical
-        }),
-        "onTouchstartPassive": onTouchStart,
-        "onTouchend": onTouchEnd,
-        "onTouchcancel": onTouchEnd
-      }, [(_a = slots.default) == null ? void 0 : _a.call(slots)]), renderIndicator()]);
-    };
-  }
-});
-const Swipe = withInstall(stdin_default$y);
-const [name$t, bem$u] = createNamespace("tabs");
-var stdin_default$x = defineComponent({
-  name: name$t,
-  props: {
-    count: makeRequiredProp(Number),
-    inited: Boolean,
-    animated: Boolean,
-    duration: makeRequiredProp(numericProp),
-    swipeable: Boolean,
-    lazyRender: Boolean,
-    currentIndex: makeRequiredProp(Number)
-  },
-  emits: ["change"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const swipeRef = ref();
-    const onChange = (index) => emit("change", index);
-    const renderChildren = () => {
-      var _a;
-      const Content = (_a = slots.default) == null ? void 0 : _a.call(slots);
-      if (props.animated || props.swipeable) {
-        return createVNode(Swipe, {
-          "ref": swipeRef,
-          "loop": false,
-          "class": bem$u("track"),
-          "duration": +props.duration * 1e3,
-          "touchable": props.swipeable,
-          "lazyRender": props.lazyRender,
-          "showIndicators": false,
-          "onChange": onChange
-        }, {
-          default: () => [Content]
-        });
-      }
-      return Content;
-    };
-    const swipeToCurrentTab = (index) => {
-      const swipe = swipeRef.value;
-      if (swipe && swipe.state.active !== index) {
-        swipe.swipeTo(index, {
-          immediate: !props.inited
-        });
-      }
-    };
-    watch(() => props.currentIndex, swipeToCurrentTab);
-    useExpose({
-      swipeRef
-    });
-    return () => createVNode("div", {
-      "class": bem$u("content", {
-        animated: props.animated || props.swipeable
-      })
-    }, [renderChildren()]);
-  }
-});
-const [name$s, bem$t] = createNamespace("tabs");
-const tabsProps = {
-  type: makeStringProp("line"),
-  color: String,
-  border: Boolean,
-  sticky: Boolean,
-  shrink: Boolean,
-  active: makeNumericProp(0),
-  duration: makeNumericProp(0.3),
-  animated: Boolean,
-  ellipsis: truthProp,
-  swipeable: Boolean,
-  scrollspy: Boolean,
-  offsetTop: makeNumericProp(0),
-  background: String,
-  lazyRender: truthProp,
-  showHeader: truthProp,
-  lineWidth: numericProp,
-  lineHeight: numericProp,
-  beforeChange: Function,
-  swipeThreshold: makeNumericProp(5),
-  titleActiveColor: String,
-  titleInactiveColor: String
-};
-const TABS_KEY = Symbol(name$s);
-var stdin_default$w = defineComponent({
-  name: name$s,
-  props: tabsProps,
-  emits: ["change", "scroll", "rendered", "clickTab", "update:active"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    let tabHeight;
-    let lockScroll;
-    let stickyFixed;
-    let cancelScrollLeftToRaf;
-    let cancelScrollTopToRaf;
-    const root = ref();
-    const navRef = ref();
-    const wrapRef = ref();
-    const contentRef = ref();
-    const id = useId();
-    const scroller = useScrollParent(root);
-    const [titleRefs, setTitleRefs] = useRefs();
-    const {
-      children,
-      linkChildren
-    } = useChildren(TABS_KEY);
-    const state = reactive({
-      inited: false,
-      position: "",
-      lineStyle: {},
-      currentIndex: -1
-    });
-    const scrollable = computed(() => children.length > +props.swipeThreshold || !props.ellipsis || props.shrink);
-    const navStyle = computed(() => ({
-      borderColor: props.color,
-      background: props.background
-    }));
-    const getTabName = (tab, index) => {
-      var _a;
-      return (_a = tab.name) != null ? _a : index;
-    };
-    const currentName = computed(() => {
-      const activeTab = children[state.currentIndex];
-      if (activeTab) {
-        return getTabName(activeTab, state.currentIndex);
-      }
-    });
-    const offsetTopPx = computed(() => unitToPx(props.offsetTop));
-    const scrollOffset = computed(() => {
-      if (props.sticky) {
-        return offsetTopPx.value + tabHeight;
-      }
-      return 0;
-    });
-    const scrollIntoView = (immediate) => {
-      const nav = navRef.value;
-      const titles = titleRefs.value;
-      if (!scrollable.value || !nav || !titles || !titles[state.currentIndex]) {
-        return;
-      }
-      const title = titles[state.currentIndex].$el;
-      const to = title.offsetLeft - (nav.offsetWidth - title.offsetWidth) / 2;
-      if (cancelScrollLeftToRaf) cancelScrollLeftToRaf();
-      cancelScrollLeftToRaf = scrollLeftTo(nav, to, immediate ? 0 : +props.duration);
-    };
-    const setLine = () => {
-      const shouldAnimate = state.inited;
-      nextTick(() => {
-        const titles = titleRefs.value;
-        if (!titles || !titles[state.currentIndex] || props.type !== "line" || isHidden(root.value)) {
-          return;
-        }
-        const title = titles[state.currentIndex].$el;
-        const {
-          lineWidth,
-          lineHeight
-        } = props;
-        const left = title.offsetLeft + title.offsetWidth / 2;
-        const lineStyle = {
-          width: addUnit(lineWidth),
-          backgroundColor: props.color,
-          transform: `translateX(${left}px) translateX(-50%)`
-        };
-        if (shouldAnimate) {
-          lineStyle.transitionDuration = `${props.duration}s`;
-        }
-        if (isDef(lineHeight)) {
-          const height = addUnit(lineHeight);
-          lineStyle.height = height;
-          lineStyle.borderRadius = height;
-        }
-        state.lineStyle = lineStyle;
-      });
-    };
-    const findAvailableTab = (index) => {
-      const diff = index < state.currentIndex ? -1 : 1;
-      while (index >= 0 && index < children.length) {
-        if (!children[index].disabled) {
-          return index;
-        }
-        index += diff;
-      }
-    };
-    const setCurrentIndex = (currentIndex, skipScrollIntoView) => {
-      const newIndex = findAvailableTab(currentIndex);
-      if (!isDef(newIndex)) {
-        return;
-      }
-      const newTab = children[newIndex];
-      const newName = getTabName(newTab, newIndex);
-      const shouldEmitChange = state.currentIndex !== null;
-      if (state.currentIndex !== newIndex) {
-        state.currentIndex = newIndex;
-        if (!skipScrollIntoView) {
-          scrollIntoView();
-        }
-        setLine();
-      }
-      if (newName !== props.active) {
-        emit("update:active", newName);
-        if (shouldEmitChange) {
-          emit("change", newName, newTab.title);
-        }
-      }
-      if (stickyFixed && !props.scrollspy) {
-        setRootScrollTop(Math.ceil(getElementTop(root.value) - offsetTopPx.value));
-      }
-    };
-    const setCurrentIndexByName = (name2, skipScrollIntoView) => {
-      const index = children.findIndex((tab, index2) => getTabName(tab, index2) === name2);
-      setCurrentIndex(index === -1 ? 0 : index, skipScrollIntoView);
-    };
-    const scrollToCurrentContent = (immediate = false) => {
-      if (props.scrollspy) {
-        const target = children[state.currentIndex].$el;
-        if (target && scroller.value) {
-          const to = getElementTop(target, scroller.value) - scrollOffset.value;
-          lockScroll = true;
-          if (cancelScrollTopToRaf) cancelScrollTopToRaf();
-          cancelScrollTopToRaf = scrollTopTo(scroller.value, to, immediate ? 0 : +props.duration, () => {
-            lockScroll = false;
-          });
-        }
-      }
-    };
-    const onClickTab = (item, index, event) => {
-      const {
-        title,
-        disabled
-      } = children[index];
-      const name2 = getTabName(children[index], index);
-      if (!disabled) {
-        callInterceptor(props.beforeChange, {
-          args: [name2],
-          done: () => {
-            setCurrentIndex(index);
-            scrollToCurrentContent();
-          }
-        });
-        route(item);
-      }
-      emit("clickTab", {
-        name: name2,
-        title,
-        event,
-        disabled
-      });
-    };
-    const onStickyScroll = (params) => {
-      stickyFixed = params.isFixed;
-      emit("scroll", params);
-    };
-    const scrollTo = (name2) => {
-      nextTick(() => {
-        setCurrentIndexByName(name2);
-        scrollToCurrentContent(true);
-      });
-    };
-    const getCurrentIndexOnScroll = () => {
-      for (let index = 0; index < children.length; index++) {
-        const {
-          top
-        } = useRect(children[index].$el);
-        if (top > scrollOffset.value) {
-          return index === 0 ? 0 : index - 1;
-        }
-      }
-      return children.length - 1;
-    };
-    const onScroll = () => {
-      if (props.scrollspy && !lockScroll) {
-        const index = getCurrentIndexOnScroll();
-        setCurrentIndex(index);
-      }
-    };
-    const renderLine = () => {
-      if (props.type === "line" && children.length) {
-        return createVNode("div", {
-          "class": bem$t("line"),
-          "style": state.lineStyle
-        }, null);
-      }
-    };
-    const renderHeader = () => {
-      var _a, _b, _c;
-      const {
-        type,
-        border,
-        sticky
-      } = props;
-      const Header = [createVNode("div", {
-        "ref": sticky ? void 0 : wrapRef,
-        "class": [bem$t("wrap"), {
-          [BORDER_TOP_BOTTOM]: type === "line" && border
-        }]
-      }, [createVNode("div", {
-        "ref": navRef,
-        "role": "tablist",
-        "class": bem$t("nav", [type, {
-          shrink: props.shrink,
-          complete: scrollable.value
-        }]),
-        "style": navStyle.value,
-        "aria-orientation": "horizontal"
-      }, [(_a = slots["nav-left"]) == null ? void 0 : _a.call(slots), children.map((item) => item.renderTitle(onClickTab)), renderLine(), (_b = slots["nav-right"]) == null ? void 0 : _b.call(slots)])]), (_c = slots["nav-bottom"]) == null ? void 0 : _c.call(slots)];
-      if (sticky) {
-        return createVNode("div", {
-          "ref": wrapRef
-        }, [Header]);
-      }
-      return Header;
-    };
-    const resize = () => {
-      setLine();
-      nextTick(() => {
-        var _a, _b;
-        scrollIntoView(true);
-        (_b = (_a = contentRef.value) == null ? void 0 : _a.swipeRef.value) == null ? void 0 : _b.resize();
-      });
-    };
-    watch(() => [props.color, props.duration, props.lineWidth, props.lineHeight], setLine);
-    watch(windowWidth, resize);
-    watch(() => props.active, (value) => {
-      if (value !== currentName.value) {
-        setCurrentIndexByName(value);
-      }
-    });
-    watch(() => children.length, () => {
-      if (state.inited) {
-        setCurrentIndexByName(props.active);
-        setLine();
-        nextTick(() => {
-          scrollIntoView(true);
-        });
-      }
-    });
-    const init = () => {
-      setCurrentIndexByName(props.active, true);
-      nextTick(() => {
-        state.inited = true;
-        if (wrapRef.value) {
-          tabHeight = useRect(wrapRef.value).height;
-        }
-        scrollIntoView(true);
-      });
-    };
-    const onRendered = (name2, title) => emit("rendered", name2, title);
-    useExpose({
-      resize,
-      scrollTo
-    });
-    onPopupReopen(setLine);
-    onMountedOrActivated(init);
-    useEventListener("scroll", onScroll, {
-      target: scroller,
-      passive: true
-    });
-    linkChildren({
-      id,
-      props,
-      setLine,
-      scrollable,
-      onRendered,
-      currentName,
-      setTitleRefs,
-      scrollIntoView
-    });
-    return () => createVNode("div", {
-      "ref": root,
-      "class": bem$t([props.type])
-    }, [props.showHeader ? props.sticky ? createVNode(Sticky, {
-      "container": root.value,
-      "offsetTop": offsetTopPx.value,
-      "onScroll": onStickyScroll
-    }, {
-      default: () => [renderHeader()]
-    }) : renderHeader() : null, createVNode(stdin_default$x, {
-      "ref": contentRef,
-      "count": children.length,
-      "inited": state.inited,
-      "animated": props.animated,
-      "duration": props.duration,
-      "swipeable": props.swipeable,
-      "lazyRender": props.lazyRender,
-      "currentIndex": state.currentIndex,
-      "onChange": setCurrentIndex
-    }, {
-      default: () => {
-        var _a;
-        return [(_a = slots.default) == null ? void 0 : _a.call(slots)];
-      }
-    })]);
-  }
-});
-const TAB_STATUS_KEY = /* @__PURE__ */ Symbol();
-const ALL_TAB_STATUS_KEY = /* @__PURE__ */ Symbol();
-const useAllTabStatus = () => inject(ALL_TAB_STATUS_KEY, null);
-const useProvideTabStatus = (status) => {
-  const allTabStatus = useAllTabStatus();
-  provide(TAB_STATUS_KEY, status);
-  provide(
-    ALL_TAB_STATUS_KEY,
-    computed(() => {
-      return (allTabStatus == null || allTabStatus.value) && status.value;
-    })
-  );
-};
-const [name$r, bem$s] = createNamespace("tab");
-const TabTitle = defineComponent({
-  name: name$r,
-  props: {
-    id: String,
-    dot: Boolean,
-    type: String,
-    color: String,
-    title: String,
-    badge: numericProp,
-    shrink: Boolean,
-    isActive: Boolean,
-    disabled: Boolean,
-    controls: String,
-    scrollable: Boolean,
-    activeColor: String,
-    inactiveColor: String,
-    showZeroBadge: truthProp
-  },
-  setup(props, {
-    slots
-  }) {
-    const style = computed(() => {
-      const style2 = {};
-      const {
-        type,
-        color,
-        disabled,
-        isActive,
-        activeColor,
-        inactiveColor
-      } = props;
-      const isCard = type === "card";
-      if (color && isCard) {
-        style2.borderColor = color;
-        if (!disabled) {
-          if (isActive) {
-            style2.backgroundColor = color;
-          } else {
-            style2.color = color;
-          }
-        }
-      }
-      const titleColor = isActive ? activeColor : inactiveColor;
-      if (titleColor) {
-        style2.color = titleColor;
-      }
-      return style2;
-    });
-    const renderText = () => {
-      const Text2 = createVNode("span", {
-        "class": bem$s("text", {
-          ellipsis: !props.scrollable
-        })
-      }, [slots.title ? slots.title() : props.title]);
-      if (props.dot || isDef(props.badge) && props.badge !== "") {
-        return createVNode(Badge, {
-          "dot": props.dot,
-          "content": props.badge,
-          "showZero": props.showZeroBadge
-        }, {
-          default: () => [Text2]
-        });
-      }
-      return Text2;
-    };
-    return () => createVNode("div", {
-      "id": props.id,
-      "role": "tab",
-      "class": [bem$s([props.type, {
-        grow: props.scrollable && !props.shrink,
-        shrink: props.shrink,
-        active: props.isActive,
-        disabled: props.disabled
-      }])],
-      "style": style.value,
-      "tabindex": props.disabled ? void 0 : props.isActive ? 0 : -1,
-      "aria-selected": props.isActive,
-      "aria-disabled": props.disabled || void 0,
-      "aria-controls": props.controls,
-      "data-allow-mismatch": "attribute"
-    }, [renderText()]);
-  }
-});
-const [name$q, bem$r] = createNamespace("swipe-item");
-var stdin_default$v = defineComponent({
-  name: name$q,
-  setup(props, {
-    slots
-  }) {
-    let rendered;
-    const state = reactive({
-      offset: 0,
-      inited: false,
-      mounted: false
-    });
-    const {
-      parent,
-      index
-    } = useParent(SWIPE_KEY);
-    if (!parent) {
-      return;
-    }
-    const style = computed(() => {
-      const style2 = {};
-      const {
-        vertical
-      } = parent.props;
-      if (parent.size.value) {
-        style2[vertical ? "height" : "width"] = `${parent.size.value}px`;
-      }
-      if (state.offset) {
-        style2.transform = `translate${vertical ? "Y" : "X"}(${state.offset}px)`;
-      }
-      return style2;
-    });
-    const shouldRender = computed(() => {
-      const {
-        loop,
-        lazyRender
-      } = parent.props;
-      if (!lazyRender || rendered) {
-        return true;
-      }
-      if (!state.mounted) {
-        return false;
-      }
-      const active = parent.activeIndicator.value;
-      const maxActive = parent.count.value - 1;
-      const prevActive = active === 0 && loop ? maxActive : active - 1;
-      const nextActive = active === maxActive && loop ? 0 : active + 1;
-      rendered = index.value === active || index.value === prevActive || index.value === nextActive;
-      return rendered;
-    });
-    const setOffset = (offset) => {
-      state.offset = offset;
-    };
-    useExpose({
-      setOffset
-    });
-    return () => {
-      var _a;
-      return createVNode("div", {
-        "class": bem$r(),
-        "style": style.value
-      }, [shouldRender.value ? (_a = slots.default) == null ? void 0 : _a.call(slots) : null]);
-    };
-  }
-});
-const SwipeItem = withInstall(stdin_default$v);
-const [name$p, bem$q] = createNamespace("tab");
-const tabProps = extend({}, routeProps, {
-  dot: Boolean,
-  name: numericProp,
-  badge: numericProp,
-  title: String,
-  disabled: Boolean,
-  titleClass: unknownProp,
-  titleStyle: [String, Object],
-  showZeroBadge: truthProp
-});
-var stdin_default$u = defineComponent({
-  name: name$p,
-  props: tabProps,
-  setup(props, {
-    slots
-  }) {
-    const id = useId();
-    const inited = ref(false);
-    const instance = getCurrentInstance();
-    const {
-      parent,
-      index
-    } = useParent(TABS_KEY);
-    if (!parent) {
-      return;
-    }
-    const getName = () => {
-      var _a;
-      return (_a = props.name) != null ? _a : index.value;
-    };
-    const init = () => {
-      inited.value = true;
-      if (parent.props.lazyRender) {
-        nextTick(() => {
-          parent.onRendered(getName(), props.title);
-        });
-      }
-    };
-    const active = computed(() => {
-      const isActive = getName() === parent.currentName.value;
-      if (isActive && !inited.value) {
-        init();
-      }
-      return isActive;
-    });
-    const parsedClass = ref("");
-    const parsedStyle = ref("");
-    watchEffect(() => {
-      const {
-        titleClass,
-        titleStyle
-      } = props;
-      parsedClass.value = titleClass ? normalizeClass(titleClass) : "";
-      parsedStyle.value = titleStyle && typeof titleStyle !== "string" ? stringifyStyle(normalizeStyle(titleStyle)) : titleStyle;
-    });
-    const renderTitle = (onClickTab) => createVNode(TabTitle, mergeProps({
-      "key": id,
-      "id": `${parent.id}-${index.value}`,
-      "ref": parent.setTitleRefs(index.value),
-      "style": parsedStyle.value,
-      "class": parsedClass.value,
-      "isActive": active.value,
-      "controls": id,
-      "scrollable": parent.scrollable.value,
-      "activeColor": parent.props.titleActiveColor,
-      "inactiveColor": parent.props.titleInactiveColor,
-      "onClick": (event) => onClickTab(instance.proxy, index.value, event)
-    }, pick(parent.props, ["type", "color", "shrink"]), pick(props, ["dot", "badge", "title", "disabled", "showZeroBadge"])), {
-      title: slots.title
-    });
-    const hasInactiveClass = ref(!active.value);
-    watch(active, (val) => {
-      if (val) {
-        hasInactiveClass.value = false;
-      } else {
-        doubleRaf(() => {
-          hasInactiveClass.value = true;
-        });
-      }
-    });
-    watch(() => props.title, () => {
-      parent.setLine();
-      parent.scrollIntoView();
-    });
-    useProvideTabStatus(active);
-    useExpose({
-      id,
-      renderTitle
-    });
-    return () => {
-      var _a;
-      const label = `${parent.id}-${index.value}`;
-      const {
-        animated,
-        swipeable,
-        scrollspy,
-        lazyRender
-      } = parent.props;
-      if (!slots.default && !animated) {
-        return;
-      }
-      const show = scrollspy || active.value;
-      if (animated || swipeable) {
-        return createVNode(SwipeItem, {
-          "id": id,
-          "role": "tabpanel",
-          "class": bem$q("panel-wrapper", {
-            inactive: hasInactiveClass.value
-          }),
-          "tabindex": active.value ? 0 : -1,
-          "aria-hidden": !active.value,
-          "aria-labelledby": label,
-          "data-allow-mismatch": "attribute"
-        }, {
-          default: () => {
-            var _a2;
-            return [createVNode("div", {
-              "class": bem$q("panel")
-            }, [(_a2 = slots.default) == null ? void 0 : _a2.call(slots)])];
-          }
-        });
-      }
-      const shouldRender = inited.value || scrollspy || !lazyRender;
-      const Content = shouldRender ? (_a = slots.default) == null ? void 0 : _a.call(slots) : null;
-      return withDirectives(createVNode("div", {
-        "id": id,
-        "role": "tabpanel",
-        "class": bem$q("panel"),
-        "tabindex": show ? 0 : -1,
-        "aria-labelledby": label,
-        "data-allow-mismatch": "attribute"
-      }, [Content]), [[vShow, show]]);
-    };
-  }
-});
-const Tab = withInstall(stdin_default$u);
-const Tabs = withInstall(stdin_default$w);
-const [name$o, bem$p] = createNamespace("picker-group");
-const PICKER_GROUP_KEY = Symbol(name$o);
-const pickerGroupProps = extend({
-  tabs: makeArrayProp(),
-  activeTab: makeNumericProp(0),
-  nextStepText: String,
-  showToolbar: truthProp
-}, pickerToolbarProps);
-defineComponent({
-  name: name$o,
-  props: pickerGroupProps,
-  emits: ["confirm", "cancel", "update:activeTab"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const activeTab = useSyncPropRef(() => props.activeTab, (value) => emit("update:activeTab", value));
-    const {
-      children,
-      linkChildren
-    } = useChildren(PICKER_GROUP_KEY);
-    linkChildren();
-    const showNextButton = () => +activeTab.value < props.tabs.length - 1 && props.nextStepText;
-    const onConfirm = () => {
-      if (showNextButton()) {
-        activeTab.value = +activeTab.value + 1;
-      } else {
-        emit("confirm", children.map((item) => item.confirm()));
-      }
-    };
-    const onCancel = () => emit("cancel");
-    return () => {
-      var _a, _b;
-      let childNodes = (_b = (_a = slots.default) == null ? void 0 : _a.call(slots)) == null ? void 0 : _b.filter((node) => node.type !== Comment).map((node) => {
-        if (node.type === Fragment) {
-          return node.children;
-        }
-        return node;
-      });
-      if (childNodes) {
-        childNodes = flat(childNodes);
-      }
-      const confirmButtonText = showNextButton() ? props.nextStepText : props.confirmButtonText;
-      return createVNode("div", {
-        "class": bem$p()
-      }, [props.showToolbar ? createVNode(stdin_default$A, {
-        "title": props.title,
-        "cancelButtonText": props.cancelButtonText,
-        "confirmButtonText": confirmButtonText,
-        "onConfirm": onConfirm,
-        "onCancel": onCancel
-      }, pick(slots, pickerToolbarSlots)) : null, createVNode(Tabs, {
-        "active": activeTab.value,
-        "onUpdate:active": ($event) => activeTab.value = $event,
-        "class": bem$p("tabs"),
-        "shrink": true,
-        "animated": true,
-        "lazyRender": false
-      }, {
-        default: () => [props.tabs.map((title, index) => createVNode(Tab, {
-          "title": title,
-          "titleClass": bem$p("tab-title")
-        }, {
-          default: () => [childNodes == null ? void 0 : childNodes[index]]
-        }))]
-      })]);
-    };
-  }
-});
-const pickerSharedProps = extend({
-  loading: Boolean,
-  readonly: Boolean,
-  allowHtml: Boolean,
-  optionHeight: makeNumericProp(44),
-  showToolbar: truthProp,
-  swipeDuration: makeNumericProp(1e3),
-  visibleOptionNum: makeNumericProp(6)
-}, pickerToolbarProps);
-const pickerProps = extend({}, pickerSharedProps, {
-  columns: makeArrayProp(),
-  modelValue: makeArrayProp(),
-  toolbarPosition: makeStringProp("top"),
-  columnsFieldNames: Object
-});
-var stdin_default$t = defineComponent({
-  name: name$y,
-  props: pickerProps,
-  emits: ["confirm", "cancel", "change", "scrollInto", "clickOption", "update:modelValue"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const columnsRef = ref();
-    const selectedValues = ref(props.modelValue.slice(0));
-    const {
-      parent
-    } = useParent(PICKER_GROUP_KEY);
-    const {
-      children,
-      linkChildren
-    } = useChildren(PICKER_KEY);
-    linkChildren();
-    const fields = computed(() => assignDefaultFields(props.columnsFieldNames));
-    const optionHeight = computed(() => unitToPx(props.optionHeight));
-    const columnsType = computed(() => getColumnsType(props.columns, fields.value));
-    const currentColumns = computed(() => {
-      const {
-        columns
-      } = props;
-      switch (columnsType.value) {
-        case "multiple":
-          return columns;
-        case "cascade":
-          return formatCascadeColumns(columns, fields.value, selectedValues);
-        default:
-          return [columns];
-      }
-    });
-    const hasOptions = computed(() => currentColumns.value.some((options) => options.length));
-    const selectedOptions = computed(() => currentColumns.value.map((options, index) => findOptionByValue(options, selectedValues.value[index], fields.value)));
-    const selectedIndexes = computed(() => currentColumns.value.map((options, index) => options.findIndex((option) => option[fields.value.value] === selectedValues.value[index])));
-    const setValue = (index, value) => {
-      if (selectedValues.value[index] !== value) {
-        const newValues = selectedValues.value.slice(0);
-        newValues[index] = value;
-        selectedValues.value = newValues;
-      }
-    };
-    const getEventParams = () => ({
-      selectedValues: selectedValues.value.slice(0),
-      selectedOptions: selectedOptions.value,
-      selectedIndexes: selectedIndexes.value
-    });
-    const onChange = (value, columnIndex) => {
-      setValue(columnIndex, value);
-      if (columnsType.value === "cascade") {
-        selectedValues.value.forEach((value2, index) => {
-          const options = currentColumns.value[index];
-          if (!isOptionExist(options, value2, fields.value)) {
-            setValue(index, options.length ? options[0][fields.value.value] : void 0);
-          }
-        });
-      }
-      nextTick(() => {
-        emit("change", extend({
-          columnIndex
-        }, getEventParams()));
-      });
-    };
-    const onClickOption = (currentOption, columnIndex) => {
-      const params = {
-        columnIndex,
-        currentOption
-      };
-      emit("clickOption", extend(getEventParams(), params));
-      emit("scrollInto", params);
-    };
-    const confirm = () => {
-      children.forEach((child) => child.stopMomentum());
-      const params = getEventParams();
-      nextTick(() => {
-        const params2 = getEventParams();
-        emit("confirm", params2);
-      });
-      return params;
-    };
-    const cancel = () => emit("cancel", getEventParams());
-    const renderColumnItems = () => currentColumns.value.map((options, columnIndex) => createVNode(stdin_default$B, {
-      "value": selectedValues.value[columnIndex],
-      "fields": fields.value,
-      "options": options,
-      "readonly": props.readonly,
-      "allowHtml": props.allowHtml,
-      "optionHeight": optionHeight.value,
-      "swipeDuration": props.swipeDuration,
-      "visibleOptionNum": props.visibleOptionNum,
-      "onChange": (value) => onChange(value, columnIndex),
-      "onClickOption": (option) => onClickOption(option, columnIndex),
-      "onScrollInto": (option) => {
-        emit("scrollInto", {
-          currentOption: option,
-          columnIndex
-        });
-      }
-    }, {
-      option: slots.option
-    }));
-    const renderMask = (wrapHeight) => {
-      if (hasOptions.value) {
-        const frameStyle = {
-          height: `${optionHeight.value}px`
-        };
-        const maskStyle = {
-          backgroundSize: `100% ${(wrapHeight - optionHeight.value) / 2}px`
-        };
-        return [createVNode("div", {
-          "class": bem$y("mask"),
-          "style": maskStyle
-        }, null), createVNode("div", {
-          "class": [BORDER_UNSET_TOP_BOTTOM, bem$y("frame")],
-          "style": frameStyle
-        }, null)];
-      }
-    };
-    const renderColumns = () => {
-      const wrapHeight = optionHeight.value * +props.visibleOptionNum;
-      const columnsStyle = {
-        height: `${wrapHeight}px`
-      };
-      if (!props.loading && !hasOptions.value && slots.empty) {
-        return slots.empty();
-      }
-      return createVNode("div", {
-        "ref": columnsRef,
-        "class": bem$y("columns"),
-        "style": columnsStyle
-      }, [renderColumnItems(), renderMask(wrapHeight)]);
-    };
-    const renderToolbar = () => {
-      if (props.showToolbar && !parent) {
-        return createVNode(stdin_default$A, mergeProps(pick(props, pickerToolbarPropKeys), {
-          "onConfirm": confirm,
-          "onCancel": cancel
-        }), pick(slots, pickerToolbarSlots));
-      }
-    };
-    const resetSelectedValues = (columns) => {
-      columns.forEach((options, index) => {
-        if (options.length && !isOptionExist(options, selectedValues.value[index], fields.value)) {
-          setValue(index, getFirstEnabledOption(options)[fields.value.value]);
-        }
-      });
-    };
-    watch(currentColumns, (columns) => resetSelectedValues(columns), {
-      immediate: true
-    });
-    let lastEmittedModelValue;
-    watch(() => props.modelValue, (newValues) => {
-      if (!isSameValue(newValues, selectedValues.value) && !isSameValue(newValues, lastEmittedModelValue)) {
-        selectedValues.value = newValues.slice(0);
-        lastEmittedModelValue = newValues.slice(0);
-      }
-      if (props.modelValue.length === 0) {
-        resetSelectedValues(currentColumns.value);
-      }
-    }, {
-      deep: true
-    });
-    watch(selectedValues, (newValues) => {
-      if (!isSameValue(newValues, props.modelValue)) {
-        lastEmittedModelValue = newValues.slice(0);
-        emit("update:modelValue", lastEmittedModelValue);
-      }
-    }, {
-      immediate: true
-    });
-    useEventListener("touchmove", preventDefault, {
-      target: columnsRef
-    });
-    const getSelectedOptions = () => selectedOptions.value;
-    useExpose({
-      confirm,
-      getSelectedOptions
-    });
-    return () => {
-      var _a, _b;
-      return createVNode("div", {
-        "class": bem$y()
-      }, [props.toolbarPosition === "top" ? renderToolbar() : null, props.loading ? createVNode(Loading, {
-        "class": bem$y("loading")
-      }, null) : null, (_a = slots["columns-top"]) == null ? void 0 : _a.call(slots), renderColumns(), (_b = slots["columns-bottom"]) == null ? void 0 : _b.call(slots), props.toolbarPosition === "bottom" ? renderToolbar() : null]);
-    };
-  }
-});
-const Picker = withInstall(stdin_default$t);
-const [name$n, bem$o] = createNamespace("cell");
-const cellSharedProps = {
-  tag: makeStringProp("div"),
-  icon: String,
-  size: String,
-  title: numericProp,
-  value: numericProp,
-  label: numericProp,
-  center: Boolean,
-  isLink: Boolean,
-  border: truthProp,
-  iconPrefix: String,
-  valueClass: unknownProp,
-  labelClass: unknownProp,
-  titleClass: unknownProp,
-  titleStyle: null,
-  arrowDirection: String,
-  required: {
-    type: [Boolean, String],
-    default: null
-  },
-  clickable: {
-    type: Boolean,
-    default: null
-  }
-};
-const cellProps = extend({}, cellSharedProps, routeProps);
-var stdin_default$s = defineComponent({
-  name: name$n,
-  props: cellProps,
-  setup(props, {
-    slots
-  }) {
-    const route2 = useRoute();
-    const renderLabel = () => {
-      const showLabel = slots.label || isDef(props.label);
-      if (showLabel) {
-        return createVNode("div", {
-          "class": [bem$o("label"), props.labelClass]
-        }, [slots.label ? slots.label() : props.label]);
-      }
-    };
-    const renderTitle = () => {
-      var _a;
-      if (slots.title || isDef(props.title)) {
-        const titleSlot = (_a = slots.title) == null ? void 0 : _a.call(slots);
-        if (Array.isArray(titleSlot) && titleSlot.length === 0) {
-          return;
-        }
-        return createVNode("div", {
-          "class": [bem$o("title"), props.titleClass],
-          "style": props.titleStyle
-        }, [titleSlot || createVNode("span", null, [props.title]), renderLabel()]);
-      }
-    };
-    const renderValue = () => {
-      const slot = slots.value || slots.default;
-      const hasValue = slot || isDef(props.value);
-      if (hasValue) {
-        return createVNode("div", {
-          "class": [bem$o("value"), props.valueClass]
-        }, [slot ? slot() : createVNode("span", null, [props.value])]);
-      }
-    };
-    const renderLeftIcon = () => {
-      if (slots.icon) {
-        return slots.icon();
-      }
-      if (props.icon) {
-        return createVNode(Icon, {
-          "name": props.icon,
-          "class": bem$o("left-icon"),
-          "classPrefix": props.iconPrefix
-        }, null);
-      }
-    };
-    const renderRightIcon = () => {
-      if (slots["right-icon"]) {
-        return slots["right-icon"]();
-      }
-      if (props.isLink) {
-        const name2 = props.arrowDirection && props.arrowDirection !== "right" ? `arrow-${props.arrowDirection}` : "arrow";
-        return createVNode(Icon, {
-          "name": name2,
-          "class": bem$o("right-icon")
-        }, null);
-      }
-    };
-    return () => {
-      var _a;
-      const {
-        tag,
-        size,
-        center,
-        border,
-        isLink,
-        required
-      } = props;
-      const clickable = (_a = props.clickable) != null ? _a : isLink;
-      const classes = {
-        center,
-        required: !!required,
-        clickable,
-        borderless: !border
-      };
-      if (size) {
-        classes[size] = !!size;
-      }
-      return createVNode(tag, {
-        "class": bem$o(classes),
-        "role": clickable ? "button" : void 0,
-        "tabindex": clickable ? 0 : void 0,
-        "onClick": route2
-      }, {
-        default: () => {
-          var _a2;
-          return [renderLeftIcon(), renderTitle(), renderValue(), renderRightIcon(), (_a2 = slots.extra) == null ? void 0 : _a2.call(slots)];
-        }
-      });
-    };
-  }
-});
-const Cell = withInstall(stdin_default$s);
-const [name$m, bem$n] = createNamespace("form");
-const formProps = {
-  colon: Boolean,
-  disabled: Boolean,
-  readonly: Boolean,
-  required: [Boolean, String],
-  showError: Boolean,
-  labelWidth: numericProp,
-  labelAlign: String,
-  inputAlign: String,
-  scrollToError: Boolean,
-  scrollToErrorPosition: String,
-  validateFirst: Boolean,
-  submitOnEnter: truthProp,
-  showErrorMessage: truthProp,
-  errorMessageAlign: String,
-  validateTrigger: {
-    type: [String, Array],
-    default: "onBlur"
-  }
-};
-var stdin_default$r = defineComponent({
-  name: name$m,
-  props: formProps,
-  emits: ["submit", "failed"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const {
-      children,
-      linkChildren
-    } = useChildren(FORM_KEY);
-    const getFieldsByNames = (names) => {
-      if (names) {
-        return children.filter((field) => names.includes(field.name));
-      }
-      return children;
-    };
-    const validateSeq = (names) => new Promise((resolve2, reject) => {
-      const errors = [];
-      const fields = getFieldsByNames(names);
-      fields.reduce((promise, field) => promise.then(() => {
-        if (!errors.length) {
-          return field.validate().then((error) => {
-            if (error) {
-              errors.push(error);
-            }
-          });
-        }
-      }), Promise.resolve()).then(() => {
-        if (errors.length) {
-          reject(errors);
-        } else {
-          resolve2();
-        }
-      });
-    });
-    const validateAll = (names) => new Promise((resolve2, reject) => {
-      const fields = getFieldsByNames(names);
-      Promise.all(fields.map((item) => item.validate())).then((errors) => {
-        errors = errors.filter(Boolean);
-        if (errors.length) {
-          reject(errors);
-        } else {
-          resolve2();
-        }
-      });
-    });
-    const validateField = (name2) => {
-      const matched = children.find((item) => item.name === name2);
-      if (matched) {
-        return new Promise((resolve2, reject) => {
-          matched.validate().then((error) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve2();
-            }
-          });
-        });
-      }
-      return Promise.reject();
-    };
-    const validate2 = (name2) => {
-      if (typeof name2 === "string") {
-        return validateField(name2);
-      }
-      return props.validateFirst ? validateSeq(name2) : validateAll(name2);
-    };
-    const resetValidation = (name2) => {
-      if (typeof name2 === "string") {
-        name2 = [name2];
-      }
-      const fields = getFieldsByNames(name2);
-      fields.forEach((item) => {
-        item.resetValidation();
-      });
-    };
-    const getValidationStatus = () => children.reduce((form, field) => {
-      form[field.name] = field.getValidationStatus();
-      return form;
-    }, {});
-    const scrollToField = (name2, options) => {
-      children.some((item) => {
-        if (item.name === name2) {
-          item.$el.scrollIntoView(options);
-          return true;
-        }
-        return false;
-      });
-    };
-    const getValues = () => children.reduce((form, field) => {
-      if (field.name !== void 0) {
-        form[field.name] = field.formValue.value;
-      }
-      return form;
-    }, {});
-    const submit = () => {
-      const values = getValues();
-      validate2().then(() => emit("submit", values)).catch((errors) => {
-        emit("failed", {
-          values,
-          errors
-        });
-        const {
-          scrollToError,
-          scrollToErrorPosition
-        } = props;
-        if (scrollToError && errors[0].name) {
-          scrollToField(errors[0].name, scrollToErrorPosition ? {
-            block: scrollToErrorPosition
-          } : void 0);
-        }
-      });
-    };
-    const onSubmit = (event) => {
-      preventDefault(event);
-      submit();
-    };
-    linkChildren({
-      props
-    });
-    useExpose({
-      submit,
-      validate: validate2,
-      getValues,
-      scrollToField,
-      resetValidation,
-      getValidationStatus
-    });
-    return () => {
-      var _a;
-      return createVNode("form", {
-        "class": bem$n(),
-        "onSubmit": onSubmit
-      }, [(_a = slots.default) == null ? void 0 : _a.call(slots)]);
-    };
-  }
-});
-const Form = withInstall(stdin_default$r);
-function isEmptyValue(value) {
-  if (Array.isArray(value)) {
-    return !value.length;
-  }
-  if (value === 0) {
-    return false;
-  }
-  return !value;
-}
-function runSyncRule(value, rule) {
-  if (isEmptyValue(value)) {
-    if (rule.required) {
-      return false;
-    }
-    if (rule.validateEmpty === false) {
-      return true;
-    }
-  }
-  if (rule.pattern && !rule.pattern.test(String(value))) {
-    return false;
-  }
-  return true;
-}
-function runRuleValidator(value, rule) {
-  return new Promise((resolve2) => {
-    const returnVal = rule.validator(value, rule);
-    if (isPromise(returnVal)) {
-      returnVal.then(resolve2);
-      return;
-    }
-    resolve2(returnVal);
-  });
-}
-function getRuleMessage(value, rule) {
-  const { message } = rule;
-  if (isFunction(message)) {
-    return message(value, rule);
-  }
-  return message || "";
-}
-function startComposing({ target }) {
-  target.composing = true;
-}
-function endComposing({ target }) {
-  if (target.composing) {
-    target.composing = false;
-    target.dispatchEvent(new Event("input"));
-  }
-}
-function resizeTextarea(input, autosize) {
-  const scrollTop = getRootScrollTop();
-  input.style.height = "auto";
-  let height = input.scrollHeight;
-  if (isObject(autosize)) {
-    const { maxHeight, minHeight } = autosize;
-    if (maxHeight !== void 0) {
-      height = Math.min(height, maxHeight);
-    }
-    if (minHeight !== void 0) {
-      height = Math.max(height, minHeight);
-    }
-  }
-  if (height) {
-    input.style.height = `${height}px`;
-    setRootScrollTop(scrollTop);
-  }
-}
-function mapInputType(type, inputmode) {
-  if (type === "number") {
-    type = "text";
-    inputmode != null ? inputmode : inputmode = "decimal";
-  }
-  if (type === "digit") {
-    type = "tel";
-    inputmode != null ? inputmode : inputmode = "numeric";
-  }
-  return { type, inputmode };
-}
-function getStringLength(str) {
-  return [...str].length;
-}
-function cutString(str, maxlength) {
-  return [...str].slice(0, maxlength).join("");
-}
-const [name$l, bem$m] = createNamespace("field");
-const fieldSharedProps = {
-  id: String,
-  name: String,
-  leftIcon: String,
-  rightIcon: String,
-  autofocus: Boolean,
-  clearable: Boolean,
-  maxlength: numericProp,
-  max: Number,
-  min: Number,
-  formatter: Function,
-  clearIcon: makeStringProp("clear"),
-  modelValue: makeNumericProp(""),
-  inputAlign: String,
-  placeholder: String,
-  autocomplete: String,
-  autocapitalize: String,
-  autocorrect: String,
-  errorMessage: String,
-  enterkeyhint: String,
-  clearTrigger: makeStringProp("focus"),
-  formatTrigger: makeStringProp("onChange"),
-  spellcheck: {
-    type: Boolean,
-    default: null
-  },
-  error: {
-    type: Boolean,
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: null
-  },
-  readonly: {
-    type: Boolean,
-    default: null
-  },
-  inputmode: String
-};
-const fieldProps = extend({}, cellSharedProps, fieldSharedProps, {
-  rows: numericProp,
-  type: makeStringProp("text"),
-  rules: Array,
-  autosize: [Boolean, Object],
-  labelWidth: numericProp,
-  labelClass: unknownProp,
-  labelAlign: String,
-  showWordLimit: Boolean,
-  errorMessageAlign: String,
-  colon: {
-    type: Boolean,
-    default: null
-  }
-});
-var stdin_default$q = defineComponent({
-  name: name$l,
-  props: fieldProps,
-  emits: ["blur", "focus", "clear", "keypress", "clickInput", "endValidate", "startValidate", "clickLeftIcon", "clickRightIcon", "update:modelValue"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const id = useId();
-    const state = reactive({
-      status: "unvalidated",
-      focused: false,
-      validateMessage: ""
-    });
-    const inputRef = ref();
-    const clearIconRef = ref();
-    const customValue = ref();
-    const {
-      parent: form
-    } = useParent(FORM_KEY);
-    const getModelValue = () => {
-      var _a;
-      return String((_a = props.modelValue) != null ? _a : "");
-    };
-    const getProp = (key) => {
-      if (isDef(props[key])) {
-        return props[key];
-      }
-      if (form && isDef(form.props[key])) {
-        return form.props[key];
-      }
-    };
-    const showClear = computed(() => {
-      const readonly = getProp("readonly");
-      if (props.clearable && !readonly) {
-        const hasValue = getModelValue() !== "";
-        const trigger = props.clearTrigger === "always" || props.clearTrigger === "focus" && state.focused;
-        return hasValue && trigger;
-      }
-      return false;
-    });
-    const formValue = computed(() => {
-      if (customValue.value && slots.input) {
-        return customValue.value();
-      }
-      return props.modelValue;
-    });
-    const showRequiredMark = computed(() => {
-      var _a;
-      const required = getProp("required");
-      if (required === "auto") {
-        return (_a = props.rules) == null ? void 0 : _a.some((rule) => rule.required);
-      }
-      return required;
-    });
-    const runRules = (rules) => rules.reduce((promise, rule) => promise.then(() => {
-      if (state.status === "failed") {
-        return;
-      }
-      let {
-        value
-      } = formValue;
-      if (rule.formatter) {
-        value = rule.formatter(value, rule);
-      }
-      if (!runSyncRule(value, rule)) {
-        state.status = "failed";
-        state.validateMessage = getRuleMessage(value, rule);
-        return;
-      }
-      if (rule.validator) {
-        if (isEmptyValue(value) && rule.validateEmpty === false) {
-          return;
-        }
-        return runRuleValidator(value, rule).then((result) => {
-          if (result && typeof result === "string") {
-            state.status = "failed";
-            state.validateMessage = result;
-          } else if (result === false) {
-            state.status = "failed";
-            state.validateMessage = getRuleMessage(value, rule);
-          }
-        });
-      }
-    }), Promise.resolve());
-    const resetValidation = () => {
-      state.status = "unvalidated";
-      state.validateMessage = "";
-    };
-    const endValidate = () => emit("endValidate", {
-      status: state.status,
-      message: state.validateMessage
-    });
-    const validate2 = (rules = props.rules) => new Promise((resolve2) => {
-      resetValidation();
-      if (rules) {
-        emit("startValidate");
-        runRules(rules).then(() => {
-          if (state.status === "failed") {
-            resolve2({
-              name: props.name,
-              message: state.validateMessage
-            });
-            endValidate();
-          } else {
-            state.status = "passed";
-            resolve2();
-            endValidate();
-          }
-        });
-      } else {
-        resolve2();
-      }
-    });
-    const validateWithTrigger = (trigger) => {
-      if (form && props.rules) {
-        const {
-          validateTrigger
-        } = form.props;
-        const defaultTrigger = toArray(validateTrigger).includes(trigger);
-        const rules = props.rules.filter((rule) => {
-          if (rule.trigger) {
-            return toArray(rule.trigger).includes(trigger);
-          }
-          return defaultTrigger;
-        });
-        if (rules.length) {
-          validate2(rules);
-        }
-      }
-    };
-    const limitValueLength = (value) => {
-      var _a;
-      const {
-        maxlength
-      } = props;
-      if (isDef(maxlength) && getStringLength(value) > +maxlength) {
-        const modelValue = getModelValue();
-        if (modelValue && getStringLength(modelValue) === +maxlength) {
-          return modelValue;
-        }
-        let selectionEnd = (_a = inputRef.value) == null ? void 0 : _a.selectionEnd;
-        if (state.focused && selectionEnd) {
-          const valueArr = [...value];
-          const exceededLength = valueArr.length - +maxlength;
-          selectionEnd = getStringLength(value.slice(0, selectionEnd));
-          valueArr.splice(selectionEnd - exceededLength, exceededLength);
-          return valueArr.join("");
-        }
-        return cutString(value, +maxlength);
-      }
-      return value;
-    };
-    const updateValue = (value, trigger = "onChange") => {
-      var _a, _b;
-      const originalValue = value;
-      value = limitValueLength(value);
-      const limitDiffLen = originalValue.length - value.length;
-      if (props.type === "number" || props.type === "digit") {
-        const isNumber2 = props.type === "number";
-        value = formatNumber(value, isNumber2, isNumber2);
-        if (trigger === "onBlur" && value !== "" && (props.min !== void 0 || props.max !== void 0)) {
-          const adjustedValue = clamp(+value, (_a = props.min) != null ? _a : -Infinity, (_b = props.max) != null ? _b : Infinity);
-          if (+value !== adjustedValue) {
-            value = adjustedValue.toString();
-          }
-        }
-      }
-      let formatterDiffLen = 0;
-      if (props.formatter && trigger === props.formatTrigger) {
-        const {
-          formatter,
-          maxlength
-        } = props;
-        value = formatter(value);
-        if (isDef(maxlength) && getStringLength(value) > +maxlength) {
-          value = cutString(value, +maxlength);
-        }
-        if (inputRef.value && state.focused) {
-          const {
-            selectionEnd
-          } = inputRef.value;
-          const bcoVal = cutString(originalValue, selectionEnd);
-          formatterDiffLen = formatter(bcoVal).length - bcoVal.length;
-        }
-      }
-      if (inputRef.value && inputRef.value.value !== value) {
-        if (state.focused) {
-          let {
-            selectionStart,
-            selectionEnd
-          } = inputRef.value;
-          inputRef.value.value = value;
-          if (isDef(selectionStart) && isDef(selectionEnd)) {
-            const valueLen = value.length;
-            if (limitDiffLen) {
-              selectionStart -= limitDiffLen;
-              selectionEnd -= limitDiffLen;
-            } else if (formatterDiffLen) {
-              selectionStart += formatterDiffLen;
-              selectionEnd += formatterDiffLen;
-            }
-            inputRef.value.setSelectionRange(Math.min(selectionStart, valueLen), Math.min(selectionEnd, valueLen));
-          }
-        } else {
-          inputRef.value.value = value;
-        }
-      }
-      if (value !== props.modelValue) {
-        emit("update:modelValue", value);
-      }
-    };
-    const onInput = (event) => {
-      if (!event.target.composing) {
-        updateValue(event.target.value);
-      }
-    };
-    const blur = () => {
-      var _a;
-      return (_a = inputRef.value) == null ? void 0 : _a.blur();
-    };
-    const focus = () => {
-      var _a;
-      return (_a = inputRef.value) == null ? void 0 : _a.focus();
-    };
-    const adjustTextareaSize = () => {
-      const input = inputRef.value;
-      if (props.type === "textarea" && props.autosize && input) {
-        resizeTextarea(input, props.autosize);
-      }
-    };
-    const onFocus = (event) => {
-      state.focused = true;
-      emit("focus", event);
-      nextTick(adjustTextareaSize);
-      if (getProp("readonly")) {
-        blur();
-      }
-    };
-    const onBlur = (event) => {
-      state.focused = false;
-      updateValue(getModelValue(), "onBlur");
-      emit("blur", event);
-      if (getProp("readonly")) {
-        return;
-      }
-      validateWithTrigger("onBlur");
-      nextTick(adjustTextareaSize);
-    };
-    const onClickInput = (event) => emit("clickInput", event);
-    const onClickLeftIcon = (event) => emit("clickLeftIcon", event);
-    const onClickRightIcon = (event) => emit("clickRightIcon", event);
-    const onClear = (event) => {
-      preventDefault(event);
-      emit("update:modelValue", "");
-      emit("clear", event);
-    };
-    const showError2 = computed(() => {
-      if (typeof props.error === "boolean") {
-        return props.error;
-      }
-      if (form && form.props.showError && state.status === "failed") {
-        return true;
-      }
-    });
-    const labelStyle = computed(() => {
-      const labelWidth = getProp("labelWidth");
-      const labelAlign = getProp("labelAlign");
-      if (labelWidth && labelAlign !== "top") {
-        return {
-          width: addUnit(labelWidth)
-        };
-      }
-    });
-    const onKeypress = (event) => {
-      const ENTER_CODE = 13;
-      if (event.keyCode === ENTER_CODE) {
-        const submitOnEnter = form && form.props.submitOnEnter;
-        if (!submitOnEnter && props.type !== "textarea") {
-          preventDefault(event);
-        }
-        if (props.type === "search") {
-          blur();
-        }
-      }
-      emit("keypress", event);
-    };
-    const getInputId = () => props.id || `${id}-input`;
-    const getValidationStatus = () => state.status;
-    const renderInput = () => {
-      const controlClass = bem$m("control", [getProp("inputAlign"), {
-        error: showError2.value,
-        custom: !!slots.input,
-        "min-height": props.type === "textarea" && !props.autosize
-      }]);
-      if (slots.input) {
-        return createVNode("div", {
-          "class": controlClass,
-          "onClick": onClickInput
-        }, [slots.input()]);
-      }
-      const inputAttrs = {
-        id: getInputId(),
-        ref: inputRef,
-        name: props.name,
-        rows: props.rows !== void 0 ? +props.rows : void 0,
-        class: controlClass,
-        disabled: getProp("disabled"),
-        readonly: getProp("readonly"),
-        autofocus: props.autofocus,
-        placeholder: props.placeholder,
-        autocomplete: props.autocomplete,
-        autocapitalize: props.autocapitalize,
-        autocorrect: props.autocorrect,
-        enterkeyhint: props.enterkeyhint,
-        spellcheck: props.spellcheck,
-        "aria-labelledby": props.label ? `${id}-label` : void 0,
-        "data-allow-mismatch": "attribute",
-        onBlur,
-        onFocus,
-        onInput,
-        onClick: onClickInput,
-        onChange: endComposing,
-        onKeypress,
-        onCompositionend: endComposing,
-        onCompositionstart: startComposing
-      };
-      if (props.type === "textarea") {
-        return createVNode("textarea", mergeProps(inputAttrs, {
-          "inputmode": props.inputmode
-        }), null);
-      }
-      return createVNode("input", mergeProps(mapInputType(props.type, props.inputmode), inputAttrs), null);
-    };
-    const renderLeftIcon = () => {
-      const leftIconSlot = slots["left-icon"];
-      if (props.leftIcon || leftIconSlot) {
-        return createVNode("div", {
-          "class": bem$m("left-icon"),
-          "onClick": onClickLeftIcon
-        }, [leftIconSlot ? leftIconSlot() : createVNode(Icon, {
-          "name": props.leftIcon,
-          "classPrefix": props.iconPrefix
-        }, null)]);
-      }
-    };
-    const renderRightIcon = () => {
-      const rightIconSlot = slots["right-icon"];
-      if (props.rightIcon || rightIconSlot) {
-        return createVNode("div", {
-          "class": bem$m("right-icon"),
-          "onClick": onClickRightIcon
-        }, [rightIconSlot ? rightIconSlot() : createVNode(Icon, {
-          "name": props.rightIcon,
-          "classPrefix": props.iconPrefix
-        }, null)]);
-      }
-    };
-    const renderWordLimit = () => {
-      if (props.showWordLimit && props.maxlength) {
-        const count = getStringLength(getModelValue());
-        return createVNode("div", {
-          "class": bem$m("word-limit")
-        }, [createVNode("span", {
-          "class": bem$m("word-num")
-        }, [count]), createTextVNode("/"), props.maxlength]);
-      }
-    };
-    const renderMessage = () => {
-      if (form && form.props.showErrorMessage === false) {
-        return;
-      }
-      const message = props.errorMessage || state.validateMessage;
-      if (message) {
-        const slot = slots["error-message"];
-        const errorMessageAlign = getProp("errorMessageAlign");
-        return createVNode("div", {
-          "class": bem$m("error-message", errorMessageAlign)
-        }, [slot ? slot({
-          message
-        }) : message]);
-      }
-    };
-    const renderLabel = () => {
-      const labelWidth = getProp("labelWidth");
-      const labelAlign = getProp("labelAlign");
-      const colon = getProp("colon") ? ":" : "";
-      if (slots.label) {
-        return [slots.label(), colon];
-      }
-      if (props.label) {
-        return createVNode("label", {
-          "id": `${id}-label`,
-          "for": slots.input ? void 0 : getInputId(),
-          "data-allow-mismatch": "attribute",
-          "onClick": (event) => {
-            preventDefault(event);
-            focus();
-          },
-          "style": labelAlign === "top" && labelWidth ? {
-            width: addUnit(labelWidth)
-          } : void 0
-        }, [props.label + colon]);
-      }
-    };
-    const renderFieldBody = () => [createVNode("div", {
-      "class": bem$m("body")
-    }, [renderInput(), showClear.value && createVNode(Icon, {
-      "ref": clearIconRef,
-      "name": props.clearIcon,
-      "class": bem$m("clear")
-    }, null), renderRightIcon(), slots.button && createVNode("div", {
-      "class": bem$m("button")
-    }, [slots.button()])]), renderWordLimit(), renderMessage()];
-    useExpose({
-      blur,
-      focus,
-      validate: validate2,
-      formValue,
-      resetValidation,
-      getValidationStatus
-    });
-    provide(CUSTOM_FIELD_INJECTION_KEY, {
-      customValue,
-      resetValidation,
-      validateWithTrigger
-    });
-    watch(() => props.modelValue, () => {
-      updateValue(getModelValue());
-      resetValidation();
-      validateWithTrigger("onChange");
-      nextTick(adjustTextareaSize);
-    });
-    useEventListener("touchstart", onClear, {
-      target: computed(() => {
-        var _a;
-        return (_a = clearIconRef.value) == null ? void 0 : _a.$el;
-      })
-    });
-    return () => {
-      const disabled = getProp("disabled");
-      const labelAlign = getProp("labelAlign");
-      const LeftIcon = renderLeftIcon();
-      const renderTitle = () => {
-        const Label = renderLabel();
-        if (labelAlign === "top") {
-          return [LeftIcon, Label].filter(Boolean);
-        }
-        return Label || [];
-      };
-      return createVNode(Cell, {
-        "size": props.size,
-        "class": bem$m({
-          error: showError2.value,
-          disabled,
-          [`label-${labelAlign}`]: labelAlign
-        }),
-        "center": props.center,
-        "border": props.border,
-        "isLink": props.isLink,
-        "clickable": props.clickable,
-        "titleStyle": labelStyle.value,
-        "valueClass": bem$m("value"),
-        "titleClass": [bem$m("label", [labelAlign, {
-          required: showRequiredMark.value
-        }]), props.labelClass],
-        "arrowDirection": props.arrowDirection
-      }, {
-        icon: LeftIcon && labelAlign !== "top" ? () => LeftIcon : null,
-        title: renderTitle,
-        value: renderFieldBody,
-        extra: slots.extra
-      });
-    };
-  }
-});
-const Field = withInstall(stdin_default$q);
-let lockCount = 0;
-function lockClick(lock) {
-  if (lock) {
-    if (!lockCount) {
-      (void 0).body.classList.add("van-toast--unclickable");
-    }
-    lockCount++;
-  } else if (lockCount) {
-    lockCount--;
-    if (!lockCount) {
-      (void 0).body.classList.remove("van-toast--unclickable");
-    }
-  }
-}
-const [name$k, bem$l] = createNamespace("toast");
-const popupInheritProps = ["show", "overlay", "teleport", "transition", "overlayClass", "overlayStyle", "closeOnClickOverlay", "zIndex"];
-const toastProps = {
-  icon: String,
-  show: Boolean,
-  type: makeStringProp("text"),
-  overlay: Boolean,
-  message: numericProp,
-  iconSize: numericProp,
-  duration: makeNumberProp(2e3),
-  position: makeStringProp("middle"),
-  teleport: [String, Object],
-  wordBreak: String,
-  className: unknownProp,
-  iconPrefix: String,
-  transition: makeStringProp("van-fade"),
-  loadingType: String,
-  forbidClick: Boolean,
-  overlayClass: unknownProp,
-  overlayStyle: Object,
-  closeOnClick: Boolean,
-  closeOnClickOverlay: Boolean,
-  zIndex: numericProp
-};
-var stdin_default$p = defineComponent({
-  name: name$k,
-  props: toastProps,
-  emits: ["update:show"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    let timer;
-    let clickable = false;
-    const toggleClickable = () => {
-      const newValue = props.show && props.forbidClick;
-      if (clickable !== newValue) {
-        clickable = newValue;
-        lockClick(clickable);
-      }
-    };
-    const updateShow = (show) => emit("update:show", show);
-    const onClick = () => {
-      if (props.closeOnClick) {
-        updateShow(false);
-      }
-    };
-    const clearTimer = () => clearTimeout(timer);
-    const renderIcon = () => {
-      const {
-        icon,
-        type,
-        iconSize,
-        iconPrefix,
-        loadingType
-      } = props;
-      const hasIcon = icon || type === "success" || type === "fail";
-      if (hasIcon) {
-        return createVNode(Icon, {
-          "name": icon || type,
-          "size": iconSize,
-          "class": bem$l("icon"),
-          "classPrefix": iconPrefix
-        }, null);
-      }
-      if (type === "loading") {
-        return createVNode(Loading, {
-          "class": bem$l("loading"),
-          "size": iconSize,
-          "type": loadingType
-        }, null);
-      }
-    };
-    const renderMessage = () => {
-      const {
-        type,
-        message
-      } = props;
-      if (slots.message) {
-        return createVNode("div", {
-          "class": bem$l("text")
-        }, [slots.message()]);
-      }
-      if (isDef(message) && message !== "") {
-        return type === "html" ? createVNode("div", {
-          "key": 0,
-          "class": bem$l("text"),
-          "innerHTML": String(message)
-        }, null) : createVNode("div", {
-          "class": bem$l("text")
-        }, [message]);
-      }
-    };
-    watch(() => [props.show, props.forbidClick], toggleClickable);
-    watch(() => [props.show, props.type, props.message, props.duration], () => {
-      clearTimer();
-      if (props.show && props.duration > 0) {
-        timer = setTimeout(() => {
-          updateShow(false);
-        }, props.duration);
-      }
-    });
-    return () => createVNode(Popup, mergeProps({
-      "class": [bem$l([props.position, props.wordBreak === "normal" ? "break-normal" : props.wordBreak, {
-        [props.type]: !props.icon
-      }]), props.className],
-      "lockScroll": false,
-      "onClick": onClick,
-      "onClosed": clearTimer,
-      "onUpdate:show": updateShow
-    }, pick(props, popupInheritProps)), {
-      default: () => [renderIcon(), renderMessage()]
-    });
-  }
-});
-const Toast = withInstall(stdin_default$p);
-const [name$j, bem$k] = createNamespace("tag");
-const tagProps = {
-  size: String,
-  mark: Boolean,
-  show: truthProp,
-  type: makeStringProp("default"),
-  color: String,
-  plain: Boolean,
-  round: Boolean,
-  textColor: String,
-  closeable: Boolean
-};
-var stdin_default$o = defineComponent({
-  name: name$j,
-  props: tagProps,
-  emits: ["close"],
-  setup(props, {
-    slots,
-    emit
-  }) {
-    const onClose = (event) => {
-      event.stopPropagation();
-      emit("close", event);
-    };
-    const getStyle = () => {
-      if (props.plain) {
-        return {
-          color: props.textColor || props.color,
-          borderColor: props.color
-        };
-      }
-      return {
-        color: props.textColor,
-        background: props.color
-      };
-    };
-    const renderTag = () => {
-      var _a;
-      const {
-        type,
-        mark,
-        plain,
-        round,
-        size,
-        closeable
-      } = props;
-      const classes = {
-        mark,
-        plain,
-        round
-      };
-      if (size) {
-        classes[size] = size;
-      }
-      const CloseIcon = closeable && createVNode(Icon, {
-        "name": "cross",
-        "class": [bem$k("close"), HAPTICS_FEEDBACK],
-        "onClick": onClose
-      }, null);
-      return createVNode("span", {
-        "style": getStyle(),
-        "class": bem$k([classes, type])
-      }, [(_a = slots.default) == null ? void 0 : _a.call(slots), CloseIcon]);
-    };
-    return () => createVNode(Transition, {
-      "name": props.closeable ? "van-fade" : void 0
-    }, {
-      default: () => [props.show ? renderTag() : null]
-    });
-  }
-});
-const Tag = withInstall(stdin_default$o);
-const [name$i, bem$j] = createNamespace("image");
-const imageProps = {
-  src: String,
-  alt: String,
-  fit: String,
-  position: String,
-  round: Boolean,
-  block: Boolean,
-  width: numericProp,
-  height: numericProp,
-  radius: numericProp,
-  lazyLoad: Boolean,
-  iconSize: numericProp,
-  showError: truthProp,
-  errorIcon: makeStringProp("photo-fail"),
-  iconPrefix: String,
-  showLoading: truthProp,
-  loadingIcon: makeStringProp("photo"),
-  crossorigin: String,
-  referrerpolicy: String,
-  decoding: String
-};
-var stdin_default$n = defineComponent({
-  name: name$i,
-  props: imageProps,
-  emits: ["load", "error"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const error = ref(false);
-    const loading = ref(true);
-    const imageRef = ref();
-    const {
-      $Lazyload
-    } = getCurrentInstance().proxy;
-    const style = computed(() => {
-      const style2 = {
-        width: addUnit(props.width),
-        height: addUnit(props.height)
-      };
-      if (isDef(props.radius)) {
-        style2.overflow = "hidden";
-        style2.borderRadius = addUnit(props.radius);
-      }
-      return style2;
-    });
-    watch(() => props.src, () => {
-      error.value = false;
-      loading.value = true;
-    });
-    const onLoad = (event) => {
-      if (loading.value) {
-        loading.value = false;
-        emit("load", event);
-      }
-    };
-    const onError = (event) => {
-      error.value = true;
-      loading.value = false;
-      emit("error", event);
-    };
-    const renderIcon = (name2, className, slot) => {
-      if (slot) {
-        return slot();
-      }
-      return createVNode(Icon, {
-        "name": name2,
-        "size": props.iconSize,
-        "class": className,
-        "classPrefix": props.iconPrefix
-      }, null);
-    };
-    const renderPlaceholder = () => {
-      if (loading.value && props.showLoading) {
-        return createVNode("div", {
-          "class": bem$j("loading")
-        }, [renderIcon(props.loadingIcon, bem$j("loading-icon"), slots.loading)]);
-      }
-      if (error.value && props.showError) {
-        return createVNode("div", {
-          "class": bem$j("error")
-        }, [renderIcon(props.errorIcon, bem$j("error-icon"), slots.error)]);
-      }
-    };
-    const renderImage = () => {
-      if (error.value || !props.src) {
-        return;
-      }
-      const attrs = {
-        alt: props.alt,
-        class: bem$j("img"),
-        decoding: props.decoding,
-        style: {
-          objectFit: props.fit,
-          objectPosition: props.position
-        },
-        crossorigin: props.crossorigin,
-        referrerpolicy: props.referrerpolicy
-      };
-      if (props.lazyLoad) {
-        return withDirectives(createVNode("img", mergeProps({
-          "ref": imageRef
-        }, attrs), null), [[resolveDirective("lazy"), props.src]]);
-      }
-      return createVNode("img", mergeProps({
-        "ref": imageRef,
-        "src": props.src,
-        "onLoad": onLoad,
-        "onError": onError
-      }, attrs), null);
-    };
-    return () => {
-      var _a;
-      return createVNode("div", {
-        "class": bem$j({
-          round: props.round,
-          block: props.block
-        }),
-        "style": style.value
-      }, [renderImage(), renderPlaceholder(), (_a = slots.default) == null ? void 0 : _a.call(slots)]);
-    };
-  }
-});
-const Image = withInstall(stdin_default$n);
-const [name$h, bem$i] = createNamespace("card");
-const cardProps = {
-  tag: String,
-  num: numericProp,
-  desc: String,
-  thumb: String,
-  title: String,
-  price: numericProp,
-  centered: Boolean,
-  lazyLoad: Boolean,
-  currency: makeStringProp("¥"),
-  thumbLink: String,
-  originPrice: numericProp
-};
-var stdin_default$m = defineComponent({
-  name: name$h,
-  props: cardProps,
-  emits: ["clickThumb"],
-  setup(props, {
-    slots,
-    emit
-  }) {
-    const renderTitle = () => {
-      if (slots.title) {
-        return slots.title();
-      }
-      if (props.title) {
-        return createVNode("div", {
-          "class": [bem$i("title"), "van-multi-ellipsis--l2"]
-        }, [props.title]);
-      }
-    };
-    const renderThumbTag = () => {
-      if (slots.tag || props.tag) {
-        return createVNode("div", {
-          "class": bem$i("tag")
-        }, [slots.tag ? slots.tag() : createVNode(Tag, {
-          "mark": true,
-          "type": "primary"
-        }, {
-          default: () => [props.tag]
-        })]);
-      }
-    };
-    const renderThumbImage = () => {
-      if (slots.thumb) {
-        return slots.thumb();
-      }
-      return createVNode(Image, {
-        "src": props.thumb,
-        "fit": "cover",
-        "width": "100%",
-        "height": "100%",
-        "lazyLoad": props.lazyLoad
-      }, null);
-    };
-    const renderThumb = () => {
-      if (slots.thumb || props.thumb) {
-        return createVNode("a", {
-          "href": props.thumbLink,
-          "class": bem$i("thumb"),
-          "onClick": (event) => emit("clickThumb", event)
-        }, [renderThumbImage(), renderThumbTag()]);
-      }
-    };
-    const renderDesc = () => {
-      if (slots.desc) {
-        return slots.desc();
-      }
-      if (props.desc) {
-        return createVNode("div", {
-          "class": [bem$i("desc"), "van-ellipsis"]
-        }, [props.desc]);
-      }
-    };
-    const renderPriceText = () => {
-      const priceArr = props.price.toString().split(".");
-      return createVNode("div", null, [createVNode("span", {
-        "class": bem$i("price-currency")
-      }, [props.currency]), createVNode("span", {
-        "class": bem$i("price-integer")
-      }, [priceArr[0]]), priceArr.length > 1 && createVNode(Fragment, null, [createTextVNode("."), createVNode("span", {
-        "class": bem$i("price-decimal")
-      }, [priceArr[1]])])]);
-    };
-    return () => {
-      var _a, _b, _c;
-      const showNum = slots.num || isDef(props.num);
-      const showPrice = slots.price || isDef(props.price);
-      const showOriginPrice = slots["origin-price"] || isDef(props.originPrice);
-      const showBottom = showNum || showPrice || showOriginPrice || slots.bottom;
-      const Price = showPrice && createVNode("div", {
-        "class": bem$i("price")
-      }, [slots.price ? slots.price() : renderPriceText()]);
-      const OriginPrice = showOriginPrice && createVNode("div", {
-        "class": bem$i("origin-price")
-      }, [slots["origin-price"] ? slots["origin-price"]() : `${props.currency} ${props.originPrice}`]);
-      const Num = showNum && createVNode("div", {
-        "class": bem$i("num")
-      }, [slots.num ? slots.num() : `x${props.num}`]);
-      const Footer = slots.footer && createVNode("div", {
-        "class": bem$i("footer")
-      }, [slots.footer()]);
-      const Bottom = showBottom && createVNode("div", {
-        "class": bem$i("bottom")
-      }, [(_a = slots["price-top"]) == null ? void 0 : _a.call(slots), Price, OriginPrice, Num, (_b = slots.bottom) == null ? void 0 : _b.call(slots)]);
-      return createVNode("div", {
-        "class": bem$i()
-      }, [createVNode("div", {
-        "class": bem$i("header")
-      }, [renderThumb(), createVNode("div", {
-        "class": bem$i("content", {
-          centered: props.centered
-        })
-      }, [createVNode("div", null, [renderTitle(), renderDesc(), (_c = slots.tags) == null ? void 0 : _c.call(slots)]), Bottom])]), Footer]);
-    };
-  }
-});
-const Card = withInstall(stdin_default$m);
-const [name$g, bem$h] = createNamespace("cell-group");
-const cellGroupProps = {
-  title: String,
-  inset: Boolean,
-  border: truthProp
-};
-var stdin_default$l = defineComponent({
-  name: name$g,
-  inheritAttrs: false,
-  props: cellGroupProps,
-  setup(props, {
-    slots,
-    attrs
-  }) {
-    const renderGroup = () => {
-      var _a;
-      return createVNode("div", mergeProps({
-        "class": [bem$h({
-          inset: props.inset
-        }), {
-          [BORDER_TOP_BOTTOM]: props.border && !props.inset
-        }]
-      }, attrs, useScopeId()), [(_a = slots.default) == null ? void 0 : _a.call(slots)]);
-    };
-    const renderTitle = () => createVNode("div", {
-      "class": bem$h("title", {
-        inset: props.inset
-      })
-    }, [slots.title ? slots.title() : props.title]);
-    return () => {
-      if (props.title || slots.title) {
-        return createVNode(Fragment, null, [renderTitle(), renderGroup()]);
-      }
-      return renderGroup();
-    };
-  }
-});
-const CellGroup = withInstall(stdin_default$l);
-const [name$f, bem$g] = createNamespace("circle");
-let uid = 0;
-const format = (rate) => Math.min(Math.max(+rate, 0), 100);
-function getPath(clockwise, viewBoxSize) {
-  const sweepFlag = clockwise ? 1 : 0;
-  return `M ${viewBoxSize / 2} ${viewBoxSize / 2} m 0, -500 a 500, 500 0 1, ${sweepFlag} 0, 1000 a 500, 500 0 1, ${sweepFlag} 0, -1000`;
-}
-const circleProps = {
-  text: String,
-  size: numericProp,
-  fill: makeStringProp("none"),
-  rate: makeNumericProp(100),
-  speed: makeNumericProp(0),
-  color: [String, Object],
-  clockwise: truthProp,
-  layerColor: String,
-  currentRate: makeNumberProp(0),
-  strokeWidth: makeNumericProp(40),
-  strokeLinecap: String,
-  startPosition: makeStringProp("top")
-};
-var stdin_default$k = defineComponent({
-  name: name$f,
-  props: circleProps,
-  emits: ["update:currentRate"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const id = `van-circle-${uid++}`;
-    const viewBoxSize = computed(() => +props.strokeWidth + 1e3);
-    const path = computed(() => getPath(props.clockwise, viewBoxSize.value));
-    const svgStyle = computed(() => {
-      const ROTATE_ANGLE_MAP = {
-        top: 0,
-        right: 90,
-        bottom: 180,
-        left: 270
-      };
-      const angleValue = ROTATE_ANGLE_MAP[props.startPosition];
-      if (angleValue) {
-        return {
-          transform: `rotate(${angleValue}deg)`
-        };
-      }
-    });
-    watch(() => props.rate, (rate) => {
-      let rafId;
-      const startTime = Date.now();
-      const startRate = props.currentRate;
-      const endRate = format(rate);
-      const duration = Math.abs((startRate - endRate) * 1e3 / +props.speed);
-      const animate = () => {
-        const now = Date.now();
-        const progress = Math.min((now - startTime) / duration, 1);
-        const rate2 = progress * (endRate - startRate) + startRate;
-        emit("update:currentRate", format(parseFloat(rate2.toFixed(1))));
-        if (endRate > startRate ? rate2 < endRate : rate2 > endRate) {
-          rafId = raf(animate);
-        }
-      };
-      if (props.speed) {
-        if (rafId) {
-          cancelRaf(rafId);
-        }
-        rafId = raf(animate);
-      } else {
-        emit("update:currentRate", endRate);
-      }
-    }, {
-      immediate: true
-    });
-    const renderHover = () => {
-      const PERIMETER = 3140;
-      const {
-        strokeWidth,
-        currentRate,
-        strokeLinecap
-      } = props;
-      const offset = PERIMETER * currentRate / 100;
-      const color = isObject(props.color) ? `url(#${id})` : props.color;
-      const style = {
-        stroke: color,
-        strokeWidth: `${+strokeWidth + 1}px`,
-        strokeLinecap,
-        strokeDasharray: `${offset}px ${PERIMETER}px`
-      };
-      return createVNode("path", {
-        "d": path.value,
-        "style": style,
-        "class": bem$g("hover"),
-        "stroke": color
-      }, null);
-    };
-    const renderLayer = () => {
-      const style = {
-        fill: props.fill,
-        stroke: props.layerColor,
-        strokeWidth: `${props.strokeWidth}px`
-      };
-      return createVNode("path", {
-        "class": bem$g("layer"),
-        "style": style,
-        "d": path.value
-      }, null);
-    };
-    const renderGradient = () => {
-      const {
-        color
-      } = props;
-      if (!isObject(color)) {
-        return;
-      }
-      const Stops = Object.keys(color).sort((a, b) => parseFloat(a) - parseFloat(b)).map((key, index) => createVNode("stop", {
-        "key": index,
-        "offset": key,
-        "stop-color": color[key]
-      }, null));
-      return createVNode("defs", null, [createVNode("linearGradient", {
-        "id": id,
-        "x1": "100%",
-        "y1": "0%",
-        "x2": "0%",
-        "y2": "0%"
-      }, [Stops])]);
-    };
-    const renderText = () => {
-      if (slots.default) {
-        return slots.default();
-      }
-      if (props.text) {
-        return createVNode("div", {
-          "class": bem$g("text")
-        }, [props.text]);
-      }
-    };
-    return () => createVNode("div", {
-      "class": bem$g(),
-      "style": getSizeStyle(props.size)
-    }, [createVNode("svg", {
-      "viewBox": `0 0 ${viewBoxSize.value} ${viewBoxSize.value}`,
-      "style": svgStyle.value
-    }, [renderGradient(), renderLayer(), renderHover()]), renderText()]);
-  }
-});
-const Circle = withInstall(stdin_default$k);
-const [name$e, bem$f] = createNamespace("empty");
-const emptyProps = {
-  image: makeStringProp("default"),
-  imageSize: [Number, String, Array],
-  description: String
-};
-var stdin_default$j = defineComponent({
-  name: name$e,
-  props: emptyProps,
-  setup(props, {
-    slots
-  }) {
-    const renderDescription = () => {
-      const description = slots.description ? slots.description() : props.description;
-      if (description) {
-        return createVNode("p", {
-          "class": bem$f("description")
-        }, [description]);
-      }
-    };
-    const renderBottom = () => {
-      if (slots.default) {
-        return createVNode("div", {
-          "class": bem$f("bottom")
-        }, [slots.default()]);
-      }
-    };
-    const baseId = useId();
-    const getId = (num) => `${baseId}-${num}`;
-    const getUrlById = (num) => `url(#${getId(num)})`;
-    const renderStop = (color, offset, opacity) => createVNode("stop", {
-      "stop-color": color,
-      "offset": `${offset}%`,
-      "stop-opacity": opacity
-    }, null);
-    const renderStops = (fromColor, toColor) => [renderStop(fromColor, 0), renderStop(toColor, 100)];
-    const renderShadow = (id) => [createVNode("defs", null, [createVNode("radialGradient", {
-      "id": getId(id),
-      "cx": "50%",
-      "cy": "54%",
-      "fx": "50%",
-      "fy": "54%",
-      "r": "297%",
-      "gradientTransform": "matrix(-.16 0 0 -.33 .58 .72)",
-      "data-allow-mismatch": "attribute"
-    }, [renderStop("#EBEDF0", 0), renderStop("#F2F3F5", 100, 0.3)])]), createVNode("ellipse", {
-      "fill": getUrlById(id),
-      "opacity": ".8",
-      "cx": "80",
-      "cy": "140",
-      "rx": "46",
-      "ry": "8",
-      "data-allow-mismatch": "attribute"
-    }, null)];
-    const renderBuilding = () => [createVNode("defs", null, [createVNode("linearGradient", {
-      "id": getId("a"),
-      "x1": "64%",
-      "y1": "100%",
-      "x2": "64%",
-      "data-allow-mismatch": "attribute"
-    }, [renderStop("#FFF", 0, 0.5), renderStop("#F2F3F5", 100)])]), createVNode("g", {
-      "opacity": ".8",
-      "data-allow-mismatch": "children"
-    }, [createVNode("path", {
-      "d": "M36 131V53H16v20H2v58h34z",
-      "fill": getUrlById("a")
-    }, null), createVNode("path", {
-      "d": "M123 15h22v14h9v77h-31V15z",
-      "fill": getUrlById("a")
-    }, null)])];
-    const renderCloud = () => [createVNode("defs", null, [createVNode("linearGradient", {
-      "id": getId("b"),
-      "x1": "64%",
-      "y1": "97%",
-      "x2": "64%",
-      "y2": "0%",
-      "data-allow-mismatch": "attribute"
-    }, [renderStop("#F2F3F5", 0, 0.3), renderStop("#F2F3F5", 100)])]), createVNode("g", {
-      "opacity": ".8",
-      "data-allow-mismatch": "children"
-    }, [createVNode("path", {
-      "d": "M87 6c3 0 7 3 8 6a8 8 0 1 1-1 16H80a7 7 0 0 1-8-6c0-4 3-7 6-7 0-5 4-9 9-9Z",
-      "fill": getUrlById("b")
-    }, null), createVNode("path", {
-      "d": "M19 23c2 0 3 1 4 3 2 0 4 2 4 4a4 4 0 0 1-4 3v1h-7v-1l-1 1c-2 0-3-2-3-4 0-1 1-3 3-3 0-2 2-4 4-4Z",
-      "fill": getUrlById("b")
-    }, null)])];
-    const renderNetwork = () => createVNode("svg", {
-      "viewBox": "0 0 160 160"
-    }, [createVNode("defs", {
-      "data-allow-mismatch": "children"
-    }, [createVNode("linearGradient", {
-      "id": getId(1),
-      "x1": "64%",
-      "y1": "100%",
-      "x2": "64%"
-    }, [renderStop("#FFF", 0, 0.5), renderStop("#F2F3F5", 100)]), createVNode("linearGradient", {
-      "id": getId(2),
-      "x1": "50%",
-      "x2": "50%",
-      "y2": "84%"
-    }, [renderStop("#EBEDF0", 0), renderStop("#DCDEE0", 100, 0)]), createVNode("linearGradient", {
-      "id": getId(3),
-      "x1": "100%",
-      "x2": "100%",
-      "y2": "100%"
-    }, [renderStops("#EAEDF0", "#DCDEE0")]), createVNode("radialGradient", {
-      "id": getId(4),
-      "cx": "50%",
-      "cy": "0%",
-      "fx": "50%",
-      "fy": "0%",
-      "r": "100%",
-      "gradientTransform": "matrix(0 1 -.54 0 .5 -.5)"
-    }, [renderStop("#EBEDF0", 0), renderStop("#FFF", 100, 0)])]), createVNode("g", {
-      "fill": "none"
-    }, [renderBuilding(), createVNode("path", {
-      "fill": getUrlById(4),
-      "d": "M0 139h160v21H0z",
-      "data-allow-mismatch": "attribute"
-    }, null), createVNode("path", {
-      "d": "M80 54a7 7 0 0 1 3 13v27l-2 2h-2a2 2 0 0 1-2-2V67a7 7 0 0 1 3-13z",
-      "fill": getUrlById(2),
-      "data-allow-mismatch": "attribute"
-    }, null), createVNode("g", {
-      "opacity": ".6",
-      "stroke-linecap": "round",
-      "stroke-width": "7",
-      "data-allow-mismatch": "children"
-    }, [createVNode("path", {
-      "d": "M64 47a19 19 0 0 0-5 13c0 5 2 10 5 13",
-      "stroke": getUrlById(3)
-    }, null), createVNode("path", {
-      "d": "M53 36a34 34 0 0 0 0 48",
-      "stroke": getUrlById(3)
-    }, null), createVNode("path", {
-      "d": "M95 73a19 19 0 0 0 6-13c0-5-2-9-6-13",
-      "stroke": getUrlById(3)
-    }, null), createVNode("path", {
-      "d": "M106 84a34 34 0 0 0 0-48",
-      "stroke": getUrlById(3)
-    }, null)]), createVNode("g", {
-      "transform": "translate(31 105)"
-    }, [createVNode("rect", {
-      "fill": "#EBEDF0",
-      "width": "98",
-      "height": "34",
-      "rx": "2"
-    }, null), createVNode("rect", {
-      "fill": "#FFF",
-      "x": "9",
-      "y": "8",
-      "width": "80",
-      "height": "18",
-      "rx": "1.1"
-    }, null), createVNode("rect", {
-      "fill": "#EBEDF0",
-      "x": "15",
-      "y": "12",
-      "width": "18",
-      "height": "6",
-      "rx": "1.1"
-    }, null)])])]);
-    const renderMaterial = () => createVNode("svg", {
-      "viewBox": "0 0 160 160"
-    }, [createVNode("defs", {
-      "data-allow-mismatch": "children"
-    }, [createVNode("linearGradient", {
-      "x1": "50%",
-      "x2": "50%",
-      "y2": "100%",
-      "id": getId(5)
-    }, [renderStops("#F2F3F5", "#DCDEE0")]), createVNode("linearGradient", {
-      "x1": "95%",
-      "y1": "48%",
-      "x2": "5.5%",
-      "y2": "51%",
-      "id": getId(6)
-    }, [renderStops("#EAEDF1", "#DCDEE0")]), createVNode("linearGradient", {
-      "y1": "45%",
-      "x2": "100%",
-      "y2": "54%",
-      "id": getId(7)
-    }, [renderStops("#EAEDF1", "#DCDEE0")])]), renderBuilding(), renderCloud(), createVNode("g", {
-      "transform": "translate(36 50)",
-      "fill": "none"
-    }, [createVNode("g", {
-      "transform": "translate(8)"
-    }, [createVNode("rect", {
-      "fill": "#EBEDF0",
-      "opacity": ".6",
-      "x": "38",
-      "y": "13",
-      "width": "36",
-      "height": "53",
-      "rx": "2"
-    }, null), createVNode("rect", {
-      "fill": getUrlById(5),
-      "width": "64",
-      "height": "66",
-      "rx": "2",
-      "data-allow-mismatch": "attribute"
-    }, null), createVNode("rect", {
-      "fill": "#FFF",
-      "x": "6",
-      "y": "6",
-      "width": "52",
-      "height": "55",
-      "rx": "1"
-    }, null), createVNode("g", {
-      "transform": "translate(15 17)",
-      "fill": getUrlById(6),
-      "data-allow-mismatch": "attribute"
-    }, [createVNode("rect", {
-      "width": "34",
-      "height": "6",
-      "rx": "1"
-    }, null), createVNode("path", {
-      "d": "M0 14h34v6H0z"
-    }, null), createVNode("rect", {
-      "y": "28",
-      "width": "34",
-      "height": "6",
-      "rx": "1"
-    }, null)])]), createVNode("rect", {
-      "fill": getUrlById(7),
-      "y": "61",
-      "width": "88",
-      "height": "28",
-      "rx": "1",
-      "data-allow-mismatch": "attribute"
-    }, null), createVNode("rect", {
-      "fill": "#F7F8FA",
-      "x": "29",
-      "y": "72",
-      "width": "30",
-      "height": "6",
-      "rx": "1"
-    }, null)])]);
-    const renderError = () => createVNode("svg", {
-      "viewBox": "0 0 160 160"
-    }, [createVNode("defs", null, [createVNode("linearGradient", {
-      "x1": "50%",
-      "x2": "50%",
-      "y2": "100%",
-      "id": getId(8),
-      "data-allow-mismatch": "attribute"
-    }, [renderStops("#EAEDF1", "#DCDEE0")])]), renderBuilding(), renderCloud(), renderShadow("c"), createVNode("path", {
-      "d": "m59 60 21 21 21-21h3l9 9v3L92 93l21 21v3l-9 9h-3l-21-21-21 21h-3l-9-9v-3l21-21-21-21v-3l9-9h3Z",
-      "fill": getUrlById(8),
-      "data-allow-mismatch": "attribute"
-    }, null)]);
-    const renderSearch = () => createVNode("svg", {
-      "viewBox": "0 0 160 160"
-    }, [createVNode("defs", {
-      "data-allow-mismatch": "children"
-    }, [createVNode("linearGradient", {
-      "x1": "50%",
-      "y1": "100%",
-      "x2": "50%",
-      "id": getId(9)
-    }, [renderStops("#EEE", "#D8D8D8")]), createVNode("linearGradient", {
-      "x1": "100%",
-      "y1": "50%",
-      "y2": "50%",
-      "id": getId(10)
-    }, [renderStops("#F2F3F5", "#DCDEE0")]), createVNode("linearGradient", {
-      "x1": "50%",
-      "x2": "50%",
-      "y2": "100%",
-      "id": getId(11)
-    }, [renderStops("#F2F3F5", "#DCDEE0")]), createVNode("linearGradient", {
-      "x1": "50%",
-      "x2": "50%",
-      "y2": "100%",
-      "id": getId(12)
-    }, [renderStops("#FFF", "#F7F8FA")])]), renderBuilding(), renderCloud(), renderShadow("d"), createVNode("g", {
-      "transform": "rotate(-45 113 -4)",
-      "fill": "none",
-      "data-allow-mismatch": "children"
-    }, [createVNode("rect", {
-      "fill": getUrlById(9),
-      "x": "24",
-      "y": "52.8",
-      "width": "5.8",
-      "height": "19",
-      "rx": "1"
-    }, null), createVNode("rect", {
-      "fill": getUrlById(10),
-      "x": "22.1",
-      "y": "67.3",
-      "width": "9.9",
-      "height": "28",
-      "rx": "1"
-    }, null), createVNode("circle", {
-      "stroke": getUrlById(11),
-      "stroke-width": "8",
-      "cx": "27",
-      "cy": "27",
-      "r": "27"
-    }, null), createVNode("circle", {
-      "fill": getUrlById(12),
-      "cx": "27",
-      "cy": "27",
-      "r": "16"
-    }, null), createVNode("path", {
-      "d": "M37 7c-8 0-15 5-16 12",
-      "stroke": getUrlById(11),
-      "stroke-width": "3",
-      "opacity": ".5",
-      "stroke-linecap": "round",
-      "transform": "rotate(45 29 13)"
-    }, null)])]);
-    const renderImage = () => {
-      var _a;
-      if (slots.image) {
-        return slots.image();
-      }
-      const PRESET_IMAGES = {
-        error: renderError,
-        search: renderSearch,
-        network: renderNetwork,
-        default: renderMaterial
-      };
-      return ((_a = PRESET_IMAGES[props.image]) == null ? void 0 : _a.call(PRESET_IMAGES)) || createVNode("img", {
-        "src": props.image
-      }, null);
-    };
-    return () => createVNode("div", {
-      "class": bem$f()
-    }, [createVNode("div", {
-      "class": bem$f("image"),
-      "style": getSizeStyle(props.imageSize)
-    }, [renderImage()]), renderDescription(), renderBottom()]);
-  }
-});
-const Empty = withInstall(stdin_default$j);
-const [name$d, bem$e, t$4] = createNamespace("dialog");
-const dialogProps = extend({}, popupSharedProps, {
-  title: String,
-  theme: String,
-  width: numericProp,
-  message: [String, Function],
-  callback: Function,
-  allowHtml: Boolean,
-  className: unknownProp,
-  transition: makeStringProp("van-dialog-bounce"),
-  messageAlign: String,
-  closeOnPopstate: truthProp,
-  showCancelButton: Boolean,
-  cancelButtonText: String,
-  cancelButtonColor: String,
-  cancelButtonDisabled: Boolean,
-  confirmButtonText: String,
-  confirmButtonColor: String,
-  confirmButtonDisabled: Boolean,
-  showConfirmButton: truthProp,
-  closeOnClickOverlay: Boolean,
-  keyboardEnabled: truthProp,
-  destroyOnClose: Boolean
-});
-const popupInheritKeys = [...popupSharedPropKeys, "transition", "closeOnPopstate", "destroyOnClose"];
-var stdin_default$i = defineComponent({
-  name: name$d,
-  props: dialogProps,
-  emits: ["confirm", "cancel", "keydown", "update:show"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const root = ref();
-    const loading = reactive({
-      confirm: false,
-      cancel: false
-    });
-    const updateShow = (value) => emit("update:show", value);
-    const close = (action) => {
-      var _a;
-      updateShow(false);
-      (_a = props.callback) == null ? void 0 : _a.call(props, action);
-    };
-    const getActionHandler = (action) => () => {
-      if (!props.show) {
-        return;
-      }
-      emit(action);
-      if (props.beforeClose) {
-        loading[action] = true;
-        callInterceptor(props.beforeClose, {
-          args: [action],
-          done() {
-            close(action);
-            loading[action] = false;
-          },
-          canceled() {
-            loading[action] = false;
-          }
-        });
-      } else {
-        close(action);
-      }
-    };
-    const onCancel = getActionHandler("cancel");
-    const onConfirm = getActionHandler("confirm");
-    const onKeydown = withKeys((event) => {
-      var _a, _b;
-      if (!props.keyboardEnabled) {
-        return;
-      }
-      if (event.target !== ((_b = (_a = root.value) == null ? void 0 : _a.popupRef) == null ? void 0 : _b.value)) {
-        return;
-      }
-      const onEventType = {
-        Enter: props.showConfirmButton ? onConfirm : noop,
-        Escape: props.showCancelButton ? onCancel : noop
-      };
-      onEventType[event.key]();
-      emit("keydown", event);
-    }, ["enter", "esc"]);
-    const renderTitle = () => {
-      const title = slots.title ? slots.title() : props.title;
-      if (title) {
-        return createVNode("div", {
-          "class": bem$e("header", {
-            isolated: !props.message && !slots.default
-          })
-        }, [title]);
-      }
-    };
-    const renderMessage = (hasTitle) => {
-      const {
-        message,
-        allowHtml,
-        messageAlign
-      } = props;
-      const classNames = bem$e("message", {
-        "has-title": hasTitle,
-        [messageAlign]: messageAlign
-      });
-      const content = isFunction(message) ? message() : message;
-      if (allowHtml && typeof content === "string") {
-        return createVNode("div", {
-          "class": classNames,
-          "innerHTML": content
-        }, null);
-      }
-      return createVNode("div", {
-        "class": classNames
-      }, [content]);
-    };
-    const renderContent = () => {
-      if (slots.default) {
-        return createVNode("div", {
-          "class": bem$e("content")
-        }, [slots.default()]);
-      }
-      const {
-        title,
-        message,
-        allowHtml
-      } = props;
-      if (message) {
-        const hasTitle = !!(title || slots.title);
-        return createVNode("div", {
-          "key": allowHtml ? 1 : 0,
-          "class": bem$e("content", {
-            isolated: !hasTitle
-          })
-        }, [renderMessage(hasTitle)]);
-      }
-    };
-    const renderButtons = () => createVNode("div", {
-      "class": [BORDER_TOP, bem$e("footer")]
-    }, [props.showCancelButton && createVNode(Button, {
-      "size": "large",
-      "text": props.cancelButtonText || t$4("cancel"),
-      "class": bem$e("cancel"),
-      "style": {
-        color: props.cancelButtonColor
-      },
-      "loading": loading.cancel,
-      "disabled": props.cancelButtonDisabled,
-      "onClick": onCancel
-    }, null), props.showConfirmButton && createVNode(Button, {
-      "size": "large",
-      "text": props.confirmButtonText || t$4("confirm"),
-      "class": [bem$e("confirm"), {
-        [BORDER_LEFT]: props.showCancelButton
-      }],
-      "style": {
-        color: props.confirmButtonColor
-      },
-      "loading": loading.confirm,
-      "disabled": props.confirmButtonDisabled,
-      "onClick": onConfirm
-    }, null)]);
-    const renderRoundButtons = () => createVNode(ActionBar, {
-      "class": bem$e("footer")
-    }, {
-      default: () => [props.showCancelButton && createVNode(ActionBarButton, {
-        "type": "warning",
-        "text": props.cancelButtonText || t$4("cancel"),
-        "class": bem$e("cancel"),
-        "color": props.cancelButtonColor,
-        "loading": loading.cancel,
-        "disabled": props.cancelButtonDisabled,
-        "onClick": onCancel
-      }, null), props.showConfirmButton && createVNode(ActionBarButton, {
-        "type": "danger",
-        "text": props.confirmButtonText || t$4("confirm"),
-        "class": bem$e("confirm"),
-        "color": props.confirmButtonColor,
-        "loading": loading.confirm,
-        "disabled": props.confirmButtonDisabled,
-        "onClick": onConfirm
-      }, null)]
-    });
-    const renderFooter = () => {
-      if (slots.footer) {
-        return slots.footer();
-      }
-      return props.theme === "round-button" ? renderRoundButtons() : renderButtons();
-    };
-    return () => {
-      const {
-        width,
-        title,
-        theme,
-        message,
-        className
-      } = props;
-      return createVNode(Popup, mergeProps({
-        "ref": root,
-        "role": "dialog",
-        "class": [bem$e([theme]), className],
-        "style": {
-          width: addUnit(width)
-        },
-        "tabindex": 0,
-        "aria-labelledby": title || message,
-        "onKeydown": onKeydown,
-        "onUpdate:show": updateShow
-      }, pick(props, popupInheritKeys)), {
-        default: () => [renderTitle(), renderContent(), renderFooter()]
-      });
-    };
-  }
-});
-const Dialog = withInstall(stdin_default$i);
-const [name$c, bem$d] = createNamespace("divider");
-const dividerProps = {
-  dashed: Boolean,
-  hairline: truthProp,
-  vertical: Boolean,
-  contentPosition: makeStringProp("center")
-};
-var stdin_default$h = defineComponent({
-  name: name$c,
-  props: dividerProps,
-  setup(props, {
-    slots
-  }) {
-    return () => {
-      var _a;
-      return createVNode("div", {
-        "role": "separator",
-        "class": bem$d({
-          dashed: props.dashed,
-          hairline: props.hairline,
-          vertical: props.vertical,
-          [`content-${props.contentPosition}`]: !!slots.default && !props.vertical
-        })
-      }, [!props.vertical && ((_a = slots.default) == null ? void 0 : _a.call(slots))]);
-    };
-  }
-});
-const Divider = withInstall(stdin_default$h);
-const getDistance = (touches) => Math.sqrt((touches[0].clientX - touches[1].clientX) ** 2 + (touches[0].clientY - touches[1].clientY) ** 2);
-const getCenter = (touches) => ({
-  x: (touches[0].clientX + touches[1].clientX) / 2,
-  y: (touches[0].clientY + touches[1].clientY) / 2
-});
-const bem$c = createNamespace("image-preview")[1];
-const longImageRatio = 2.6;
-const imagePreviewItemProps = {
-  src: String,
-  show: Boolean,
-  active: Number,
-  minZoom: makeRequiredProp(numericProp),
-  maxZoom: makeRequiredProp(numericProp),
-  rootWidth: makeRequiredProp(Number),
-  rootHeight: makeRequiredProp(Number),
-  disableZoom: Boolean,
-  doubleScale: Boolean,
-  closeOnClickImage: Boolean,
-  closeOnClickOverlay: Boolean,
-  vertical: Boolean
-};
-var stdin_default$g = defineComponent({
-  props: imagePreviewItemProps,
-  emits: ["scale", "close", "longPress"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const state = reactive({
-      scale: 1,
-      moveX: 0,
-      moveY: 0,
-      moving: false,
-      zooming: false,
-      initializing: false,
-      imageRatio: 0
-    });
-    const touch = useTouch();
-    const imageRef = ref();
-    const swipeItem = ref();
-    const vertical = ref(false);
-    const isLongImage = ref(false);
-    let initialMoveY = 0;
-    const imageStyle = computed(() => {
-      const {
-        scale,
-        moveX,
-        moveY,
-        moving,
-        zooming,
-        initializing
-      } = state;
-      const style = {
-        transitionDuration: zooming || moving || initializing ? "0s" : ".3s"
-      };
-      if (scale !== 1 || isLongImage.value) {
-        style.transform = `matrix(${scale}, 0, 0, ${scale}, ${moveX}, ${moveY})`;
-      }
-      return style;
-    });
-    const maxMoveX = computed(() => {
-      if (state.imageRatio) {
-        const {
-          rootWidth,
-          rootHeight
-        } = props;
-        const displayWidth = vertical.value ? rootHeight / state.imageRatio : rootWidth;
-        return Math.max(0, (state.scale * displayWidth - rootWidth) / 2);
-      }
-      return 0;
-    });
-    const maxMoveY = computed(() => {
-      if (state.imageRatio) {
-        const {
-          rootWidth,
-          rootHeight
-        } = props;
-        const displayHeight = vertical.value ? rootHeight : rootWidth * state.imageRatio;
-        return Math.max(0, (state.scale * displayHeight - rootHeight) / 2);
-      }
-      return 0;
-    });
-    const setScale = (scale, center) => {
-      var _a;
-      scale = clamp(scale, +props.minZoom, +props.maxZoom + 1);
-      if (scale !== state.scale) {
-        const ratio = scale / state.scale;
-        state.scale = scale;
-        if (center) {
-          const imageRect = useRect((_a = imageRef.value) == null ? void 0 : _a.$el);
-          const origin = {
-            x: imageRect.width * 0.5,
-            y: imageRect.height * 0.5
-          };
-          const moveX = state.moveX - (center.x - imageRect.left - origin.x) * (ratio - 1);
-          const moveY = state.moveY - (center.y - imageRect.top - origin.y) * (ratio - 1);
-          state.moveX = clamp(moveX, -maxMoveX.value, maxMoveX.value);
-          state.moveY = clamp(moveY, -maxMoveY.value, maxMoveY.value);
-        } else {
-          state.moveX = 0;
-          state.moveY = isLongImage.value ? initialMoveY : 0;
-        }
-        emit("scale", {
-          scale,
-          index: props.active
-        });
-      }
-    };
-    const resetScale = () => {
-      setScale(1);
-    };
-    const toggleScale = () => {
-      const scale = state.scale > 1 ? 1 : 2;
-      setScale(scale, scale === 2 || isLongImage.value ? {
-        x: touch.startX.value,
-        y: touch.startY.value
-      } : void 0);
-    };
-    let fingerNum;
-    let startMoveX;
-    let startMoveY;
-    let startScale;
-    let startDistance;
-    let lastCenter;
-    let doubleTapTimer;
-    let touchStartTime;
-    let isImageMoved = false;
-    const onTouchStart = (event) => {
-      const {
-        touches
-      } = event;
-      fingerNum = touches.length;
-      if (fingerNum === 2 && props.disableZoom) {
-        return;
-      }
-      const {
-        offsetX
-      } = touch;
-      touch.start(event);
-      startMoveX = state.moveX;
-      startMoveY = state.moveY;
-      touchStartTime = Date.now();
-      isImageMoved = false;
-      state.moving = fingerNum === 1 && (state.scale !== 1 || isLongImage.value);
-      state.zooming = fingerNum === 2 && !offsetX.value;
-      if (state.zooming) {
-        startScale = state.scale;
-        startDistance = getDistance(touches);
-      }
-    };
-    const onTouchMove = (event) => {
-      const {
-        touches
-      } = event;
-      touch.move(event);
-      if (state.moving) {
-        const {
-          deltaX,
-          deltaY
-        } = touch;
-        const moveX = deltaX.value + startMoveX;
-        const moveY = deltaY.value + startMoveY;
-        if ((props.vertical ? touch.isVertical() && Math.abs(moveY) > maxMoveY.value : touch.isHorizontal() && Math.abs(moveX) > maxMoveX.value) && !isImageMoved) {
-          state.moving = false;
-          return;
-        }
-        isImageMoved = true;
-        preventDefault(event, true);
-        state.moveX = clamp(moveX, -maxMoveX.value, maxMoveX.value);
-        state.moveY = clamp(moveY, -maxMoveY.value, maxMoveY.value);
-      }
-      if (state.zooming) {
-        preventDefault(event, true);
-        if (touches.length === 2) {
-          const distance = getDistance(touches);
-          const scale = startScale * distance / startDistance;
-          lastCenter = getCenter(touches);
-          setScale(scale, lastCenter);
-        }
-      }
-    };
-    const checkClose = (event) => {
-      var _a;
-      const swipeItemEl = (_a = swipeItem.value) == null ? void 0 : _a.$el;
-      if (!swipeItemEl) return;
-      const imageEl = swipeItemEl.firstElementChild;
-      const isClickOverlay = event.target === swipeItemEl;
-      const isClickImage = imageEl == null ? void 0 : imageEl.contains(event.target);
-      if (!props.closeOnClickImage && isClickImage) return;
-      if (!props.closeOnClickOverlay && isClickOverlay) return;
-      emit("close");
-    };
-    const checkTap = (event) => {
-      if (fingerNum > 1) {
-        return;
-      }
-      const deltaTime = Date.now() - touchStartTime;
-      const TAP_TIME = 250;
-      if (touch.isTap.value) {
-        if (deltaTime < TAP_TIME) {
-          if (props.doubleScale) {
-            if (doubleTapTimer) {
-              clearTimeout(doubleTapTimer);
-              doubleTapTimer = null;
-              toggleScale();
-            } else {
-              doubleTapTimer = setTimeout(() => {
-                checkClose(event);
-                doubleTapTimer = null;
-              }, TAP_TIME);
-            }
-          } else {
-            checkClose(event);
-          }
-        } else if (deltaTime > LONG_PRESS_START_TIME) {
-          emit("longPress");
-        }
-      }
-    };
-    const onTouchEnd = (event) => {
-      let stopPropagation2 = false;
-      if (state.moving || state.zooming) {
-        stopPropagation2 = true;
-        if (state.moving && startMoveX === state.moveX && startMoveY === state.moveY) {
-          stopPropagation2 = false;
-        }
-        if (!event.touches.length) {
-          if (state.zooming) {
-            state.moveX = clamp(state.moveX, -maxMoveX.value, maxMoveX.value);
-            state.moveY = clamp(state.moveY, -maxMoveY.value, maxMoveY.value);
-            state.zooming = false;
-          }
-          state.moving = false;
-          startMoveX = 0;
-          startMoveY = 0;
-          startScale = 1;
-          if (state.scale < 1) {
-            resetScale();
-          }
-          const maxZoom = +props.maxZoom;
-          if (state.scale > maxZoom) {
-            setScale(maxZoom, lastCenter);
-          }
-        }
-      }
-      preventDefault(event, stopPropagation2);
-      checkTap(event);
-      touch.reset();
-    };
-    const resize = () => {
-      const {
-        rootWidth,
-        rootHeight
-      } = props;
-      const rootRatio = rootHeight / rootWidth;
-      const {
-        imageRatio
-      } = state;
-      vertical.value = state.imageRatio > rootRatio && imageRatio < longImageRatio;
-      isLongImage.value = state.imageRatio > rootRatio && imageRatio >= longImageRatio;
-      if (isLongImage.value) {
-        initialMoveY = (imageRatio * rootWidth - rootHeight) / 2;
-        state.moveY = initialMoveY;
-        state.initializing = true;
-        raf(() => {
-          state.initializing = false;
-        });
-      }
-      resetScale();
-    };
-    const onLoad = (event) => {
-      const {
-        naturalWidth,
-        naturalHeight
-      } = event.target;
-      state.imageRatio = naturalHeight / naturalWidth;
-      resize();
-    };
-    watch(() => props.active, resetScale);
-    watch(() => props.show, (value) => {
-      if (!value) {
-        resetScale();
-      }
-    });
-    watch(() => [props.rootWidth, props.rootHeight], resize);
-    useEventListener("touchmove", onTouchMove, {
-      target: computed(() => {
-        var _a;
-        return (_a = swipeItem.value) == null ? void 0 : _a.$el;
-      })
-    });
-    useExpose({
-      resetScale
-    });
-    return () => {
-      const imageSlots = {
-        loading: () => createVNode(Loading, {
-          "type": "spinner"
-        }, null)
-      };
-      return createVNode(SwipeItem, {
-        "ref": swipeItem,
-        "class": bem$c("swipe-item"),
-        "onTouchstartPassive": onTouchStart,
-        "onTouchend": onTouchEnd,
-        "onTouchcancel": onTouchEnd
-      }, {
-        default: () => [slots.image ? createVNode("div", {
-          "class": bem$c("image-wrap")
-        }, [slots.image({
-          src: props.src,
-          onLoad,
-          style: imageStyle.value
-        })]) : createVNode(Image, {
-          "ref": imageRef,
-          "src": props.src,
-          "fit": "contain",
-          "class": bem$c("image", {
-            vertical: vertical.value
-          }),
-          "style": imageStyle.value,
-          "onLoad": onLoad
-        }, imageSlots)]
-      });
-    };
-  }
-});
-const [name$b, bem$b] = createNamespace("image-preview");
-const popupProps = ["show", "teleport", "transition", "overlayStyle", "closeOnPopstate"];
-const imagePreviewProps = {
-  show: Boolean,
-  loop: truthProp,
-  images: makeArrayProp(),
-  minZoom: makeNumericProp(1 / 3),
-  maxZoom: makeNumericProp(3),
-  overlay: truthProp,
-  vertical: Boolean,
-  closeable: Boolean,
-  showIndex: truthProp,
-  className: unknownProp,
-  closeIcon: makeStringProp("clear"),
-  transition: String,
-  beforeClose: Function,
-  doubleScale: truthProp,
-  overlayClass: unknownProp,
-  overlayStyle: Object,
-  swipeDuration: makeNumericProp(300),
-  startPosition: makeNumericProp(0),
-  showIndicators: Boolean,
-  closeOnPopstate: truthProp,
-  closeOnClickImage: truthProp,
-  closeOnClickOverlay: truthProp,
-  closeIconPosition: makeStringProp("top-right"),
-  teleport: [String, Object]
-};
-var stdin_default$f = defineComponent({
-  name: name$b,
-  props: imagePreviewProps,
-  emits: ["scale", "close", "closed", "change", "longPress", "update:show"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const swipeRef = ref();
-    const activedPreviewItemRef = ref();
-    const state = reactive({
-      active: 0,
-      rootWidth: 0,
-      rootHeight: 0,
-      disableZoom: false
-    });
-    const resize = () => {
-      if (swipeRef.value) {
-        const rect = useRect(swipeRef.value.$el);
-        state.rootWidth = rect.width;
-        state.rootHeight = rect.height;
-        swipeRef.value.resize();
-      }
-    };
-    const emitScale = (args) => emit("scale", args);
-    const updateShow = (show) => emit("update:show", show);
-    const emitClose = () => {
-      callInterceptor(props.beforeClose, {
-        args: [state.active],
-        done: () => updateShow(false)
-      });
-    };
-    const setActive = (active) => {
-      if (active !== state.active) {
-        state.active = active;
-        emit("change", active);
-      }
-    };
-    const renderIndex = () => {
-      if (props.showIndex) {
-        return createVNode("div", {
-          "class": bem$b("index")
-        }, [slots.index ? slots.index({
-          index: state.active
-        }) : `${state.active + 1} / ${props.images.length}`]);
-      }
-    };
-    const renderCover = () => {
-      if (slots.cover) {
-        return createVNode("div", {
-          "class": bem$b("cover")
-        }, [slots.cover()]);
-      }
-    };
-    const onDragStart = () => {
-      state.disableZoom = true;
-    };
-    const onDragEnd = () => {
-      state.disableZoom = false;
-    };
-    const renderImages = () => createVNode(Swipe, {
-      "ref": swipeRef,
-      "lazyRender": true,
-      "loop": props.loop,
-      "class": bem$b("swipe"),
-      "vertical": props.vertical,
-      "duration": props.swipeDuration,
-      "initialSwipe": props.startPosition,
-      "showIndicators": props.showIndicators,
-      "indicatorColor": "white",
-      "onChange": setActive,
-      "onDragEnd": onDragEnd,
-      "onDragStart": onDragStart
-    }, {
-      default: () => [props.images.map((image, index) => createVNode(stdin_default$g, {
-        "ref": (item) => {
-          if (index === state.active) {
-            activedPreviewItemRef.value = item;
-          }
-        },
-        "src": image,
-        "show": props.show,
-        "active": state.active,
-        "maxZoom": props.maxZoom,
-        "minZoom": props.minZoom,
-        "rootWidth": state.rootWidth,
-        "rootHeight": state.rootHeight,
-        "disableZoom": state.disableZoom,
-        "doubleScale": props.doubleScale,
-        "closeOnClickImage": props.closeOnClickImage,
-        "closeOnClickOverlay": props.closeOnClickOverlay,
-        "vertical": props.vertical,
-        "onScale": emitScale,
-        "onClose": emitClose,
-        "onLongPress": () => emit("longPress", {
-          index
-        })
-      }, {
-        image: slots.image
-      }))]
-    });
-    const renderClose = () => {
-      if (props.closeable) {
-        return createVNode(Icon, {
-          "role": "button",
-          "name": props.closeIcon,
-          "class": [bem$b("close-icon", props.closeIconPosition), HAPTICS_FEEDBACK],
-          "onClick": emitClose
-        }, null);
-      }
-    };
-    const onClosed = () => emit("closed");
-    const swipeTo = (index, options) => {
-      var _a;
-      return (_a = swipeRef.value) == null ? void 0 : _a.swipeTo(index, options);
-    };
-    useExpose({
-      resetScale: () => {
-        var _a;
-        (_a = activedPreviewItemRef.value) == null ? void 0 : _a.resetScale();
-      },
-      swipeTo
-    });
-    watch([windowWidth, windowHeight], resize);
-    watch(() => props.startPosition, (value) => setActive(+value));
-    watch(() => props.show, (value) => {
-      const {
-        images,
-        startPosition
-      } = props;
-      if (value) {
-        setActive(+startPosition);
-        nextTick(() => {
-          resize();
-          swipeTo(+startPosition, {
-            immediate: true
-          });
-        });
-      } else {
-        emit("close", {
-          index: state.active,
-          url: images[state.active]
-        });
-      }
-    });
-    return () => createVNode(Popup, mergeProps({
-      "class": [bem$b(), props.className],
-      "overlayClass": [bem$b("overlay"), props.overlayClass],
-      "onClosed": onClosed,
-      "onUpdate:show": updateShow
-    }, pick(props, popupProps)), {
-      default: () => [renderClose(), renderImages(), renderIndex(), renderCover()]
-    });
-  }
-});
-const showImagePreview = (options, startPosition = 0) => {
-  {
-    return;
-  }
-};
-const ImagePreview = withInstall(stdin_default$f);
-const [name$a, bem$a, t$3] = createNamespace("list");
-const listProps = {
-  error: Boolean,
-  offset: makeNumericProp(300),
-  loading: Boolean,
-  disabled: Boolean,
-  finished: Boolean,
-  scroller: Object,
-  errorText: String,
-  direction: makeStringProp("down"),
-  loadingText: {
-    type: String,
-    default: ""
-  },
-  finishedText: String,
-  immediateCheck: truthProp
-};
-var stdin_default$e = defineComponent({
-  name: name$a,
-  props: listProps,
-  emits: ["load", "update:error", "update:loading"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const loading = ref(props.loading);
-    const root = ref();
-    const placeholder = ref();
-    const tabStatus = useAllTabStatus();
-    const scrollParent = useScrollParent(root);
-    const scroller = computed(() => props.scroller || scrollParent.value);
-    const check = () => {
-      nextTick(() => {
-        if (loading.value || props.finished || props.disabled || props.error || // skip check when inside an inactive tab
-        (tabStatus == null ? void 0 : tabStatus.value) === false) {
-          return;
-        }
-        const {
-          direction
-        } = props;
-        const offset = +props.offset;
-        const scrollParentRect = useRect(scroller);
-        if (!scrollParentRect.height || isHidden(root)) {
-          return;
-        }
-        let isReachEdge = false;
-        const placeholderRect = useRect(placeholder);
-        if (direction === "up") {
-          isReachEdge = scrollParentRect.top - placeholderRect.top <= offset;
-        } else {
-          isReachEdge = placeholderRect.bottom - scrollParentRect.bottom <= offset;
-        }
-        if (isReachEdge) {
-          loading.value = true;
-          emit("update:loading", true);
-          emit("load");
-        }
-      });
-    };
-    const renderFinishedText = () => {
-      if (props.finished) {
-        const text = slots.finished ? slots.finished() : props.finishedText;
-        if (text) {
-          return createVNode("div", {
-            "class": bem$a("finished-text")
-          }, [text]);
-        }
-      }
-    };
-    const clickErrorText = () => {
-      emit("update:error", false);
-      check();
-    };
-    const renderErrorText = () => {
-      if (props.error) {
-        const text = slots.error ? slots.error() : props.errorText;
-        if (text) {
-          return createVNode("div", {
-            "role": "button",
-            "class": bem$a("error-text"),
-            "tabindex": 0,
-            "onClick": clickErrorText
-          }, [text]);
-        }
-      }
-    };
-    const renderLoading = () => {
-      if (loading.value && !props.finished && !props.disabled) {
-        return createVNode("div", {
-          "class": bem$a("loading")
-        }, [slots.loading ? slots.loading() : props.loadingText != null && createVNode(Loading, {
-          "class": bem$a("loading-icon")
-        }, {
-          default: () => [props.loadingText || t$3("loading")]
-        })]);
-      }
-    };
-    watch(() => [props.loading, props.finished, props.error], check);
-    if (tabStatus) {
-      watch(tabStatus, (tabActive) => {
-        if (tabActive) {
-          check();
-        }
-      });
-    }
-    useExpose({
-      check
-    });
-    useEventListener("scroll", check, {
-      target: scroller,
-      passive: true
-    });
-    return () => {
-      var _a;
-      const Content = (_a = slots.default) == null ? void 0 : _a.call(slots);
-      const Placeholder = createVNode("div", {
-        "ref": placeholder,
-        "class": bem$a("placeholder")
-      }, null);
-      return createVNode("div", {
-        "ref": root,
-        "role": "feed",
-        "class": bem$a(),
-        "aria-busy": loading.value
-      }, [props.direction === "down" ? Content : Placeholder, renderLoading(), renderFinishedText(), renderErrorText(), props.direction === "up" ? Content : Placeholder]);
-    };
-  }
-});
-const List = withInstall(stdin_default$e);
-const [name$9, bem$9] = createNamespace("nav-bar");
-const navBarProps = {
-  title: String,
-  fixed: Boolean,
-  zIndex: numericProp,
-  border: truthProp,
-  leftText: String,
-  rightText: String,
-  leftDisabled: Boolean,
-  rightDisabled: Boolean,
-  leftArrow: Boolean,
-  placeholder: Boolean,
-  safeAreaInsetTop: Boolean,
-  clickable: truthProp
-};
-var stdin_default$d = defineComponent({
-  name: name$9,
-  props: navBarProps,
-  emits: ["clickLeft", "clickRight"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const navBarRef = ref();
-    const renderPlaceholder = usePlaceholder(navBarRef, bem$9);
-    const onClickLeft = (event) => {
-      if (!props.leftDisabled) {
-        emit("clickLeft", event);
-      }
-    };
-    const onClickRight = (event) => {
-      if (!props.rightDisabled) {
-        emit("clickRight", event);
-      }
-    };
-    const renderLeft = () => {
-      if (slots.left) {
-        return slots.left();
-      }
-      return [props.leftArrow && createVNode(Icon, {
-        "class": bem$9("arrow"),
-        "name": "arrow-left"
-      }, null), props.leftText && createVNode("span", {
-        "class": bem$9("text")
-      }, [props.leftText])];
-    };
-    const renderRight = () => {
-      if (slots.right) {
-        return slots.right();
-      }
-      return createVNode("span", {
-        "class": bem$9("text")
-      }, [props.rightText]);
-    };
-    const renderNavBar = () => {
-      const {
-        title,
-        fixed,
-        border,
-        zIndex
-      } = props;
-      const style = getZIndexStyle(zIndex);
-      const hasLeft = props.leftArrow || props.leftText || slots.left;
-      const hasRight = props.rightText || slots.right;
-      return createVNode("div", {
-        "ref": navBarRef,
-        "style": style,
-        "class": [bem$9({
-          fixed
-        }), {
-          [BORDER_BOTTOM]: border,
-          "van-safe-area-top": props.safeAreaInsetTop
-        }]
-      }, [createVNode("div", {
-        "class": bem$9("content")
-      }, [hasLeft && createVNode("div", {
-        "class": [bem$9("left", {
-          disabled: props.leftDisabled
-        }), props.clickable && !props.leftDisabled ? HAPTICS_FEEDBACK : ""],
-        "onClick": onClickLeft
-      }, [renderLeft()]), createVNode("div", {
-        "class": [bem$9("title"), "van-ellipsis"]
-      }, [slots.title ? slots.title() : title]), hasRight && createVNode("div", {
-        "class": [bem$9("right", {
-          disabled: props.rightDisabled
-        }), props.clickable && !props.rightDisabled ? HAPTICS_FEEDBACK : ""],
-        "onClick": onClickRight
-      }, [renderRight()])])]);
-    };
-    return () => {
-      if (props.fixed && props.placeholder) {
-        return renderPlaceholder(renderNavBar);
-      }
-      return renderNavBar();
-    };
-  }
-});
-const NavBar = withInstall(stdin_default$d);
-const [name$8, bem$8] = createNamespace("notice-bar");
-const noticeBarProps = {
-  text: String,
-  mode: String,
-  color: String,
-  delay: makeNumericProp(1),
-  speed: makeNumericProp(60),
-  leftIcon: String,
-  wrapable: Boolean,
-  background: String,
-  scrollable: {
-    type: Boolean,
-    default: null
-  }
-};
-var stdin_default$c = defineComponent({
-  name: name$8,
-  props: noticeBarProps,
-  emits: ["close", "replay"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    let wrapWidth = 0;
-    let contentWidth = 0;
-    let startTimer;
-    const wrapRef = ref();
-    const contentRef = ref();
-    const state = reactive({
-      show: true,
-      offset: 0,
-      duration: 0
-    });
-    const renderLeftIcon = () => {
-      if (slots["left-icon"]) {
-        return slots["left-icon"]();
-      }
-      if (props.leftIcon) {
-        return createVNode(Icon, {
-          "class": bem$8("left-icon"),
-          "name": props.leftIcon
-        }, null);
-      }
-    };
-    const getRightIconName = () => {
-      if (props.mode === "closeable") {
-        return "cross";
-      }
-      if (props.mode === "link") {
-        return "arrow";
-      }
-    };
-    const onClickRightIcon = (event) => {
-      if (props.mode === "closeable") {
-        state.show = false;
-        emit("close", event);
-      }
-    };
-    const renderRightIcon = () => {
-      if (slots["right-icon"]) {
-        return slots["right-icon"]();
-      }
-      const name2 = getRightIconName();
-      if (name2) {
-        return createVNode(Icon, {
-          "name": name2,
-          "class": bem$8("right-icon"),
-          "onClick": onClickRightIcon
-        }, null);
-      }
-    };
-    const onTransitionEnd = () => {
-      state.offset = wrapWidth;
-      state.duration = 0;
-      raf(() => {
-        doubleRaf(() => {
-          state.offset = -contentWidth;
-          state.duration = (contentWidth + wrapWidth) / +props.speed;
-          emit("replay");
-        });
-      });
-    };
-    const renderMarquee = () => {
-      const ellipsis = props.scrollable === false && !props.wrapable;
-      const style = {
-        transform: state.offset ? `translateX(${state.offset}px)` : "",
-        transitionDuration: `${state.duration}s`
-      };
-      return createVNode("div", {
-        "ref": wrapRef,
-        "role": "marquee",
-        "class": bem$8("wrap")
-      }, [createVNode("div", {
-        "ref": contentRef,
-        "style": style,
-        "class": [bem$8("content"), {
-          "van-ellipsis": ellipsis
-        }],
-        "onTransitionend": onTransitionEnd
-      }, [slots.default ? slots.default() : props.text])]);
-    };
-    const reset = () => {
-      const {
-        delay,
-        speed,
-        scrollable
-      } = props;
-      const ms = isDef(delay) ? +delay * 1e3 : 0;
-      wrapWidth = 0;
-      contentWidth = 0;
-      state.offset = 0;
-      state.duration = 0;
-      clearTimeout(startTimer);
-      startTimer = setTimeout(() => {
-        if (!wrapRef.value || !contentRef.value || scrollable === false) {
-          return;
-        }
-        const wrapRefWidth = useRect(wrapRef).width;
-        const contentRefWidth = useRect(contentRef).width;
-        if (scrollable || contentRefWidth > wrapRefWidth) {
-          doubleRaf(() => {
-            wrapWidth = wrapRefWidth;
-            contentWidth = contentRefWidth;
-            state.offset = -contentWidth;
-            state.duration = contentWidth / +speed;
-          });
-        }
-      }, ms);
-    };
-    onPopupReopen(reset);
-    onMountedOrActivated(reset);
-    useEventListener("pageshow", reset);
-    useExpose({
-      reset
-    });
-    watch(() => [props.text, props.scrollable], reset);
-    return () => {
-      const {
-        color,
-        wrapable,
-        background
-      } = props;
-      return withDirectives(createVNode("div", {
-        "role": "alert",
-        "class": bem$8({
-          wrapable
-        }),
-        "style": {
-          color,
-          background
-        }
-      }, [renderLeftIcon(), renderMarquee(), renderRightIcon()]), [[vShow, state.show]]);
-    };
-  }
-});
-const NoticeBar = withInstall(stdin_default$c);
-const [name$7, bem$7, t$2] = createNamespace("pagination");
-const makePage = (number2, text, active) => ({
-  number: number2,
-  text,
-  active
-});
-const paginationProps = {
-  mode: makeStringProp("multi"),
-  prevText: String,
-  nextText: String,
-  pageCount: makeNumericProp(0),
-  modelValue: makeNumberProp(0),
-  totalItems: makeNumericProp(0),
-  showPageSize: makeNumericProp(5),
-  itemsPerPage: makeNumericProp(10),
-  forceEllipses: Boolean,
-  showPrevButton: truthProp,
-  showNextButton: truthProp
-};
-var stdin_default$b = defineComponent({
-  name: name$7,
-  props: paginationProps,
-  emits: ["change", "update:modelValue"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const count = computed(() => {
-      const {
-        pageCount,
-        totalItems,
-        itemsPerPage
-      } = props;
-      const count2 = +pageCount || Math.ceil(+totalItems / +itemsPerPage);
-      return Math.max(1, count2);
-    });
-    const pages = computed(() => {
-      const items = [];
-      const pageCount = count.value;
-      const showPageSize = +props.showPageSize;
-      const {
-        modelValue,
-        forceEllipses
-      } = props;
-      let startPage = 1;
-      let endPage = pageCount;
-      const isMaxSized = showPageSize < pageCount;
-      if (isMaxSized) {
-        startPage = Math.max(modelValue - Math.floor(showPageSize / 2), 1);
-        endPage = startPage + showPageSize - 1;
-        if (endPage > pageCount) {
-          endPage = pageCount;
-          startPage = endPage - showPageSize + 1;
-        }
-      }
-      for (let number2 = startPage; number2 <= endPage; number2++) {
-        const page = makePage(number2, number2, number2 === modelValue);
-        items.push(page);
-      }
-      if (isMaxSized && showPageSize > 0 && forceEllipses) {
-        if (startPage > 1) {
-          const prevPages = makePage(startPage - 1, "...");
-          items.unshift(prevPages);
-        }
-        if (endPage < pageCount) {
-          const nextPages = makePage(endPage + 1, "...");
-          items.push(nextPages);
-        }
-      }
-      return items;
-    });
-    const updateModelValue = (value, emitChange) => {
-      value = clamp(value, 1, count.value);
-      if (props.modelValue !== value) {
-        emit("update:modelValue", value);
-        if (emitChange) {
-          emit("change", value);
-        }
-      }
-    };
-    watchEffect(() => updateModelValue(props.modelValue));
-    const renderDesc = () => createVNode("li", {
-      "class": bem$7("page-desc")
-    }, [slots.pageDesc ? slots.pageDesc() : `${props.modelValue}/${count.value}`]);
-    const renderPrevButton = () => {
-      const {
-        mode,
-        modelValue,
-        showPrevButton
-      } = props;
-      if (!showPrevButton) {
-        return;
-      }
-      const slot = slots["prev-text"];
-      const disabled = modelValue === 1;
-      return createVNode("li", {
-        "class": [bem$7("item", {
-          disabled,
-          border: mode === "simple",
-          prev: true
-        }), BORDER_SURROUND]
-      }, [createVNode("button", {
-        "type": "button",
-        "disabled": disabled,
-        "onClick": () => updateModelValue(modelValue - 1, true)
-      }, [slot ? slot() : props.prevText || t$2("prev")])]);
-    };
-    const renderNextButton = () => {
-      const {
-        mode,
-        modelValue,
-        showNextButton
-      } = props;
-      if (!showNextButton) {
-        return;
-      }
-      const slot = slots["next-text"];
-      const disabled = modelValue === count.value;
-      return createVNode("li", {
-        "class": [bem$7("item", {
-          disabled,
-          border: mode === "simple",
-          next: true
-        }), BORDER_SURROUND]
-      }, [createVNode("button", {
-        "type": "button",
-        "disabled": disabled,
-        "onClick": () => updateModelValue(modelValue + 1, true)
-      }, [slot ? slot() : props.nextText || t$2("next")])]);
-    };
-    const renderPages = () => pages.value.map((page) => createVNode("li", {
-      "class": [bem$7("item", {
-        active: page.active,
-        page: true
-      }), BORDER_SURROUND]
-    }, [createVNode("button", {
-      "type": "button",
-      "aria-current": page.active || void 0,
-      "onClick": () => updateModelValue(page.number, true)
-    }, [slots.page ? slots.page(page) : page.text])]));
-    return () => createVNode("nav", {
-      "role": "navigation",
-      "class": bem$7()
-    }, [createVNode("ul", {
-      "class": bem$7("items")
-    }, [renderPrevButton(), props.mode === "simple" ? renderDesc() : renderPages(), renderNextButton()])]);
-  }
-});
-const Pagination = withInstall(stdin_default$b);
-const [name$6, bem$6] = createNamespace("progress");
-const progressProps = {
-  color: String,
-  inactive: Boolean,
-  pivotText: String,
-  textColor: String,
-  showPivot: truthProp,
-  pivotColor: String,
-  trackColor: String,
-  strokeWidth: numericProp,
-  percentage: {
-    type: numericProp,
-    default: 0,
-    validator: (value) => +value >= 0 && +value <= 100
-  }
-};
-var stdin_default$a = defineComponent({
-  name: name$6,
-  props: progressProps,
-  setup(props, {
-    slots
-  }) {
-    const background = computed(() => props.inactive ? void 0 : props.color);
-    const format2 = (rate) => Math.min(Math.max(+rate, 0), 100);
-    const renderPivot = () => {
-      const {
-        textColor,
-        pivotText,
-        pivotColor,
-        percentage
-      } = props;
-      const safePercentage = format2(percentage);
-      const text = pivotText != null ? pivotText : `${safePercentage}%`;
-      if (props.showPivot && (slots.pivot || text)) {
-        const style = {
-          color: textColor,
-          left: `${safePercentage}%`,
-          transform: `translate(-${safePercentage}%,-50%)`,
-          background: pivotColor || background.value
-        };
-        return createVNode("span", {
-          "style": style,
-          "class": bem$6("pivot", {
-            inactive: props.inactive
-          })
-        }, [slots.pivot ? slots.pivot({
-          percentage: safePercentage
-        }) : text]);
-      }
-    };
-    return () => {
-      const {
-        trackColor,
-        percentage,
-        strokeWidth
-      } = props;
-      const safePercentage = format2(percentage);
-      const rootStyle = {
-        background: trackColor,
-        height: addUnit(strokeWidth)
-      };
-      const portionStyle = {
-        width: `${safePercentage}%`,
-        background: background.value
-      };
-      return createVNode("div", {
-        "class": bem$6(),
-        "style": rootStyle
-      }, [createVNode("span", {
-        "class": bem$6("portion", {
-          inactive: props.inactive
-        }),
-        "style": portionStyle
-      }, null), renderPivot()]);
-    };
-  }
-});
-const Progress = withInstall(stdin_default$a);
-const [name$5, bem$5, t$1] = createNamespace("pull-refresh");
-const DEFAULT_HEAD_HEIGHT = 50;
-const TEXT_STATUS = ["pulling", "loosing", "success"];
-const pullRefreshProps = {
-  disabled: Boolean,
-  modelValue: Boolean,
-  headHeight: makeNumericProp(DEFAULT_HEAD_HEIGHT),
-  successText: String,
-  pullingText: String,
-  loosingText: String,
-  loadingText: String,
-  pullDistance: numericProp,
-  successDuration: makeNumericProp(500),
-  animationDuration: makeNumericProp(300)
-};
-var stdin_default$9 = defineComponent({
-  name: name$5,
-  props: pullRefreshProps,
-  emits: ["change", "refresh", "update:modelValue"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    let reachTop;
-    const root = ref();
-    const track = ref();
-    const scrollParent = useScrollParent(root);
-    const state = reactive({
-      status: "normal",
-      distance: 0,
-      duration: 0
-    });
-    const touch = useTouch();
-    const getHeadStyle = () => {
-      if (props.headHeight !== DEFAULT_HEAD_HEIGHT) {
-        return {
-          height: `${props.headHeight}px`
-        };
-      }
-    };
-    const isTouchable = () => state.status !== "loading" && state.status !== "success" && !props.disabled;
-    const ease = (distance) => {
-      const pullDistance = +(props.pullDistance || props.headHeight);
-      if (distance > pullDistance) {
-        if (distance < pullDistance * 2) {
-          distance = pullDistance + (distance - pullDistance) / 2;
-        } else {
-          distance = pullDistance * 1.5 + (distance - pullDistance * 2) / 4;
-        }
-      }
-      return Math.round(distance);
-    };
-    const setStatus = (distance, isLoading) => {
-      const pullDistance = +(props.pullDistance || props.headHeight);
-      state.distance = distance;
-      if (isLoading) {
-        state.status = "loading";
-      } else if (distance === 0) {
-        state.status = "normal";
-      } else if (distance < pullDistance) {
-        state.status = "pulling";
-      } else {
-        state.status = "loosing";
-      }
-      emit("change", {
-        status: state.status,
-        distance
-      });
-    };
-    const getStatusText = () => {
-      const {
-        status
-      } = state;
-      if (status === "normal") {
-        return "";
-      }
-      return props[`${status}Text`] || t$1(status);
-    };
-    const renderStatus = () => {
-      const {
-        status,
-        distance
-      } = state;
-      if (slots[status]) {
-        return slots[status]({
-          distance
-        });
-      }
-      const nodes = [];
-      if (TEXT_STATUS.includes(status)) {
-        nodes.push(createVNode("div", {
-          "class": bem$5("text")
-        }, [getStatusText()]));
-      }
-      if (status === "loading") {
-        nodes.push(createVNode(Loading, {
-          "class": bem$5("loading")
-        }, {
-          default: getStatusText
-        }));
-      }
-      return nodes;
-    };
-    const showSuccessTip = () => {
-      state.status = "success";
-      setTimeout(() => {
-        setStatus(0);
-      }, +props.successDuration);
-    };
-    const checkPosition = (event) => {
-      reachTop = getScrollTop(scrollParent.value) === 0;
-      if (reachTop) {
-        state.duration = 0;
-        touch.start(event);
-      }
-    };
-    const onTouchStart = (event) => {
-      if (isTouchable()) {
-        checkPosition(event);
-      }
-    };
-    const onTouchMove = (event) => {
-      if (isTouchable()) {
-        if (!reachTop) {
-          checkPosition(event);
-        }
-        const {
-          deltaY
-        } = touch;
-        touch.move(event);
-        if (reachTop && deltaY.value >= 0 && touch.isVertical()) {
-          preventDefault(event);
-          setStatus(ease(deltaY.value));
-        }
-      }
-    };
-    const onTouchEnd = () => {
-      if (reachTop && touch.deltaY.value && isTouchable()) {
-        state.duration = +props.animationDuration;
-        if (state.status === "loosing") {
-          setStatus(+props.headHeight, true);
-          emit("update:modelValue", true);
-          nextTick(() => emit("refresh"));
-        } else {
-          setStatus(0);
-        }
-      }
-    };
-    watch(() => props.modelValue, (value) => {
-      state.duration = +props.animationDuration;
-      if (value) {
-        setStatus(+props.headHeight, true);
-      } else if (slots.success || props.successText) {
-        showSuccessTip();
-      } else {
-        setStatus(0, false);
-      }
-    });
-    useEventListener("touchmove", onTouchMove, {
-      target: track
-    });
-    return () => {
-      var _a;
-      const trackStyle = {
-        transitionDuration: `${state.duration}ms`,
-        transform: state.distance ? `translate3d(0,${state.distance}px, 0)` : ""
-      };
-      return createVNode("div", {
-        "ref": root,
-        "class": bem$5()
-      }, [createVNode("div", {
-        "ref": track,
-        "class": bem$5("track"),
-        "style": trackStyle,
-        "onTouchstartPassive": onTouchStart,
-        "onTouchend": onTouchEnd,
-        "onTouchcancel": onTouchEnd
-      }, [createVNode("div", {
-        "class": bem$5("head"),
-        "style": getHeadStyle()
-      }, [renderStatus()]), (_a = slots.default) == null ? void 0 : _a.call(slots)])]);
-    };
-  }
-});
-const PullRefresh = withInstall(stdin_default$9);
-const [name$4, bem$4] = createNamespace("skeleton-title");
-const skeletonTitleProps = {
-  round: Boolean,
-  titleWidth: numericProp
-};
-var stdin_default$8 = defineComponent({
-  name: name$4,
-  props: skeletonTitleProps,
-  setup(props) {
-    return () => createVNode("h3", {
-      "class": bem$4([{
-        round: props.round
-      }]),
-      "style": {
-        width: addUnit(props.titleWidth)
-      }
-    }, null);
-  }
-});
-const SkeletonTitle = withInstall(stdin_default$8);
-var stdin_default$7 = SkeletonTitle;
-const [name$3, bem$3] = createNamespace("skeleton-avatar");
-const skeletonAvatarProps = {
-  avatarSize: numericProp,
-  avatarShape: makeStringProp("round")
-};
-var stdin_default$6 = defineComponent({
-  name: name$3,
-  props: skeletonAvatarProps,
-  setup(props) {
-    return () => createVNode("div", {
-      "class": bem$3([props.avatarShape]),
-      "style": getSizeStyle(props.avatarSize)
-    }, null);
-  }
-});
-const SkeletonAvatar = withInstall(stdin_default$6);
-var stdin_default$5 = SkeletonAvatar;
-const DEFAULT_ROW_WIDTH = "100%";
-const skeletonParagraphProps = {
-  round: Boolean,
-  rowWidth: {
-    type: numericProp,
-    default: DEFAULT_ROW_WIDTH
-  }
-};
-const [name$2, bem$2] = createNamespace("skeleton-paragraph");
-var stdin_default$4 = defineComponent({
-  name: name$2,
-  props: skeletonParagraphProps,
-  setup(props) {
-    return () => createVNode("div", {
-      "class": bem$2([{
-        round: props.round
-      }]),
-      "style": {
-        width: props.rowWidth
-      }
-    }, null);
-  }
-});
-const SkeletonParagraph = withInstall(stdin_default$4);
-var stdin_default$3 = SkeletonParagraph;
-const [name$1, bem$1] = createNamespace("skeleton");
-const DEFAULT_LAST_ROW_WIDTH = "60%";
-const skeletonProps = {
-  row: makeNumericProp(0),
-  round: Boolean,
-  title: Boolean,
-  titleWidth: numericProp,
-  avatar: Boolean,
-  avatarSize: numericProp,
-  avatarShape: makeStringProp("round"),
-  loading: truthProp,
-  animate: truthProp,
-  rowWidth: {
-    type: [Number, String, Array],
-    default: DEFAULT_ROW_WIDTH
-  }
-};
-var stdin_default$2 = defineComponent({
-  name: name$1,
-  inheritAttrs: false,
-  props: skeletonProps,
-  setup(props, {
-    slots,
-    attrs
-  }) {
-    const renderAvatar = () => {
-      if (props.avatar) {
-        return createVNode(stdin_default$5, {
-          "avatarShape": props.avatarShape,
-          "avatarSize": props.avatarSize
-        }, null);
-      }
-    };
-    const renderTitle = () => {
-      if (props.title) {
-        return createVNode(stdin_default$7, {
-          "round": props.round,
-          "titleWidth": props.titleWidth
-        }, null);
-      }
-    };
-    const getRowWidth = (index) => {
-      const {
-        rowWidth
-      } = props;
-      if (rowWidth === DEFAULT_ROW_WIDTH && index === +props.row - 1) {
-        return DEFAULT_LAST_ROW_WIDTH;
-      }
-      if (Array.isArray(rowWidth)) {
-        return rowWidth[index];
-      }
-      return rowWidth;
-    };
-    const renderRows = () => Array(+props.row).fill("").map((_, i) => createVNode(stdin_default$3, {
-      "key": i,
-      "round": props.round,
-      "rowWidth": addUnit(getRowWidth(i))
-    }, null));
-    const renderContents = () => {
-      if (slots.template) {
-        return slots.template();
-      }
-      return createVNode(Fragment, null, [renderAvatar(), createVNode("div", {
-        "class": bem$1("content")
-      }, [renderTitle(), renderRows()])]);
-    };
-    return () => {
-      var _a;
-      if (!props.loading) {
-        return (_a = slots.default) == null ? void 0 : _a.call(slots);
-      }
-      return createVNode("div", mergeProps({
-        "class": bem$1({
-          animate: props.animate,
-          round: props.round
-        })
-      }, attrs), [renderContents()]);
-    };
-  }
-});
-const Skeleton = withInstall(stdin_default$2);
-const [name, bem, t] = createNamespace("uploader");
-function readFileContent(file, resultType) {
-  return new Promise((resolve2) => {
-    if (resultType === "file") {
-      resolve2();
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      resolve2(event.target.result);
-    };
-    if (resultType === "dataUrl") {
-      reader.readAsDataURL(file);
-    } else if (resultType === "text") {
-      reader.readAsText(file);
-    }
-  });
-}
-function isOversize(items, maxSize) {
-  return toArray(items).some((item) => {
-    if (item.file) {
-      if (isFunction(maxSize)) {
-        return maxSize(item.file);
-      }
-      return item.file.size > +maxSize;
-    }
-    return false;
-  });
-}
-function filterFiles(items, maxSize) {
-  const valid = [];
-  const invalid = [];
-  items.forEach((item) => {
-    if (isOversize(item, maxSize)) {
-      invalid.push(item);
-    } else {
-      valid.push(item);
-    }
-  });
-  return { valid, invalid };
-}
-const IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg|avif)/i;
-const isImageUrl = (url) => IMAGE_REGEXP.test(url);
-function isImageFile(item) {
-  if (item.isImage) {
-    return true;
-  }
-  if (item.file && item.file.type) {
-    return item.file.type.indexOf("image") === 0;
-  }
-  if (item.url) {
-    return isImageUrl(item.url);
-  }
-  if (typeof item.content === "string") {
-    return item.content.indexOf("data:image") === 0;
-  }
-  return false;
-}
-var stdin_default$1 = defineComponent({
-  props: {
-    name: numericProp,
-    item: makeRequiredProp(Object),
-    index: Number,
-    imageFit: String,
-    lazyLoad: Boolean,
-    deletable: Boolean,
-    reupload: Boolean,
-    previewSize: [Number, String, Array],
-    beforeDelete: Function
-  },
-  emits: ["delete", "preview", "reupload"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const renderMask = () => {
-      const {
-        status,
-        message
-      } = props.item;
-      if (status === "uploading" || status === "failed") {
-        const MaskIcon = status === "failed" ? createVNode(Icon, {
-          "name": "close",
-          "class": bem("mask-icon")
-        }, null) : createVNode(Loading, {
-          "class": bem("loading")
-        }, null);
-        const showMessage = isDef(message) && message !== "";
-        return createVNode("div", {
-          "class": bem("mask")
-        }, [MaskIcon, showMessage && createVNode("div", {
-          "class": bem("mask-message")
-        }, [message])]);
-      }
-    };
-    const onDelete = (event) => {
-      const {
-        name: name2,
-        item,
-        index,
-        beforeDelete
-      } = props;
-      event.stopPropagation();
-      callInterceptor(beforeDelete, {
-        args: [item, {
-          name: name2,
-          index
-        }],
-        done: () => emit("delete")
-      });
-    };
-    const onPreview = () => emit("preview");
-    const onReupload = () => emit("reupload");
-    const renderDeleteIcon = () => {
-      if (props.deletable && props.item.status !== "uploading") {
-        const slot = slots["preview-delete"];
-        return createVNode("div", {
-          "role": "button",
-          "class": bem("preview-delete", {
-            shadow: !slot
-          }),
-          "tabindex": 0,
-          "aria-label": t("delete"),
-          "onClick": onDelete
-        }, [slot ? slot() : createVNode(Icon, {
-          "name": "cross",
-          "class": bem("preview-delete-icon")
-        }, null)]);
-      }
-    };
-    const renderCover = () => {
-      if (slots["preview-cover"]) {
-        const {
-          index,
-          item
-        } = props;
-        return createVNode("div", {
-          "class": bem("preview-cover")
-        }, [slots["preview-cover"](extend({
-          index
-        }, item))]);
-      }
-    };
-    const renderPreview = () => {
-      const {
-        item,
-        lazyLoad,
-        imageFit,
-        previewSize,
-        reupload
-      } = props;
-      if (isImageFile(item)) {
-        return createVNode(Image, {
-          "fit": imageFit,
-          "src": item.objectUrl || item.content || item.url,
-          "class": bem("preview-image"),
-          "width": Array.isArray(previewSize) ? previewSize[0] : previewSize,
-          "height": Array.isArray(previewSize) ? previewSize[1] : previewSize,
-          "lazyLoad": lazyLoad,
-          "onClick": reupload ? onReupload : onPreview
-        }, {
-          default: renderCover
-        });
-      }
-      return createVNode("div", {
-        "class": bem("file"),
-        "style": getSizeStyle(props.previewSize)
-      }, [createVNode(Icon, {
-        "class": bem("file-icon"),
-        "name": "description"
-      }, null), createVNode("div", {
-        "class": [bem("file-name"), "van-ellipsis"]
-      }, [item.file ? item.file.name : item.url]), renderCover()]);
-    };
-    return () => createVNode("div", {
-      "class": bem("preview")
-    }, [renderPreview(), renderMask(), renderDeleteIcon()]);
-  }
-});
-const uploaderProps = {
-  name: makeNumericProp(""),
-  accept: makeStringProp("image/*"),
-  capture: String,
-  multiple: Boolean,
-  disabled: Boolean,
-  readonly: Boolean,
-  lazyLoad: Boolean,
-  maxCount: makeNumericProp(Infinity),
-  imageFit: makeStringProp("cover"),
-  resultType: makeStringProp("dataUrl"),
-  uploadIcon: makeStringProp("photograph"),
-  uploadText: String,
-  deletable: truthProp,
-  reupload: Boolean,
-  afterRead: Function,
-  showUpload: truthProp,
-  modelValue: makeArrayProp(),
-  beforeRead: Function,
-  beforeDelete: Function,
-  previewSize: [Number, String, Array],
-  previewImage: truthProp,
-  previewOptions: Object,
-  previewFullImage: truthProp,
-  maxSize: {
-    type: [Number, String, Function],
-    default: Infinity
-  }
-};
-var stdin_default = defineComponent({
-  name,
-  props: uploaderProps,
-  emits: ["delete", "oversize", "clickUpload", "closePreview", "clickPreview", "clickReupload", "update:modelValue"],
-  setup(props, {
-    emit,
-    slots
-  }) {
-    const inputRef = ref();
-    const urls = [];
-    const reuploadIndex = ref(-1);
-    const isReuploading = ref(false);
-    const getDetail = (index = props.modelValue.length) => ({
-      name: props.name,
-      index
-    });
-    const resetInput = () => {
-      if (inputRef.value) {
-        inputRef.value.value = "";
-      }
-    };
-    const onAfterRead = (items) => {
-      resetInput();
-      if (isOversize(items, props.maxSize)) {
-        if (Array.isArray(items)) {
-          const result = filterFiles(items, props.maxSize);
-          items = result.valid;
-          emit("oversize", result.invalid, getDetail());
-          if (!items.length) {
-            return;
-          }
-        } else {
-          emit("oversize", items, getDetail());
-          return;
-        }
-      }
-      items = reactive(items);
-      if (reuploadIndex.value > -1) {
-        const arr = [...props.modelValue];
-        arr.splice(reuploadIndex.value, 1, items);
-        emit("update:modelValue", arr);
-        reuploadIndex.value = -1;
-      } else {
-        emit("update:modelValue", [...props.modelValue, ...toArray(items)]);
-      }
-      if (props.afterRead) {
-        props.afterRead(items, getDetail());
-      }
-    };
-    const readFile = (files) => {
-      const {
-        maxCount,
-        modelValue,
-        resultType
-      } = props;
-      if (Array.isArray(files)) {
-        const remainCount = +maxCount - modelValue.length;
-        if (files.length > remainCount) {
-          files = files.slice(0, remainCount);
-        }
-        Promise.all(files.map((file) => readFileContent(file, resultType))).then((contents) => {
-          const fileList = files.map((file, index) => {
-            const result = {
-              file,
-              status: "",
-              message: "",
-              objectUrl: URL.createObjectURL(file)
-            };
-            if (contents[index]) {
-              result.content = contents[index];
-            }
-            return result;
-          });
-          onAfterRead(fileList);
-        });
-      } else {
-        readFileContent(files, resultType).then((content) => {
-          const result = {
-            file: files,
-            status: "",
-            message: "",
-            objectUrl: URL.createObjectURL(files)
-          };
-          if (content) {
-            result.content = content;
-          }
-          onAfterRead(result);
-        });
-      }
-    };
-    const onChange = (event) => {
-      const {
-        files
-      } = event.target;
-      if (props.disabled || !files || !files.length) {
-        return;
-      }
-      const file = files.length === 1 ? files[0] : [].slice.call(files);
-      if (props.beforeRead) {
-        const response = props.beforeRead(file, getDetail());
-        if (!response) {
-          resetInput();
-          return;
-        }
-        if (isPromise(response)) {
-          response.then((data) => {
-            if (data) {
-              readFile(data);
-            } else {
-              readFile(file);
-            }
-          }).catch(resetInput);
-          return;
-        }
-      }
-      readFile(file);
-    };
-    let imagePreview;
-    const onClosePreview = () => emit("closePreview");
-    const previewImage = (item) => {
-      if (props.previewFullImage) {
-        const imageFiles = props.modelValue.filter(isImageFile);
-        const images = imageFiles.map((item2) => {
-          if (item2.objectUrl && !item2.url && item2.status !== "failed") {
-            item2.url = item2.objectUrl;
-            urls.push(item2.url);
-          }
-          return item2.url;
-        }).filter(Boolean);
-        imagePreview = showImagePreview(extend({
-          images,
-          startPosition: imageFiles.indexOf(item),
-          onClose: onClosePreview
-        }, props.previewOptions));
-      }
-    };
-    const closeImagePreview = () => {
-      if (imagePreview) {
-        imagePreview.close();
-      }
-    };
-    const deleteFile = (item, index) => {
-      const fileList = props.modelValue.slice(0);
-      fileList.splice(index, 1);
-      emit("update:modelValue", fileList);
-      emit("delete", item, getDetail(index));
-    };
-    const reuploadFile = (index) => {
-      isReuploading.value = true;
-      reuploadIndex.value = index;
-      nextTick(() => chooseFile());
-    };
-    const onInputClick = () => {
-      if (!isReuploading.value) {
-        reuploadIndex.value = -1;
-      }
-      isReuploading.value = false;
-    };
-    const renderPreviewItem = (item, index) => {
-      const needPickData = ["imageFit", "deletable", "reupload", "previewSize", "beforeDelete"];
-      const previewData = extend(pick(props, needPickData), pick(item, needPickData, true));
-      return createVNode(stdin_default$1, mergeProps({
-        "item": item,
-        "index": index,
-        "onClick": () => emit(props.reupload ? "clickReupload" : "clickPreview", item, getDetail(index)),
-        "onDelete": () => deleteFile(item, index),
-        "onPreview": () => previewImage(item),
-        "onReupload": () => reuploadFile(index)
-      }, pick(props, ["name", "lazyLoad"]), previewData), pick(slots, ["preview-cover", "preview-delete"]));
-    };
-    const renderPreviewList = () => {
-      if (props.previewImage) {
-        return props.modelValue.map(renderPreviewItem);
-      }
-    };
-    const onClickUpload = (event) => emit("clickUpload", event);
-    const renderUpload = () => {
-      const lessThanMax = props.modelValue.length < +props.maxCount;
-      const Input = props.readonly ? null : createVNode("input", {
-        "ref": inputRef,
-        "type": "file",
-        "class": bem("input"),
-        "accept": props.accept,
-        "capture": props.capture,
-        "multiple": props.multiple && reuploadIndex.value === -1,
-        "disabled": props.disabled,
-        "onChange": onChange,
-        "onClick": onInputClick
-      }, null);
-      if (slots.default) {
-        return withDirectives(createVNode("div", {
-          "class": bem("input-wrapper"),
-          "onClick": onClickUpload
-        }, [slots.default(), Input]), [[vShow, lessThanMax]]);
-      }
-      return withDirectives(createVNode("div", {
-        "class": bem("upload", {
-          readonly: props.readonly
-        }),
-        "style": getSizeStyle(props.previewSize),
-        "onClick": onClickUpload
-      }, [createVNode(Icon, {
-        "name": props.uploadIcon,
-        "class": bem("upload-icon")
-      }, null), props.uploadText && createVNode("span", {
-        "class": bem("upload-text")
-      }, [props.uploadText]), Input]), [[vShow, props.showUpload && lessThanMax]]);
-    };
-    const chooseFile = () => {
-      if (inputRef.value && !props.disabled) {
-        inputRef.value.click();
-      }
-    };
-    useExpose({
-      chooseFile,
-      reuploadFile,
-      closeImagePreview
-    });
-    useCustomFieldValue(() => props.modelValue);
-    return () => createVNode("div", {
-      "class": bem()
-    }, [createVNode("div", {
-      "class": bem("wrapper", {
-        disabled: props.disabled
-      })
-    }, [renderPreviewList(), renderUpload()])]);
-  }
-});
-const Uploader = withInstall(stdin_default);
-const vant_E1sid_s2drf_FTnNUXVP7c_m9CYVU2kcWnYFPKlNDOM = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
-  const components = [
-    Button,
-    NavBar,
-    Tab,
-    Tabs,
-    Popup,
-    Overlay,
-    Loading,
-    Toast,
-    Dialog,
-    ActionSheet,
-    Picker,
-    Uploader,
-    Swipe,
-    SwipeItem,
-    PullRefresh,
-    List,
-    ImagePreview,
-    Field,
-    Form,
-    Cell,
-    CellGroup,
-    Card,
-    Badge,
-    Icon,
-    Pagination,
-    NoticeBar,
-    Divider,
-    Empty,
-    Skeleton,
-    Tag,
-    Progress,
-    Circle
-  ];
-  components.forEach((component) => {
-    nuxtApp.vueApp.component(component.name || "", component);
-  });
-  return {
-    provide: {
-      vantToast: Toast,
-      vantDialog: Dialog,
-      vantImagePreview: ImagePreview
-    }
-  };
+  name: "nuxt:global-components"
 });
 const ssg_detect_IpHCGcQQ_IR5Rl99qyukWoMA9fJGfuTYyoksTzy81cs = /* @__PURE__ */ defineNuxtPlugin({
   name: "i18n:plugin:ssg-detect",
@@ -13991,12 +7079,11 @@ const plugins = [
   route_locale_detect__HPHJq3Jg7gwhwgKEI8tQavopSAjmrCSPXl9HgL2h9U,
   i18n_EI7LsD1KYQADczz5hrChviGQCdVM8yUkvFEZLJpmnvM,
   components_plugin_z4hgvsiddfKkfXTP6M8M4zG5Cb7sGnDhcryKVM45Di4,
-  vant_E1sid_s2drf_FTnNUXVP7c_m9CYVU2kcWnYFPKlNDOM,
   ssg_detect_IpHCGcQQ_IR5Rl99qyukWoMA9fJGfuTYyoksTzy81cs
 ];
 const layouts = {
-  auth: defineAsyncComponent(() => import('./auth-D85-3ghC.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-Db8mBkME.mjs').then((m) => m.default || m)),
+  auth: defineAsyncComponent(() => import('./auth-C4t_wNsZ.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-W3mDrAJU.mjs').then((m) => m.default || m)),
   mobile: defineAsyncComponent(() => import('./mobile-DkqKjfBF.mjs').then((m) => m.default || m)),
   pay: defineAsyncComponent(() => import('./pay-nUxaFhjK.mjs').then((m) => m.default || m))
 };
@@ -14029,10 +7116,10 @@ const __nuxt_component_0 = defineComponent({
   setup(props, context) {
     const nuxtApp = useNuxtApp();
     const injectedRoute = inject(PageRouteSymbol);
-    const shouldUseEagerRoute = !injectedRoute || injectedRoute === useRoute$1();
-    const route2 = shouldUseEagerRoute ? useRoute$2() : injectedRoute;
+    const shouldUseEagerRoute = !injectedRoute || injectedRoute === useRoute();
+    const route = shouldUseEagerRoute ? useRoute$1() : injectedRoute;
     const layout = computed(() => {
-      let layout2 = unref(props.name) ?? route2?.meta.layout ?? routeRulesMatcher(route2?.path).appLayout ?? "default";
+      let layout2 = unref(props.name) ?? route?.meta.layout ?? routeRulesMatcher(route?.path).appLayout ?? "default";
       if (layout2 && !(layout2 in layouts)) {
         if (props.fallback) {
           layout2 = unref(props.fallback);
@@ -14046,9 +7133,9 @@ const __nuxt_component_0 = defineComponent({
     let lastLayout;
     return () => {
       const hasLayout = !!layout.value && layout.value in layouts;
-      const hasTransition = hasLayout && !!(route2?.meta.layoutTransition ?? appLayoutTransition);
+      const hasTransition = hasLayout && !!(route?.meta.layoutTransition ?? appLayoutTransition);
       const transitionProps = hasTransition && _mergeTransitionProps([
-        route2?.meta.layoutTransition,
+        route?.meta.layoutTransition,
         appLayoutTransition,
         {
           onBeforeLeave() {
@@ -14078,12 +7165,12 @@ const __nuxt_component_0 = defineComponent({
             default: () => h(
               LayoutProvider,
               {
-                layoutProps: mergeProps(context.attrs, route2.meta.layoutProps ?? {}, { ref: layoutRef }),
+                layoutProps: mergeProps(context.attrs, route.meta.layoutProps ?? {}, { ref: layoutRef }),
                 key: layout.value || void 0,
                 name: layout.value,
                 shouldProvide: !props.name,
-                isRenderingNewLayout: (name2) => {
-                  return name2 !== previouslyRenderedLayout && name2 === layout.value;
+                isRenderingNewLayout: (name) => {
+                  return name !== previouslyRenderedLayout && name === layout.value;
                 },
                 hasTransition
               },
@@ -14117,17 +7204,17 @@ const LayoutProvider = defineComponent({
     }
   },
   setup(props, context) {
-    const name2 = props.name;
+    const name = props.name;
     if (props.shouldProvide) {
       provide(LayoutMetaSymbol, {
         // When name=false, always return true so NuxtPage doesn't skip rendering
-        isCurrent: (route2) => name2 === false || name2 === (route2.meta.layout ?? routeRulesMatcher(route2.path).appLayout ?? "default")
+        isCurrent: (route) => name === false || name === (route.meta.layout ?? routeRulesMatcher(route.path).appLayout ?? "default")
       });
     }
     const injectedRoute = inject(PageRouteSymbol);
-    const isNotWithinNuxtPage = injectedRoute && injectedRoute === useRoute$1();
+    const isNotWithinNuxtPage = injectedRoute && injectedRoute === useRoute();
     if (isNotWithinNuxtPage) {
-      const vueRouterRoute = useRoute$2();
+      const vueRouterRoute = useRoute$1();
       const reactiveChildRoute = {};
       for (const _key in vueRouterRoute) {
         const key = _key;
@@ -14141,19 +7228,19 @@ const LayoutProvider = defineComponent({
       provide(PageRouteSymbol, shallowReactive(reactiveChildRoute));
     }
     return () => {
-      if (!name2 || typeof name2 === "string" && !(name2 in layouts)) {
+      if (!name || typeof name === "string" && !(name in layouts)) {
         return context.slots.default?.();
       }
       return h(
         LayoutLoader,
-        { key: name2, layoutProps: props.layoutProps, name: name2 },
+        { key: name, layoutProps: props.layoutProps, name },
         context.slots
       );
     };
   }
 });
-const defineRouteProvider = (name2 = "RouteProvider") => defineComponent({
-  name: name2,
+const defineRouteProvider = (name = "RouteProvider") => defineComponent({
+  name,
   props: {
     route: {
       type: Object,
@@ -14167,14 +7254,14 @@ const defineRouteProvider = (name2 = "RouteProvider") => defineComponent({
   setup(props) {
     const previousKey = props.renderKey;
     const previousRoute = props.route;
-    const route2 = {};
+    const route = {};
     for (const key in props.route) {
-      Object.defineProperty(route2, key, {
+      Object.defineProperty(route, key, {
         get: () => previousKey === props.renderKey ? props.route[key] : previousRoute[key],
         enumerable: true
       });
     }
-    provide(PageRouteSymbol, shallowReactive(route2));
+    provide(PageRouteSymbol, shallowReactive(route));
     return () => {
       if (!props.vnode) {
         return props.vnode;
@@ -14216,12 +7303,12 @@ const __nuxt_component_1 = defineComponent({
     nuxtApp.deferHydration();
     return () => {
       return h(RouterView, { name: props.name, route: props.route, ...attrs }, {
-        default: (routeProps2) => {
+        default: (routeProps) => {
           return h(Suspense, { suspensible: true }, {
             default() {
               return h(RouteProvider, {
-                vnode: slots.default ? normalizeSlot(slots.default, routeProps2) : routeProps2.Component,
-                route: routeProps2.route,
+                vnode: slots.default ? normalizeSlot(slots.default, routeProps) : routeProps.Component,
+                route: routeProps.route,
                 vnodeRef: pageRef
               });
             }
@@ -14283,8 +7370,8 @@ const _sfc_main$1 = {
     const statusText = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
     const description = _error.message || _error.toString();
     const stack = void 0;
-    const _Error404 = defineAsyncComponent(() => import('./error-404-DyJwnlkL.mjs'));
-    const _Error = defineAsyncComponent(() => import('./error-500-BJixXQWB.mjs'));
+    const _Error404 = defineAsyncComponent(() => import('./error-404-CImdyZMZ.mjs'));
+    const _Error = defineAsyncComponent(() => import('./error-500-CDbzTNYf.mjs'));
     const ErrorTemplate = is404 ? _Error404 : _Error;
     return (_ctx, _push, _parent, _attrs) => {
       _push(ssrRenderComponent(unref(ErrorTemplate), mergeProps({ status: unref(status), statusText: unref(statusText), statusCode: unref(status), statusMessage: unref(statusText), description: unref(description), stack: unref(stack) }, _attrs), null, _parent));
@@ -14306,7 +7393,7 @@ const _sfc_main = {
     nuxtApp.deferHydration();
     nuxtApp.ssrContext.url;
     const SingleRenderer = false;
-    provide(PageRouteSymbol, useRoute$1());
+    provide(PageRouteSymbol, useRoute());
     nuxtApp.hooks.callHookWith((hooks) => hooks.map((hook) => hook()), "vue:setup", []);
     const error = /* @__PURE__ */ useError();
     const abortRender = error.value && !nuxtApp.ssrContext.error;
@@ -14376,5 +7463,5 @@ let entry;
 }
 const entry_default = ((ssrContext) => entry(ssrContext));
 
-export { __nuxt_component_0 as _, useLocalePath as a, useSupabaseClient as b, useSupabaseUser as c, useRoute$1 as d, entry_default as default, useRuntimeConfig as e, useRouter as f, useNuxtApp as g, asyncDataDefaults as h, createError as i, fetchDefaults as j, useRequestFetch as k, defineNuxtRouteMiddleware as l, encodeRoutePath as m, navigateTo as n, hasProtocol as o, parseQuery as p, joinURL as q, resolveRouteObject$1 as r, isScriptProtocol as s, tryUseNuxtApp as t, useI18n as u, withoutTrailingSlash as v, withTrailingSlash as w, nuxtLinkDefaults as x, useSwitchLocalePath as y };
+export { useLocalePath as a, useRoute as b, useSupabaseClient as c, useSupabaseUser as d, entry_default as default, useRuntimeConfig as e, useNuxtApp as f, asyncDataDefaults as g, createError as h, defineNuxtRouteMiddleware as i, useRouter as j, encodeRoutePath as k, hasProtocol as l, joinURL as m, navigateTo as n, isScriptProtocol as o, parseQuery as p, withoutTrailingSlash as q, resolveRouteObject$1 as r, nuxtLinkDefaults as s, tryUseNuxtApp as t, useI18n as u, useSwitchLocalePath as v, withTrailingSlash as w };
 //# sourceMappingURL=server.mjs.map

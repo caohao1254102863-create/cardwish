@@ -1,5 +1,5 @@
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'vue-bundle-renderer/runtime';
-import { j as joinRelativeURL, u as useRuntimeConfig, e as encodePath, f as defineRenderHandler, a as getQuery, h as createError, i as getRouteRules, k as getResponseStatusText, l as getResponseStatus, m as useNitroApp } from '../nitro/nitro.mjs';
+import { j as joinRelativeURL, u as useRuntimeConfig, f as encodePath, h as defineRenderHandler, a as getQuery, i as createError, k as getRouteRules, l as getResponseStatusText, m as getResponseStatus, n as useNitroApp } from '../nitro/nitro.mjs';
 import { renderToString } from 'vue/server-renderer';
 import { createHead as createHead$1, propsToString, renderSSRHead } from 'unhead/server';
 import { stringify, uneval } from 'devalue';
@@ -76,7 +76,7 @@ function createHead(options = {}) {
 
 const NUXT_RUNTIME_PAYLOAD_EXTRACTION = false;
 
-const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"},{"name":"description","content":"Create beautiful digital greeting cards, share with friends, and let them pay for it!"},{"name":"og:title","content":"CardWish - Beautiful Digital Greeting Cards"},{"name":"og:description","content":"Create beautiful digital greeting cards, share with friends, and let them pay for it!"},{"name":"og:type","content":"website"},{"name":"og:site_name","content":"CardWish"}],"link":[{"rel":"icon","type":"image/x-icon","href":"/favicon.ico"}],"style":[],"script":[],"noscript":[],"title":"CardWish - Beautiful Digital Greeting Cards"};
+const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"},{"name":"description","content":"Create beautiful digital greeting cards, share with friends, and let them pay for it!"},{"property":"og:title","content":"CardWish - Beautiful Digital Greeting Cards"},{"property":"og:description","content":"Create beautiful digital greeting cards, share with friends, and let them pay for it!"},{"property":"og:type","content":"website"},{"property":"og:site_name","content":"CardWish"}],"link":[{"rel":"icon","type":"image/x-icon","href":"/favicon.ico"}],"style":[],"script":[],"noscript":[],"title":"CardWish - Beautiful Digital Greeting Cards"};
 
 const appRootTag = "div";
 

@@ -3609,10 +3609,6 @@ function isEqual(object1, object2) {
 
 const e=globalThis.process?.getBuiltinModule?.("crypto")?.hash,r="sha256",s="base64url";function digest(t){if(e)return e(r,t,s);const o=createHash(r).update(t);return globalThis.process?.versions?.webcontainer?o.digest().toString(s):o.digest(s)}
 
-function hash$1(input) {
-  return digest(serialize$1(input));
-}
-
 const Hasher = /* @__PURE__ */ (() => {
   class Hasher2 {
     buff = "";
@@ -4317,7 +4313,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "98c32a15-040c-4c46-a20e-18049da88a64",
+    "buildId": "2b57b914-d53c-4003-818f-d569400dee3c",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4350,8 +4346,8 @@ const _inlineRuntimeConfig = {
     "creatorPercent": 70,
     "minWithdrawalCents": 1000,
     "supabase": {
-      "url": "",
-      "key": "",
+      "url": "https://nvmwlajlbvykjagzajii.supabase.co",
+      "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52bXdsYWpsYnZ5a2phZ3phamlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMzI1NTksImV4cCI6MjA5NjgwODU1OX0.z3Q7u7PSIoZEjyduEkgS9eHxpkA-36XMnZ4ZlICWfeg",
       "redirect": false,
       "redirectOptions": {
         "login": "/auth/login",
@@ -4367,21 +4363,21 @@ const _inlineRuntimeConfig = {
         "saveRedirectToCookie": false
       },
       "cookieName": "sb",
-      "cookiePrefix": "",
+      "cookiePrefix": "sb-nvmwlajlbvykjagzajii-auth-token",
       "useSsrCookies": true,
       "cookieOptions": {
         "maxAge": 28800,
         "sameSite": "lax",
-        "secure": true
+        "secure": false
       },
       "clientOptions": {}
     },
     "i18n": {
       "baseUrl": "",
-      "defaultLocale": "en",
+      "defaultLocale": "zh-CN",
       "defaultDirection": "ltr",
       "strategy": "prefix_except_default",
-      "lazy": true,
+      "lazy": false,
       "rootRedirect": "",
       "routesNameSeparator": "___",
       "defaultLocaleRouteNameSuffix": "default",
@@ -4390,21 +4386,21 @@ const _inlineRuntimeConfig = {
       "trailingSlash": false,
       "locales": [
         {
-          "code": "en",
-          "name": "English",
-          "files": [
-            {
-              "path": "/Users/langxiaoyue/digital-card-platform/i18n/locales/en.json",
-              "cache": ""
-            }
-          ]
-        },
-        {
           "code": "zh-CN",
           "name": "中文",
           "files": [
             {
               "path": "/Users/langxiaoyue/digital-card-platform/i18n/locales/zh-CN.json",
+              "cache": ""
+            }
+          ]
+        },
+        {
+          "code": "en",
+          "name": "English",
+          "files": [
+            {
+              "path": "/Users/langxiaoyue/digital-card-platform/i18n/locales/en.json",
               "cache": ""
             }
           ]
@@ -4433,10 +4429,10 @@ const _inlineRuntimeConfig = {
       },
       "multiDomainLocales": false,
       "domainLocales": {
-        "en": {
+        "zh-CN": {
           "domain": ""
         },
-        "zh-CN": {
+        "en": {
           "domain": ""
         }
       }
@@ -4444,7 +4440,7 @@ const _inlineRuntimeConfig = {
   },
   "stripeSecretKey": "sk_test_",
   "stripeWebhookSecret": "whsec_",
-  "supabaseServiceRoleKey": "",
+  "supabaseServiceRoleKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52bXdsYWpsYnZ5a2phZ3phamlpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTIzMjU1OSwiZXhwIjoyMDk2ODA4NTU5fQ.pK9KHLXd31N6-y3ENWH6-jyEtOGbU-cdmgry3Sl5sfo",
   "supabase": {
     "serviceKey": ""
   }
@@ -4888,15 +4884,24 @@ const plugins = [
 
 const _SxA8c9 = defineEventHandler(() => {});
 
+const _lazy_oFyUrK = () => import('../routes/api/auth/email-register.post.mjs');
+const _lazy_MfrE77 = () => import('../routes/api/auth/phone-login.post.mjs');
+const _lazy_hkzNzS = () => import('../routes/api/auth/phone-register.post.mjs');
 const _lazy_Soy2bQ = () => import('../routes/api/cards/_id_.get.mjs');
 const _lazy_i8MlKH = () => import('../routes/api/index.get.mjs');
 const _lazy_zaJigO = () => import('../routes/api/index.get2.mjs');
 const _lazy_7nuUqz = () => import('../routes/api/checkout.post.mjs');
+const _lazy_B3_IGU = () => import('../routes/api/debug/cookies.get.mjs');
+const _lazy_tIeLBY = () => import('../routes/api/debug/test-supabase.get.mjs');
 const _lazy_j3GGFs = () => import('../routes/api/orders/_id_.get.mjs');
 const _lazy_YL_aOK = () => import('../routes/api/orders/_share_code/by-share.get.mjs');
 const _lazy_tSV3Jn = () => import('../routes/api/index.get3.mjs');
+const _lazy_I8BJTD = () => import('../routes/api/pay/_share_code/create-paypal-order.post.mjs');
 const _lazy_1K7U62 = () => import('../routes/api/pay/_share_code/create-session.post.mjs');
+const _lazy_LwemNY = () => import('../routes/api/pay/_share_code/demo-pay.post.mjs');
 const _lazy_l4Ie9e = () => import('../routes/api/pay/_share_code/success.get.mjs');
+const _lazy_jy5Zwv = () => import('../routes/api/paypal/capture-and-complete.post.mjs');
+const _lazy_KxMRUT = () => import('../routes/api/paypal/capture-order.post.mjs');
 const _lazy_6cnSkz = () => import('../routes/api/stripe/webhook.post.mjs');
 const _lazy_p5cPpW = () => import('../routes/api/user/earnings.get.mjs');
 const _lazy_jihTf5 = () => import('../routes/api/user/received-cards.get.mjs');
@@ -4906,15 +4911,24 @@ const _lazy_g5roFv = () => import('../routes/api/user/withdraw.post.mjs');
 const _lazy_wyzq9G = () => import('../routes/renderer.mjs').then(function (n) { return n.r; });
 
 const handlers = [
+  { route: '/api/auth/email-register', handler: _lazy_oFyUrK, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/phone-login', handler: _lazy_MfrE77, lazy: true, middleware: false, method: "post" },
+  { route: '/api/auth/phone-register', handler: _lazy_hkzNzS, lazy: true, middleware: false, method: "post" },
   { route: '/api/cards/:id', handler: _lazy_Soy2bQ, lazy: true, middleware: false, method: "get" },
   { route: '/api/cards', handler: _lazy_i8MlKH, lazy: true, middleware: false, method: "get" },
   { route: '/api/categories', handler: _lazy_zaJigO, lazy: true, middleware: false, method: "get" },
   { route: '/api/checkout', handler: _lazy_7nuUqz, lazy: true, middleware: false, method: "post" },
+  { route: '/api/debug/cookies', handler: _lazy_B3_IGU, lazy: true, middleware: false, method: "get" },
+  { route: '/api/debug/test-supabase', handler: _lazy_tIeLBY, lazy: true, middleware: false, method: "get" },
   { route: '/api/orders/:id', handler: _lazy_j3GGFs, lazy: true, middleware: false, method: "get" },
   { route: '/api/orders/:share_code/by-share', handler: _lazy_YL_aOK, lazy: true, middleware: false, method: "get" },
   { route: '/api/orders', handler: _lazy_tSV3Jn, lazy: true, middleware: false, method: "get" },
+  { route: '/api/pay/:share_code/create-paypal-order', handler: _lazy_I8BJTD, lazy: true, middleware: false, method: "post" },
   { route: '/api/pay/:share_code/create-session', handler: _lazy_1K7U62, lazy: true, middleware: false, method: "post" },
+  { route: '/api/pay/:share_code/demo-pay', handler: _lazy_LwemNY, lazy: true, middleware: false, method: "post" },
   { route: '/api/pay/:share_code/success', handler: _lazy_l4Ie9e, lazy: true, middleware: false, method: "get" },
+  { route: '/api/paypal/capture-and-complete', handler: _lazy_jy5Zwv, lazy: true, middleware: false, method: "post" },
+  { route: '/api/paypal/capture-order', handler: _lazy_KxMRUT, lazy: true, middleware: false, method: "post" },
   { route: '/api/stripe/webhook', handler: _lazy_6cnSkz, lazy: true, middleware: false, method: "post" },
   { route: '/api/user/earnings', handler: _lazy_p5cPpW, lazy: true, middleware: false, method: "get" },
   { route: '/api/user/received-cards', handler: _lazy_jihTf5, lazy: true, middleware: false, method: "get" },
@@ -5152,5 +5166,5 @@ function getCacheHeaders(url) {
   return {};
 }
 
-export { $fetch as $, destr as A, isEqual as B, getCookie as C, deleteCookie as D, hash$1 as E, handler as F, getQuery as a, getHeader as b, readRawBody as c, defineEventHandler as d, encodePath as e, defineRenderHandler as f, getRouterParam as g, createError$1 as h, getRouteRules as i, joinRelativeURL as j, getResponseStatusText as k, getResponseStatus as l, useNitroApp as m, defu as n, sanitizeStatusCode as o, getContext as p, createHooks as q, readBody as r, setResponseStatus as s, getRequestProtocol as t, useRuntimeConfig as u, getRequestHeaders as v, executeAsync as w, setCookie as x, klona as y, getRequestHeader as z };
+export { $fetch as $, klona as A, getRequestHeader as B, destr as C, isEqual as D, deleteCookie as E, handler as F, getQuery as a, getHeader as b, readRawBody as c, defineEventHandler as d, getCookie as e, encodePath as f, getRouterParam as g, defineRenderHandler as h, createError$1 as i, joinRelativeURL as j, getRouteRules as k, getResponseStatusText as l, getResponseStatus as m, useNitroApp as n, sanitizeStatusCode as o, parseCookies as p, getContext as q, readBody as r, setResponseStatus as s, defu as t, useRuntimeConfig as u, createHooks as v, getRequestProtocol as w, getRequestHeaders as x, executeAsync as y, setCookie as z };
 //# sourceMappingURL=nitro.mjs.map

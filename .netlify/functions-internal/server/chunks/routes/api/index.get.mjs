@@ -1,5 +1,5 @@
 import { d as defineEventHandler, a as getQuery } from '../../nitro/nitro.mjs';
-import { g as getServiceClient } from '../../_/supabase.mjs';
+import { a as getClient } from '../../_/supabase.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -11,7 +11,7 @@ import '@supabase/supabase-js';
 
 const index_get = defineEventHandler(async (event) => {
   try {
-    const supabase = getServiceClient();
+    const supabase = getClient();
     const query = getQuery(event);
     const locale = query.locale || "en";
     const category = query.category;
@@ -19,12 +19,10 @@ const index_get = defineEventHandler(async (event) => {
     const page = parseInt(query.page || "1");
     const limit = Math.min(parseInt(query.limit || "20"), 50);
     const offset = (page - 1) * limit;
-    const nameField = locale === "zh-CN" ? "name_zh" : "name_en";
-    const descField = locale === "zh-CN" ? "description_zh" : "description_en";
     let dbQuery = supabase.from("card_templates").select(`
         id, category_id,
-        ${nameField} as name, name_zh, name_en,
-        ${descField} as description, description_zh, description_en,
+        name_zh, name_en,
+        description_zh, description_en,
         price_cents, currency, images, tags, status, sort_order, created_at,
         categories!inner(slug)
       `, { count: "exact" }).eq("status", "online");
@@ -51,9 +49,22 @@ const index_get = defineEventHandler(async (event) => {
     const cards = (data || []).map((item) => {
       var _a;
       return {
-        ...item,
+        id: item.id,
+        category_id: item.category_id,
         category_slug: (_a = item.categories) == null ? void 0 : _a.slug,
-        categories: void 0
+        name: locale === "zh-CN" ? item.name_zh : item.name_en,
+        name_zh: item.name_zh,
+        name_en: item.name_en,
+        description: locale === "zh-CN" ? item.description_zh : item.description_en,
+        description_zh: item.description_zh,
+        description_en: item.description_en,
+        price_cents: item.price_cents,
+        currency: item.currency,
+        images: item.images,
+        tags: item.tags,
+        status: item.status,
+        sort_order: item.sort_order,
+        created_at: item.created_at
       };
     });
     return {

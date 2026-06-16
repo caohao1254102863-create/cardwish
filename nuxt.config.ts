@@ -68,7 +68,7 @@ export default defineNuxtConfig({
 
   // Nitro (Netlify Functions) configuration
   nitro: {
-    preset: 'netlify',
+    preset: 'cloudflare-pages',
   },
 
   // App configuration

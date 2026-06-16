@@ -1,5 +1,6 @@
 import { d as defineEventHandler, s as setResponseStatus, r as readBody, u as useRuntimeConfig } from '../../nitro/nitro.mjs';
-import { g as getServiceClient, a as getUserFromEvent, e as ensureProfileAndWallet, b as generateShareCode, c as generateOrderNumber } from '../../_/supabase.mjs';
+import { g as getServerUser } from '../../_/auth.mjs';
+import { g as getServiceClient, b as generateShareCode, c as generateOrderNumber } from '../../_/supabase.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -13,7 +14,7 @@ const checkout_post = defineEventHandler(async (event) => {
   var _a;
   try {
     const supabase = getServiceClient();
-    const user = await getUserFromEvent(event);
+    const user = await getServerUser(event);
     if (!user) {
       setResponseStatus(event, 401);
       return { error: "Login required" };
@@ -24,11 +25,18 @@ const checkout_post = defineEventHandler(async (event) => {
       setResponseStatus(event, 400);
       return { error: "template_id is required" };
     }
-    await ensureProfileAndWallet(supabase, user.id);
     const { data: template } = await supabase.from("card_templates").select("price_cents, currency, name_zh, name_en, categories(slug)").eq("id", template_id).single();
     if (!template) {
       setResponseStatus(event, 404);
       return { error: "Card template not found" };
+    }
+    const { data: profile } = await supabase.from("profiles").select("id").eq("id", user.id).single();
+    if (!profile) {
+      await supabase.from("profiles").insert({ id: user.id, preferred_locale: "zh-CN" });
+    }
+    const { data: wallet } = await supabase.from("wallets").select("id").eq("user_id", user.id).single();
+    if (!wallet) {
+      await supabase.from("wallets").insert({ user_id: user.id, balance_cents: 0, total_earned_cents: 0, total_withdrawn_cents: 0 });
     }
     const shareCode = generateShareCode();
     const orderNumber = generateOrderNumber();

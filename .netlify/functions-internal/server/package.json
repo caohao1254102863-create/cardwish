@@ -13,7 +13,6 @@
     "@supabase/ssr": "0.7.0",
     "@supabase/storage-js": "2.108.1",
     "@supabase/supabase-js": "2.108.1",
-    "@vant/use": "1.6.0",
     "@vue/compiler-core": "3.5.38",
     "@vue/compiler-dom": "3.5.38",
     "@vue/compiler-ssr": "3.5.38",

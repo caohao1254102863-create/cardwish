@@ -1,5 +1,5 @@
 import { d as defineEventHandler, g as getRouterParam, s as setResponseStatus } from '../../../../nitro/nitro.mjs';
-import { g as getServiceClient } from '../../../../_/supabase.mjs';
+import { a as getClient } from '../../../../_/supabase.mjs';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -12,7 +12,7 @@ import '@supabase/supabase-js';
 const byShare_get = defineEventHandler(async (event) => {
   var _a, _b, _c, _d, _e;
   try {
-    const supabase = getServiceClient();
+    const supabase = getClient();
     const shareCode = getRouterParam(event, "share_code");
     const { data: order, error } = await supabase.from("orders").select(`
         *,
