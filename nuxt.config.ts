@@ -45,13 +45,19 @@ export default defineNuxtConfig({
 
   // Supabase configuration
   supabase: {
-    url: process.env.SUPABASE_URL,
-    key: process.env.SUPABASE_KEY,
+    url: process.env.SUPABASE_URL || '',
+    key: process.env.SUPABASE_KEY || '',
     redirect: false,
     cookieOptions: {
       maxAge: 28800,
       sameSite: 'lax',
-      secure: false,
+      secure: true,
+    },
+    clientOptions: {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+      },
     },
     redirectOptions: {
       login: '/auth/login',
@@ -97,9 +103,11 @@ export default defineNuxtConfig({
       platformFeePercent: 30,
       creatorPercent: 70,
       minWithdrawalCents: 1000,
+      supabaseUrl: process.env.SUPABASE_URL || '',
+      supabaseKey: process.env.SUPABASE_KEY || '',
     },
-    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
-    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
+    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
   },
 })

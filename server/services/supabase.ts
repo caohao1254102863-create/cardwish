@@ -4,9 +4,9 @@ import type { Database } from '~/types/supabase'
 function getSupabaseConfig() {
   const config = useRuntimeConfig()
   return {
-    url: process.env.SUPABASE_URL || '',
-    anonKey: process.env.SUPABASE_KEY || '',
-    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || (config as any).supabaseServiceRoleKey || '',
+    url: process.env.SUPABASE_URL || config.public.supabaseUrl || '',
+    anonKey: process.env.SUPABASE_KEY || config.public.supabaseKey || '',
+    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || config.supabaseServiceRoleKey || '',
   }
 }
 
