@@ -4,9 +4,9 @@ import type { Database } from '~/types/supabase'
 function getSupabaseConfig() {
   const config = useRuntimeConfig()
   return {
-    url: process.env.SUPABASE_URL || config.public.supabaseUrl || '',
-    anonKey: process.env.SUPABASE_KEY || config.public.supabaseKey || '',
-    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || config.supabaseServiceRoleKey || '',
+    url: process.env.SUPABASE_URL || config.public.supabaseUrl || 'https://nvmwlajlbvykjagzajii.supabase.co',
+    anonKey: process.env.SUPABASE_KEY || config.public.supabaseKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52bXdsYWpsYnZ5a2phZ3phamlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMzI1NTksImV4cCI6MjA5NjgwODU1OX0.z3Q7u7PSIoZEjyduEkgS9eHxpkA-36XMnZ4ZlICWfeg',
+    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || config.supabaseServiceRoleKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52bXdsYWpsYnZ5a2phZ3phamlpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTIzMjU1OSwiZXhwIjoyMDk2ODA4NTU5fQ.pK9KHLXd31N6-y3ENWH6-jyEtOGbU-cdmgry3Sl5sfo',
   }
 }
 

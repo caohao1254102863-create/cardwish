@@ -45,8 +45,8 @@ export default defineNuxtConfig({
 
   // Supabase configuration
   supabase: {
-    url: process.env.SUPABASE_URL || '',
-    key: process.env.SUPABASE_KEY || '',
+    url: 'https://nvmwlajlbvykjagzajii.supabase.co',
+    key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52bXdsYWpsYnZ5a2phZ3phamlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMzI1NTksImV4cCI6MjA5NjgwODU1OX0.z3Q7u7PSIoZEjyduEkgS9eHxpkA-36XMnZ4ZlICWfeg',
     redirect: false,
     cookieOptions: {
       maxAge: 28800,
@@ -108,6 +108,6 @@ export default defineNuxtConfig({
     },
     stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
     stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
-    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+    supabaseServiceRoleKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52bXdsYWpsYnZ5a2phZ3phamlpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTIzMjU1OSwiZXhwIjoyMDk2ODA4NTU5fQ.pK9KHLXd31N6-y3ENWH6-jyEtOGbU-cdmgry3Sl5sfo',
   },
 })
