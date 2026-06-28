@@ -46,14 +46,53 @@
           </div>
         </div>
 
-        <!-- Account -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">收款账户</label>
-          <input v-model="account" type="text"
-            :placeholder="method === 'paypal' ? '输入你的 PayPal 邮箱地址' : '输入银行账户信息'"
-            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-sm" />
-          <p class="text-xs text-gray-400 mt-1">💰 到账时间：1-3 个工作日</p>
-        </div>
+        <!-- PayPal account fields -->
+        <template v-if="method === 'paypal'">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">PayPal 邮箱</label>
+            <input v-model="paypalEmail" type="email"
+              placeholder="your@email.com"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">确认 PayPal 邮箱</label>
+            <input v-model="paypalEmail2" type="email"
+              placeholder="再次输入邮箱"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">账户持有人姓名（选填）</label>
+            <input v-model="holderName" type="text"
+              placeholder="PayPal 账户上的姓名"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-sm" />
+          </div>
+        </template>
+
+        <!-- Bank account fields -->
+        <template v-if="method === 'bank'">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">账户持有人姓名</label>
+            <input v-model="holderName" type="text" placeholder="银行账户姓名（英文）"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">银行名称</label>
+            <input v-model="bankName" type="text" placeholder="例如：HSBC Hong Kong"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">账号 / IBAN</label>
+            <input v-model="bankAccount" type="text" placeholder="银行账号或 IBAN"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">SWIFT / BIC 代码</label>
+            <input v-model="swiftCode" type="text" placeholder="例如：HSBCHKHH"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-sm" />
+          </div>
+        </template>
+
+        <p class="text-xs text-gray-400">💰 到账时间：1-3 个工作日</p>
 
         <!-- Fee note -->
         <div class="bg-gray-50 rounded-lg p-3 text-xs text-gray-500">
@@ -95,14 +134,27 @@ const minAmt = computed(() => (config.public.minWithdrawalCents || 1000) / 100)
 const balance = ref(0)
 const amount = ref(null)
 const method = ref('paypal')
-const account = ref('')
+const paypalEmail = ref('')
+const paypalEmail2 = ref('')
+const holderName = ref('')
+const bankName = ref('')
+const bankAccount = ref('')
+const swiftCode = ref('')
 const submitting = ref(false)
 const history = ref([])
 
 const maxAmt = computed(() => balance.value / 100)
 const canSubmit = computed(() => {
   const amt = (amount.value || 0)
-  return amt >= minAmt.value && amt <= maxAmt.value && account.value.trim().length > 0
+  if (amt < minAmt.value || amt > maxAmt.value) return false
+  if (method.value === 'paypal') {
+    if (!paypalEmail.value || !paypalEmail2.value) return false
+    if (!paypalEmail.value.includes('@')) return false
+    if (paypalEmail.value !== paypalEmail2.value) return false
+  } else {
+    if (!holderName.value || !bankName.value || !bankAccount.value) return false
+  }
+  return true
 })
 
 function fmt(c) { return (c / 100).toFixed(2) }
@@ -123,10 +175,14 @@ async function submit() {
     const { data: { session } } = await supabase.auth.getSession()
     const token = session?.access_token || ''
     const amountCents = Math.round((amount.value || 0) * 100)
+    const accountInfo = method.value === 'paypal'
+      ? { paypal_email: paypalEmail.value, holder_name: holderName.value || '' }
+      : { holder_name: holderName.value, bank_name: bankName.value, bank_account: bankAccount.value, swift_code: swiftCode.value || '' }
+
     await $fetch('/api/user/withdraw', {
       method: 'POST',
       headers: token ? { Authorization: 'Bearer ' + token } : {},
-      body: { amount_cents: amountCents, method: method.value, account_info: { account: account.value } },
+      body: { amount_cents: amountCents, method: method.value, account_info: accountInfo },
     })
     window.$toast('提现申请已提交，1-3 个工作日到账', 'success')
     navigateTo('/user/wallet')
