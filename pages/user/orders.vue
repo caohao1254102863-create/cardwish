@@ -26,7 +26,7 @@
               <span class="text-xs px-2 py-0.5 rounded-full" :class="badgeClass(o.status)">{{ statusLabel(o.status) }}</span>
             </div>
             <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0" style="background:linear-gradient(135deg,#fce7f3,#f3e8ff)">💝</div>
+              <img :src="orderImg(o)" class="w-12 h-12 rounded-lg object-cover flex-shrink-0" @error="e => e.target.style.display='none'" />
               <div class="flex-1 min-w-0">
                 <p class="font-medium text-gray-700 truncate">{{ o.message || '无留言' }}</p>
                 <p class="text-sm text-gray-400">致: {{ o.recipient_name }}</p>
@@ -49,6 +49,11 @@ const currentStatus = ref('all')
 const tabs = [{ value: 'all', label: '全部' }, { value: 'pending', label: '等待付款' }, { value: 'delivered', label: '已送达' }]
 
 function fmt(c) { return (c / 100).toFixed(2) }
+function orderImg(o) {
+  const slug = o.category_slug || 'love'
+  const idx = (parseInt(o.sort_order) % 3) + 1
+  return '/images/cards/' + slug + '/' + slug + '-' + idx + '.png'
+}
 function statusLabel(s) {
   const m = { pending: '等待付款', paid: '已付款', delivered: '已送达', expired: '已过期', cancelled: '已取消' }
   return m[s] || s
@@ -76,6 +81,7 @@ async function fetchOrders() {
 
 watch(currentStatus, () => fetchOrders())
 onMounted(() => fetchOrders())
+useHead({ title: "我的订单 - CardWish" })
 </script>
 
 <style scoped>

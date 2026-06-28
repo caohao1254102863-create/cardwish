@@ -31,12 +31,13 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { t } = useI18n()
 const localePath = useLocalePath()
 
 const { data, pending } = useAsyncData('user-received', () => $fetch('/api/user/received-cards'))
-const cards = computed(() => (data.value as any)?.cards || [])
+const cards = computed(() => (data.value)?.cards || [])
 
-function formatDate(d: string) { return new Date(d).toLocaleDateString() }
+function formatDate(d) { return new Date(d).toLocaleDateString() }
+useHead({ title: "收到的卡片 - CardWish" })
 </script>

@@ -17,7 +17,13 @@ export default defineEventHandler(async (event) => {
 
     let dbQuery = supabase
       .from('orders')
-      .select('*', { count: 'exact' })
+      .select(`
+        *,
+        card_templates!inner(
+          sort_order,
+          categories(slug)
+        )
+      `, { count: 'exact' })
       .eq('creator_id', user.id)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
@@ -30,8 +36,17 @@ export default defineEventHandler(async (event) => {
 
     if (error) throw error
 
+    const orders = (data || []).map(function(o) {
+      return {
+        ...o,
+        category_slug: o.card_templates?.categories?.slug || 'love',
+        sort_order: o.card_templates?.sort_order || 0,
+        card_templates: undefined,
+      }
+    })
+
     return {
-      orders: data || [],
+      orders,
       total: count || 0,
       page,
       limit,

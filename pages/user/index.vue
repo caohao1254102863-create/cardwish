@@ -51,7 +51,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const supabase = useSupabaseClient()

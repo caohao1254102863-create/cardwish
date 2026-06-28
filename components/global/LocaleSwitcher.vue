@@ -9,7 +9,7 @@
   </button>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { locale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 

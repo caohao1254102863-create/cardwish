@@ -59,11 +59,16 @@
     <div v-if="currentStep === 1" class="px-4 animate-fade-in">
       <div class="card-container p-5">
         <h3 class="font-semibold text-gray-700 mb-4">{{ t('card.card_preview') }}</h3>
-        <div class="rounded-xl p-5 gradient-love text-white mb-4 text-center">
-          <div class="text-4xl mb-3">💝</div>
-          <p class="font-message text-white/90">"{{ form.message || '...' }}"</p>
-          <div class="mt-4 pt-4 border-t border-white/20">
-            <p class="text-sm text-white/80">{{ t('card.to') }}: {{ form.recipientName || '...' }}</p>
+        <div class="rounded-xl overflow-hidden mb-4 border border-gray-100">
+          <div class="h-40 relative" style="background:linear-gradient(135deg,#fce7f3,#f3e8ff)">
+            <img :src="previewImg" class="w-full h-full object-cover" @error="imgFail=true" />
+            <div v-if="imgFail" class="absolute inset-0 flex items-center justify-center text-5xl">💝</div>
+          </div>
+          <div class="p-5 gradient-love text-white text-center">
+            <p class="font-message text-white/90">"{{ form.message || '...' }}"</p>
+            <div class="mt-4 pt-4 border-t border-white/20">
+              <p class="text-sm text-white/80">{{ t('card.to') }}: {{ form.recipientName || '...' }}</p>
+            </div>
           </div>
         </div>
 
@@ -128,7 +133,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
@@ -141,38 +146,46 @@ const steps = computed(() => [t('checkout.step_personalize'), t('checkout.step_c
 const currentStep = ref(0)
 const creating = ref(false)
 const copied = ref(false)
-const shareData = ref<any>(null)
-const qrCanvas = ref<HTMLCanvasElement | null>(null)
-const cardTemplate = ref<any>(null)
+const shareData = ref(null)
+const qrCanvas = ref(null)
+const cardTemplate = ref(null)
 
 // Get template_id from query params
-const templateId = computed(() => route.query.template_id as string)
+const templateId = computed(() => route.query.template_id)
 
 const platformFee = computed(() => Math.round((cardTemplate.value?.price_cents || 0) * 0.3))
 const creatorEarning = computed(() => (cardTemplate.value?.price_cents || 0) - platformFee.value)
 
+const imgFail = ref(false)
+const previewImg = computed(() => {
+  const slug = cardTemplate.value?.category_slug || 'love'
+  const so = cardTemplate.value?.sort_order || 0
+  const idx = (so % 3) + 1
+  return '/images/cards/' + slug + '/' + slug + '-' + idx + '.png'
+})
+
 const form = reactive({ message: '', recipientName: '', address: '' })
 
-function formatPrice(c: number) { return (c / 100).toFixed(2) }
+function formatPrice(c) { return (c / 100).toFixed(2) }
 
 // Load card template info
 onMounted(async () => {
   if (templateId.value) {
     try {
       const res = await $fetch(`/api/cards/${templateId.value}`)
-      cardTemplate.value = (res as any).card
+      cardTemplate.value = (res).card
     } catch (e) {}
   }
 })
 
 async function handleCreateOrder() {
   if (!user.value) {
-    alert('未登录，请先登录 / Not logged in')
+    window.$toast('请先登录', 'error', 2000)
     navigateTo(localePath('/auth/login'))
     return
   }
   if (!templateId.value) {
-    alert('Please select a card first')
+    window.$toast('请先选择卡片', 'error', 2000)
     return
   }
   creating.value = true
@@ -182,7 +195,7 @@ async function handleCreateOrder() {
     const token = session?.access_token || ''
 
     if (!token) {
-      alert('登录已过期，请重新登录 / Session expired')
+      window.$toast('登录已过期，请重新登录', 'error', 2000)
       navigateTo(localePath('/auth/login'))
       return
     }
@@ -203,11 +216,11 @@ async function handleCreateOrder() {
     nextTick(async () => {
       if (qrCanvas.value) {
         const QRCode = (await import('qrcode')).default
-        await QRCode.toCanvas(qrCanvas.value, (res as any).share_url, { width: 200 })
+        await QRCode.toCanvas(qrCanvas.value, (res).share_url, { width: 200 })
       }
     })
-  } catch (e: any) {
-    alert(e.message || 'Failed to create order')
+  } catch (e) {
+    { window.$toast(e.message || '创建失败', 'error'); }
   }
   creating.value = false
 }
@@ -220,4 +233,5 @@ async function copyShareUrl() {
   } catch (e) {}
 }
 
+useHead({ title: "定制卡片 - CardWish" })
 </script>

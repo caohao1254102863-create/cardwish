@@ -53,20 +53,20 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
 
-const card = ref<any>(null)
+const card = ref(null)
 const loading = ref(true)
 
 const cardGradient = computed(() => {
-  const map: Record<string, string> = { love: 'gradient-love', birthday: 'gradient-birthday', flowers: 'gradient-floral', coffee: 'gradient-coffee' }
+  const map = { love: 'gradient-love', birthday: 'gradient-birthday', flowers: 'gradient-floral', coffee: 'gradient-coffee' }
   return map[card.value?.category_slug || ''] || 'gradient-love'
 })
 
-function formatDate(date: string) { return new Date(date).toLocaleDateString() }
+function formatDate(date) { return new Date(date).toLocaleDateString() }
 
 function downloadCard() {
   // TODO: generate and download card image

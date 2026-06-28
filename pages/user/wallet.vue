@@ -13,10 +13,14 @@
         </div>
       </div>
 
-      <NuxtLink v-if="(w?.balance_cents || 0) >= minWithdrawal" :to="localePath('/user/withdraw')" class="btn-primary w-full !mt-4 !inline-flex">
+      <NuxtLink :to="localePath('/user/withdraw')" class="btn-primary w-full !mt-4 !inline-flex"
+        :class="{ 'opacity-50 pointer-events-none': (w?.balance_cents || 0) < minWithdrawal }">
         💸 {{ t('wallet.withdraw') }}
       </NuxtLink>
-      <p v-else class="text-center text-xs text-gray-400 mt-3">{{ t('wallet.min_withdrawal', { amount: '$' + formatPrice(minWithdrawal) }) }}</p>
+      <p v-if="(w?.balance_cents || 0) < minWithdrawal" class="text-center text-xs text-gray-400 mt-3">
+        {{ t('wallet.min_withdrawal', { amount: '$' + formatPrice(minWithdrawal) }) }}
+      </p>
+      <p v-else class="text-center text-xs text-gray-400 mt-3">可提现金额 ${{ formatPrice(w?.balance_cents || 0) }}</p>
     </div>
 
     <div class="px-4">
@@ -41,17 +45,18 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { t } = useI18n()
 const localePath = useLocalePath()
 const config = useRuntimeConfig()
-const minWithdrawal = computed(() => config.public.minWithdrawalCents as number)
+const minWithdrawal = computed(() => config.public.minWithdrawalCents)
 
 const { data: walletData } = useAsyncData('user-wallet', () => $fetch('/api/user/wallet'))
 const { data: earningsData, pending: loadingEarnings } = useAsyncData('user-earnings', () => $fetch('/api/user/earnings'))
 
-const w = computed(() => walletData.value as any)
-const earnings = computed(() => (earningsData.value as any)?.earnings || [])
+const w = computed(() => walletData.value)
+const earnings = computed(() => (earningsData.value)?.earnings || [])
 
-function formatPrice(c: number) { return (c / 100).toFixed(2) }
+function formatPrice(c) { return (c / 100).toFixed(2) }
+useHead({ title: "我的钱包 - CardWish" })
 </script>

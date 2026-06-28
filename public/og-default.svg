@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b81"/>
+      <stop offset="50%" style="stop-color:#fce7f3"/>
+      <stop offset="100%" style="stop-color:#f3e8ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <text x="600" y="280" text-anchor="middle" font-size="120">💝</text>
+  <text x="600" y="400" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="bold" fill="#333">CardWish</text>
+  <text x="600" y="460" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" fill="#666">精美数字心意卡 · 朋友代付</text>
+  <text x="600" y="520" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#999">选择卡片 → 分享好友 → 帮TA付款</text>
+</svg>

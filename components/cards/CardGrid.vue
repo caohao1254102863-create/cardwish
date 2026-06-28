@@ -32,11 +32,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { t } = useI18n()
 
-defineProps<{
-  cards: any[]
-  loading?: boolean
-}>()
+defineProps({
+  cards: Array,
+  loading: Boolean,
+})
 </script>

@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
 
     const shareCode = generateShareCode()
     const orderNumber = generateOrderNumber()
-    const expiresAt = new Date(Date.now() + 48 * 3600 * 1000).toISOString()
+    const expiresAt = new Date(Date.now() + 24 * 3600000).toISOString()
 
     const { data: order, error } = await supabase
       .from('orders')

@@ -30,16 +30,16 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { t, locale } = useI18n()
 const route = useRoute()
 
-const slug = computed(() => route.params.slug as string)
+const slug = computed(() => route.params.slug)
 const currentSort = ref('popular')
 const page = ref(1)
 
 const catName = computed(() => {
-  const map: Record<string, string> = {
+  const map = {
     birthday: '🎂 ' + t('categories.birthday'),
     love: '💕 ' + t('categories.love'),
     flowers: '💐 ' + t('categories.flowers'),
@@ -73,7 +73,7 @@ const { data, pending, refresh } = useAsyncData(
         locale: locale.value,
       },
     })
-    return (res as any).cards || []
+    return (res).cards || []
   },
   { watch: [slug, currentSort] }
 )

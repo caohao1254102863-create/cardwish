@@ -1,143 +1,151 @@
 <template>
   <div class="pb-6">
     <div class="px-4 pt-4 pb-2">
-      <NuxtLink :to="localePath('/user/wallet')" class="text-[var(--color-primary)] text-sm no-underline">
-        ← {{ t('common.back') }}
-      </NuxtLink>
-      <h1 class="text-xl font-bold mt-2">{{ t('wallet.withdraw') }}</h1>
+      <NuxtLink to="/user/wallet" class="text-red-400 text-sm no-underline">← 返回钱包</NuxtLink>
+      <h1 class="text-xl font-bold mt-2">提现</h1>
     </div>
 
+    <!-- Balance card -->
+    <div class="px-4 mb-4">
+      <div class="rounded-2xl p-6 text-white text-center" style="background:linear-gradient(135deg,#ff6b81,#ff8fa3)">
+        <p class="text-sm opacity-80 mb-1">可提现余额</p>
+        <p class="text-4xl font-bold">${{ fmt(balance) }}</p>
+      </div>
+    </div>
+
+    <!-- Withdraw form -->
     <div class="px-4">
-      <div class="card-container p-5">
-        <!-- Balance display -->
-        <div class="text-center mb-6">
-          <p class="text-sm text-gray-500">{{ t('wallet.balance') }}</p>
-          <p class="text-3xl font-bold text-[var(--color-primary)]">
-            {{ currencySymbol }}{{ formatPrice(balance) }}
-          </p>
+      <div class="card-container p-5 space-y-4">
+        <!-- Amount -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">提现金额 (USD)</label>
+          <input v-model.number="amount" type="number"
+            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-lg font-bold"
+            placeholder="0.00" step="0.01" :min="minAmt" :max="maxAmt" />
+          <p class="text-xs text-gray-400 mt-1">最低 ${{ minAmt }}，最高 ${{ fmt(balance) }}</p>
         </div>
 
-        <!-- Amount input -->
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            {{ t('wallet.withdraw_amount') }}
-          </label>
-          <input
-            v-model.number="amount"
-            type="number"
-            :min="formatPrice(minWithdrawal)"
-            :max="formatPrice(balance)"
-            step="0.01"
-            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-card-shadow)] outline-none text-lg font-bold"
-            placeholder="0.00"
-          />
-          <p class="text-xs text-gray-400 mt-1">
-            {{ t('wallet.min_withdrawal', { amount: currencySymbol + formatPrice(minWithdrawal) }) }}
-          </p>
-        </div>
-
-        <!-- Method selection -->
-        <div class="mb-4">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            {{ t('wallet.withdraw_method') }}
-          </label>
-          <div class="grid grid-cols-3 gap-2">
-            <button
-              v-for="method in methods"
-              :key="method.value"
-              class="py-3 rounded-lg border text-center text-sm transition-all"
-              :class="selectedMethod === method.value
-                ? 'border-[var(--color-primary)] bg-pink-50 text-[var(--color-primary)] font-semibold'
-                : 'border-gray-200 text-gray-500'"
-              @click="selectedMethod = method.value"
-            >
-              {{ method.label }}
+        <!-- Method -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">收款方式</label>
+          <div class="space-y-2">
+            <button type="button" @click="method = 'paypal'"
+              class="w-full p-3 rounded-lg border text-left text-sm flex items-center gap-3 transition-all"
+              :class="method === 'paypal' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'">
+              <span class="text-lg">🅿️</span>
+              <div><p class="font-medium text-gray-700">PayPal</p><p class="text-xs text-gray-400">推荐 · 与收款通道一致</p></div>
+              <span v-if="method === 'paypal'" class="ml-auto text-blue-500">✓</span>
+            </button>
+            <button type="button" @click="method = 'bank'"
+              class="w-full p-3 rounded-lg border text-left text-sm flex items-center gap-3 transition-all"
+              :class="method === 'bank' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'">
+              <span class="text-lg">🏦</span>
+              <div><p class="font-medium text-gray-700">银行转账</p><p class="text-xs text-gray-400">仅支持香港/海外银行账户</p></div>
+              <span v-if="method === 'bank'" class="ml-auto text-blue-500">✓</span>
             </button>
           </div>
         </div>
 
-        <!-- Account info -->
-        <div class="mb-6">
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            {{ t('wallet.account_info') }}
-          </label>
-          <input
-            v-model="accountInfo"
-            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-card-shadow)] outline-none"
-            :placeholder="t('wallet.account_info_hint')"
-          />
+        <!-- Account -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">收款账户</label>
+          <input v-model="account" type="text"
+            :placeholder="method === 'paypal' ? '输入你的 PayPal 邮箱地址' : '输入银行账户信息'"
+            class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-red-400 outline-none text-sm" />
+          <p class="text-xs text-gray-400 mt-1">💰 到账时间：1-3 个工作日</p>
+        </div>
+
+        <!-- Fee note -->
+        <div class="bg-gray-50 rounded-lg p-3 text-xs text-gray-500">
+          <p class="font-medium text-gray-600 mb-1">💡 提现说明</p>
+          <p>· 提现金额为你从卡片中获得的 70% 收益</p>
+          <p>· 平台不收取提现手续费</p>
+          <p>· PayPal 可能产生少量跨境交易费</p>
+          <p>· 提交后 1-3 个工作日内到账</p>
         </div>
 
         <!-- Submit -->
-        <button
-          class="btn-primary w-full"
-          :disabled="!canWithdraw || submitting"
-          @click="handleWithdraw"
-        >
-          {{ submitting ? t('common.loading') : t('wallet.withdraw') + ' ' + currencySymbol + formatPrice(amountCents) }}
+        <button type="button" class="btn-primary w-full" :disabled="!canSubmit || submitting" @click="submit">
+          {{ submitting ? '提交中...' : '提交提现申请' }}
         </button>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="px-4 mt-6" v-if="history.length > 0">
+      <h3 class="font-semibold text-gray-700 mb-3">提现记录</h3>
+      <div class="space-y-2">
+        <div v-for="h in history" :key="h.id" class="card-container p-4 flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-700">${{ fmt(h.amount_cents) }}</p>
+            <p class="text-xs text-gray-400">{{ h.method }} · {{ fmtDate(h.created_at) }}</p>
+          </div>
+          <span class="text-xs px-2 py-1 rounded-full" :class="statusClass(h.status)">{{ statusLabel(h.status) }}</span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-const { t } = useI18n()
-const localePath = useLocalePath()
+<script setup>
+const supabase = useSupabaseClient()
 const config = useRuntimeConfig()
+const minAmt = computed(() => (config.public.minWithdrawalCents || 1000) / 100)
 
 const balance = ref(0)
-const amount = ref<number | null>(null)
-const selectedMethod = ref('wechat')
-const accountInfo = ref('')
+const amount = ref(null)
+const method = ref('paypal')
+const account = ref('')
 const submitting = ref(false)
+const history = ref([])
 
-const minWithdrawal = computed(() => config.public.minWithdrawalCents as number)
-const amountCents = computed(() => Math.round((amount.value || 0) * 100))
-
-const currencySymbol = computed(() => '$')
-
-const methods = [
-  { value: 'wechat', label: t('wallet.method_wechat') },
-  { value: 'alipay', label: t('wallet.method_alipay') },
-  { value: 'bank', label: t('wallet.method_bank') },
-]
-
-const canWithdraw = computed(() => {
-  return amountCents.value >= minWithdrawal.value &&
-    amountCents.value <= balance.value &&
-    accountInfo.value.trim().length > 0
+const maxAmt = computed(() => balance.value / 100)
+const canSubmit = computed(() => {
+  const amt = (amount.value || 0)
+  return amt >= minAmt.value && amt <= maxAmt.value && account.value.trim().length > 0
 })
 
-function formatPrice(cents: number): string { return (cents / 100).toFixed(2) }
+function fmt(c) { return (c / 100).toFixed(2) }
+function fmtDate(d) { return new Date(d).toLocaleDateString('zh-CN') }
+function statusLabel(s) {
+  const m = { pending: '处理中', processing: '处理中', completed: '已完成', rejected: '已拒绝' }
+  return m[s] || s
+}
+function statusClass(s) {
+  const m = { pending: 'bg-yellow-100 text-yellow-700', processing: 'bg-blue-100 text-blue-700', completed: 'bg-green-100 text-green-700', rejected: 'bg-red-100 text-red-500' }
+  return m[s] || ''
+}
 
-async function handleWithdraw() {
-  if (!canWithdraw.value) return
+async function submit() {
+  if (!canSubmit.value) return
   submitting.value = true
   try {
-    const { error } = await useFetch('/api/user/withdraw', {
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token || ''
+    const amountCents = Math.round((amount.value || 0) * 100)
+    await $fetch('/api/user/withdraw', {
       method: 'POST',
-      body: {
-        amount_cents: amountCents.value,
-        method: selectedMethod.value,
-        account_info: { account: accountInfo.value },
-      },
+      headers: token ? { Authorization: 'Bearer ' + token } : {},
+      body: { amount_cents: amountCents, method: method.value, account_info: { account: account.value } },
     })
-    if (error.value) throw error.value
-    alert(t('wallet.withdraw_success'))
-    navigateTo(localePath('/user/wallet'))
-  } catch (e: any) {
-    alert(e.message || t('errors.withdrawal_failed'))
+    window.$toast('提现申请已提交，1-3 个工作日到账', 'success')
+    navigateTo('/user/wallet')
+  } catch (e) {
+    window.$toast('提交失败: ' + (e.message || '未知错误'), 'error')
   }
   submitting.value = false
 }
 
 onMounted(async () => {
   try {
-    const { data } = await useFetch('/api/user/wallet')
-    if (data.value) {
-      balance.value = (data.value as any).balance_cents || 0
-    }
+    const { data: { session } } = await supabase.auth.getSession()
+    const token = session?.access_token || ''
+    const [walletRes, histRes] = await Promise.all([
+      $fetch('/api/user/wallet', { headers: token ? { Authorization: 'Bearer ' + token } : {} }),
+      $fetch('/api/user/withdrawals?limit=20', { headers: token ? { Authorization: 'Bearer ' + token } : {} }),
+    ])
+    balance.value = walletRes?.balance_cents || 0
+    history.value = histRes?.withdrawals || []
   } catch (e) {}
 })
 </script>

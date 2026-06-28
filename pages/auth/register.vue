@@ -63,13 +63,13 @@ const loading = ref(false)
 function sendCode() {
   const raw = phone.value.replace(/\D/g, '')
   phone.value = raw
-  if (raw.length !== 11) { alert('请输入11位手机号'); return }
+  if (raw.length !== 11) { window.$toast('请输入11位手机号', 'error', 2000); return }
   sentCode.value = String(Math.floor(100000 + Math.random() * 900000))
   codeSent.value = true
 }
 
 async function doRegister() {
-  if (inputCode.value !== sentCode.value) { alert('验证码不正确'); return }
+  if (inputCode.value !== sentCode.value) { window.$toast('验证码不正确', 'error', 2000); return }
   loading.value = true
   try {
     const formatted = '+86' + phone.value
@@ -96,7 +96,7 @@ async function doRegister() {
 
     await navigateTo('/')
   } catch (e) {
-    alert('注册失败: ' + (e.message || '未知错误'))
+    { window.$toast('注册失败: ' + (e.message || '未知错误'), 'error'); }
   }
   loading.value = false
 }

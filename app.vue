@@ -2,13 +2,20 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+  <Toast ref="toastRef" />
 </template>
 
-<script setup lang="ts">
-// Global app setup
-const { locale } = useI18n()
-const supabase = useSupabaseClient()
+<script setup>
+const toastRef = ref(null)
 
-// Watch auth state
-const user = useSupabaseUser()
+// Global toast helper
+function toast(msg, type = 'info', duration = 2500) {
+  if (toastRef.value) toastRef.value.show(msg, type, duration)
+}
+
+// Make available globally
+if (process.client) window.$toast = toast
+
+// Also provide via Nuxt
+provide('toast', toast)
 </script>

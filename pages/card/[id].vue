@@ -19,8 +19,16 @@
     <!-- Card Detail -->
     <template v-else>
       <div class="relative">
-        <div class="w-full aspect-[4/3] flex items-center justify-center text-7xl" :class="gradientClass">
-          {{ categoryEmoji }}
+        <div class="w-full aspect-[4/3] relative overflow-hidden" :class="gradientClass">
+          <img
+            :src="cardImage"
+            :alt="card.name"
+            class="w-full h-full object-cover"
+            @error="imgFail = true"
+          />
+          <div v-if="imgFail" class="absolute inset-0 flex items-center justify-center text-7xl">
+            {{ categoryEmoji }}
+          </div>
         </div>
       </div>
 
@@ -62,7 +70,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
@@ -72,21 +80,31 @@ const { data, pending } = useAsyncData(
   () => $fetch(`/api/cards/${route.params.id}`, { query: { locale: locale.value } })
 )
 
-const card = computed(() => (data.value as any)?.card || null)
+const imgFail = ref(false)
+const cardImage = computed(() => {
+  if (card.value?.images && card.value.images[0] && card.value.images[0].url) {
+    return card.value.images[0].url
+  }
+  const slug = card.value?.category_slug || 'love'
+  const idx = (parseInt(card.value?.sort_order) % 3) + 1
+  return '/images/cards/' + slug + '/' + slug + '-' + idx + '.png'
+})
+
+const card = computed(() => (data.value)?.card || null)
 
 const gradientClass = computed(() => {
-  const m: Record<string, string> = { love: 'gradient-love', birthday: 'gradient-birthday', flowers: 'gradient-floral', coffee: 'gradient-coffee', congratulations: 'gradient-sunset', thanks: 'gradient-forest', mystery: 'gradient-royal' }
+  const m = { love: 'gradient-love', birthday: 'gradient-birthday', flowers: 'gradient-floral', coffee: 'gradient-coffee', congratulations: 'gradient-sunset', thanks: 'gradient-forest', mystery: 'gradient-royal' }
   return m[card.value?.category_slug || ''] || 'gradient-love'
 })
 
 const categoryEmoji = computed(() => {
-  const m: Record<string, string> = { love: '💕', birthday: '🎂', flowers: '💐', coffee: '☕', cake: '🍰', thanks: '🙏', congratulations: '🎉', mystery: '🎁', encouragement: '💪', friendship: '🤝' }
+  const m = { love: '💕', birthday: '🎂', flowers: '💐', coffee: '☕', cake: '🍰', thanks: '🙏', congratulations: '🎉', mystery: '🎁', encouragement: '💪', friendship: '🤝' }
   return m[card.value?.category_slug || ''] || '💝'
 })
 
 const catName = computed(() => t(`categories.${card.value?.category_slug}`) || card.value?.category_slug)
 
-function formatPrice(c: number) { return (c / 100).toFixed(2) }
+function formatPrice(c) { return (c / 100).toFixed(2) }
 
 useHead(() => ({
   title: card.value ? `${card.value.name} - CardWish` : 'CardWish',

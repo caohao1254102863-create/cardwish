@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
       .select(`
         *,
         card_templates!inner(
-          name_zh, name_en, images, category_id,
+          name_zh, name_en, images, sort_order, category_id,
           categories(slug)
         )
       `)
@@ -41,6 +41,7 @@ export default defineEventHandler(async (event) => {
         expires_at: order.expires_at,
         card_name: order.card_templates?.name_zh || order.card_templates?.name_en,
         card_images: order.card_templates?.images,
+        sort_order: order.card_templates?.sort_order || 0,
         category_slug: order.card_templates?.categories?.slug,
         card_templates: undefined,
       },

@@ -24,6 +24,8 @@ const route = useRoute()
 const sc = computed(() => route.params.shareCode)
 const name = ref('')
 
+definePageMeta({ layout: 'pay' })
+
 onMounted(async () => {
   try {
     // Capture PayPal payment + complete order

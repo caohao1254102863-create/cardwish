@@ -17,8 +17,9 @@
       </div>
       <div class="px-3 -mt-4">
         <div class="bg-white rounded-xl overflow-hidden shadow-sm">
-          <div class="h-40 flex items-center justify-center" style="background:linear-gradient(135deg,#fce7f3,#fff1f2,#f3e8ff)">
-            <div class="text-center"><p class="text-6xl">💝</p></div>
+          <div class="h-40 relative overflow-hidden" style="background:linear-gradient(135deg,#fce7f3,#fff1f2,#f3e8ff)">
+            <img :src="cardImg" class="w-full h-full object-cover" @error="imgFail=true" />
+            <div v-if="imgFail" class="absolute inset-0 flex items-center justify-center"><p class="text-6xl">💝</p></div>
           </div>
           <div class="p-4">
             <p v-if="order.message" class="text-sm p-3 rounded-lg mb-3" style="background:#fff7ed;color:#c2410c">"{{ order.message }}"</p>
@@ -53,10 +54,24 @@
 <script setup>
 const route = useRoute()
 const cfg = useRuntimeConfig()
-const ret = useAsyncData('order-detail', () => $fetch('/api/orders/' + route.params.id))
+const supabase = useSupabaseClient()
+const ret = useAsyncData('order-detail', async () => {
+  const { data: { session } } = await supabase.auth.getSession()
+  const token = session?.access_token || ''
+  return $fetch('/api/orders/' + route.params.id, {
+    headers: token ? { Authorization: 'Bearer ' + token } : {},
+  })
+})
 const order = computed(() => {
   const d = ret.data.value
   return d ? d.order : null
+})
+const imgFail = ref(false)
+const cardImg = computed(() => {
+  const slug = order.value?.category_slug || 'love'
+  const so = order.value?.sort_order || 0
+  const idx = (so % 3) + 1
+  return '/images/cards/' + slug + '/' + slug + '-' + idx + '.png'
 })
 const copied = ref(false)
 const shareUrl = computed(() => order.value ? cfg.public.siteUrl + '/pay/' + order.value.share_code : '')
@@ -84,6 +99,6 @@ function shareTo(p) {
   const t = encodeURIComponent('帮我付一下这张心意卡片 ' + shareUrl.value)
   if (p === 'wa') window.open('https://wa.me/?text=' + t, '_blank')
   else if (p === 'x') window.open('https://x.com/intent/tweet?text=' + t, '_blank')
-  else { copyUrl(); alert('已复制！打开' + (p === 'wechat' ? '微信' : '小红书') + '粘贴发送') }
+  else { copyUrl(); window.$toast('已复制链接，打开' + (p === 'wechat' ? '微信' : '小红书') + '粘贴发送', 'success', 2000) }
 }
 </script>
